@@ -1,0 +1,2350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2FA84F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Treino PF">
+<link rel="manifest" href='data:application/manifest+json,{"name":"Treino PF — entrevista","short_name":"Treino PF","start_url":"./","display":"standalone","orientation":"portrait","background_color":"%23F4F7F1","theme_color":"%232FA84F"}'>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%232FA84F'/%3E%3Ctext x='32' y='44' font-family='sans-serif' font-size='34' font-weight='700' fill='%23F4F7F1' text-anchor='middle'%3EPF%3C/text%3E%3C/svg%3E">
+<title>Общая — тренажёр Polícia Federal</title>
+<style>
+  :root{
+    --bg:#F4F7F1;
+    --card:#FFFFFF;
+    --ink:#2B3A2F;
+    --ink-soft:#6C7C71;
+    --rule:#DDE5DB;
+    --verde:#2FA84F;
+    --verde-escuro:#238A3E;
+    --stamp:#E0523C;
+    --mark:#F0B429;
+    --paper:#F4F7F1;
+    --paper-2:#FFFFFF;
+    --r:16px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:ui-rounded,"Nunito","Segoe UI Variable",ui-sans-serif,system-ui,-apple-system,Roboto,sans-serif;
+    font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:16px 14px 60px}
+  header{padding-bottom:12px;margin-bottom:14px}
+  h1{font-size:1.3rem;line-height:1.2;margin:0 0 4px;font-weight:800;letter-spacing:-0.01em}
+  .sub{color:var(--ink-soft);font-size:.9rem;margin:0}
+  .marca{display:inline-block;margin:0 0 8px;padding:3px 11px;font-size:.7rem;font-weight:800;
+    letter-spacing:.06em;background:var(--verde);color:#fff;border-radius:999px}
+  .proto{font-size:.76rem;font-weight:700;color:var(--ink-soft);margin-top:8px;letter-spacing:.02em}
+  .panel,.qcard{background:var(--card);border:2px solid var(--rule);border-radius:var(--r);padding:16px;margin-bottom:14px}
+  details > summary{
+    list-style:none;position:relative;padding-right:30px;user-select:none;
+  }
+  details > summary::-webkit-details-marker{display:none}
+  details > summary::after{
+    content:"";position:absolute;right:8px;top:50%;width:9px;height:9px;
+    border-right:2.5px solid currentColor;border-bottom:2.5px solid currentColor;
+    transform:translateY(-70%) rotate(45deg);transition:transform .18s;opacity:.75;
+  }
+  details[open] > summary::after{transform:translateY(-20%) rotate(225deg)}
+  details > summary:hover::after{opacity:1}
+  @media (prefers-reduced-motion:reduce){details > summary::after{transition:none}}
+  details.panel summary{list-style:none}
+  details.panel summary::-webkit-details-marker{display:none}
+  label{display:block;font-size:.8rem;font-weight:700;color:var(--ink-soft);margin-bottom:6px}
+  textarea,select,input{
+    width:100%;font:inherit;font-size:.95rem;color:var(--ink);
+    background:#fff;border:2px solid var(--rule);padding:11px 12px;border-radius:12px;
+  }
+  textarea:focus,select:focus,input:focus{outline:none;border-color:var(--verde)}
+  textarea{min-height:88px;resize:vertical}
+  select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink-soft) 50%),linear-gradient(135deg,var(--ink-soft) 50%,transparent 50%);background-position:calc(100% - 18px) 54%,calc(100% - 13px) 54%;background-size:6px 6px;background-repeat:no-repeat}
+  .row{display:flex;gap:10px}
+  .row>div{flex:1;min-width:0}
+  .field{margin-bottom:14px}
+  button{
+    font:inherit;font-weight:800;cursor:pointer;letter-spacing:.02em;
+    background:var(--verde);color:#fff;border:0;border-bottom:4px solid var(--verde-escuro);
+    padding:13px 18px;border-radius:14px;transition:transform .06s,filter .12s;
+  }
+  button:active{transform:translateY(2px);border-bottom-width:2px}
+  button:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+  button.ghost{background:#fff;color:var(--ink);border:2px solid var(--rule);border-bottom-width:4px;
+    font-weight:700;padding:9px 14px;font-size:.86rem}
+  button.ghost:hover{border-color:var(--verde);color:var(--verde-escuro)}
+  button[disabled]{opacity:.45;cursor:default;transform:none}
+  .wide{width:100%}
+  .stamp{position:absolute;top:-12px;right:14px;background:var(--mark);color:#4A3708;
+    font-size:.72rem;font-weight:800;border-radius:999px;padding:3px 11px}
+  .qcard{position:relative;padding-top:22px}
+  .q{font-size:1.2rem;line-height:1.4;margin:0 0 14px;font-weight:800}
+  .aux{border-top:2px dashed var(--rule);padding-top:11px;margin-top:11px;font-size:.93rem}
+  .aux .tag{color:var(--ink-soft);font-size:.76rem;font-weight:700;display:block;margin-bottom:3px}
+  .tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .fb{background:#F0F8F2;border:2px solid #CBE6D3;border-radius:14px;padding:13px;margin-bottom:14px}
+  .fb.weak{background:#FDF1EF;border-color:#F3CFC8}
+  .fb h3{margin:0 0 6px;font-size:.8rem;color:var(--ink-soft);font-weight:800}
+  .corr{background:linear-gradient(transparent 60%,var(--mark) 60%);font-weight:600}
+  .difOut{color:#A8321F;text-decoration:line-through;text-decoration-thickness:2px}
+  .difIn{background:var(--mark);border-radius:5px;padding:0 4px;font-weight:700}
+  .difLinha{margin:0 0 8px;line-height:1.7}
+  .difRotulo{display:block;font-size:.76rem;font-weight:800;color:var(--ink-soft);margin-bottom:2px}
+  ul{margin:6px 0 0;padding-left:20px}
+  li{margin-bottom:3px}
+  .muted{color:var(--ink-soft);font-size:.85rem}
+  .muted a,#linkChave a{color:var(--verde-escuro);text-decoration:underline;font-weight:700}
+  .err{border:2px solid var(--stamp);color:#A8321F;background:#FDF1EF;border-radius:14px;
+    padding:12px;font-size:.9rem;margin-bottom:14px;font-weight:600}
+  .hidden{display:none}
+  .load{font-size:.9rem;font-weight:700;color:var(--ink-soft);padding:10px 0}
+  .dot{display:inline-block;animation:b 1.2s infinite}
+  .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+  @keyframes b{0%,100%{opacity:.25}50%{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.dot{animation:none;opacity:.6}button{transition:none}}
+  footer{margin-top:22px;padding-top:14px;border-top:2px solid var(--rule)}
+  .nav{display:flex;gap:8px;margin-bottom:16px}
+  .tab{flex:1;background:#fff;color:var(--ink-soft);border:2px solid var(--rule);border-bottom-width:4px;
+    font-weight:800;padding:11px 4px;font-size:.9rem;border-radius:14px}
+  .tab.on{background:var(--verde);color:#fff;border-color:var(--verde-escuro)}
+  .bar{height:14px;background:#E4EBE2;border-radius:999px;margin-top:10px;overflow:hidden}
+  .bar span{display:block;height:100%;background:var(--verde);width:0;border-radius:999px;transition:width .3s}
+  @media (prefers-reduced-motion:reduce){.bar span{transition:none}}
+  .prompt{font-size:1.6rem;font-weight:800;margin:0 0 4px;line-height:1.2}
+  .promptSub{color:var(--ink-soft);font-size:.84rem;font-weight:700;margin:0 0 16px}
+  .opt{display:block;width:100%;text-align:left;background:#fff;color:var(--ink);
+    border:2px solid var(--rule);border-bottom-width:4px;font-weight:700;padding:14px;margin-bottom:10px;
+    border-radius:14px;font-size:1rem}
+  .opt:hover:not([disabled]){border-color:var(--verde)}
+  .opt.certa{border-color:var(--verde);background:#EAF7EE;color:var(--verde-escuro)}
+  .opt.errada{border-color:var(--stamp);background:#FDF1EF;color:#A8321F}
+  .opt[disabled]{opacity:1;cursor:default;transform:none}
+  .veredito{padding:14px;margin-top:14px;font-weight:800;border-radius:14px;font-size:1.05rem}
+  .veredito.bom{background:#EAF7EE;color:var(--verde-escuro)}
+  .veredito.ruim{background:#FDF1EF;color:#A8321F}
+  .veredito .sol{display:block;font-weight:600;font-size:.92rem;margin-top:6px;color:var(--ink-soft)}
+  .fim{text-align:center;padding:28px 12px}
+  .fim .big{font-size:3rem;font-weight:800;line-height:1;margin:0 0 6px;color:var(--verde)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="marca">ОБЩАЯ ВЕРСИЯ</p>
+  <h1>Entrevista de naturalização — treino diário</h1>
+  <p class="sub">Тренажёр собеседования в Polícia Federal. Вопросы и ответы — на португальском, разбор — на русском.</p>
+  <p class="proto" id="proto">—</p>
+</header>
+
+<details id="sobre" class="panel" style="margin-bottom:16px">
+  <summary style="cursor:pointer;font-weight:650">Что это и как пользоваться</summary>
+  <p style="margin:10px 0 0">Тренажёр к собеседованию на натурализацию в Polícia Federal. Четыре вкладки.</p>
+
+  <p style="margin:10px 0 0"><b>Слова.</b> Карточки с интервальным повторением: работают без интернета и без ключей. Слово поднимается на уровень за верный ответ и падает за ошибку, повтор возвращается через 1, 2, 4, 8, 16 и 30 дней. Упражнение меняется с уровнем: выбрать перевод, назвать по-португальски, узнать на слух, собрать фразу из слов, написать самому. Значок-картинка показывается только после ответа — так запоминается лучше. Две кнопки озвучки везде: 🔊 обычная скорость и 🐢 замедленная.</p>
+
+  <p style="margin:10px 0 0"><b>Словарики.</b> Колода разбита по темам: документы, семья, работа, учёба, быт, фразы-выручалочки. Выберите словарик — и повторяться будет только он. В «Инструментах»: своё слово со своим значком, кнопка «Собрать словарь» (модель читает вашу анкету и составляет слова под вашу профессию — они идут в словарик «Мой случай»), выбор голоса, перенос прогресса между устройствами и выгрузка колоды в файл для Excel, Anki или DuoCards.</p>
+
+  <p style="margin:10px 0 0"><b>Собеседование.</b> Диалог с агентом на португальском. Вопросы сочиняет языковая модель по вашей анкете, поэтому нужен ключ API — бесплатного хватает. Анкету можно писать по-русски и перевести кнопкой, проверив результат. После каждого ответа — разбор: ваш текст с зачёркнутыми ошибками, исправленная фраза с подсветкой правок, список ошибок с причинами и озвучка правильного варианта. Подсказки — перевод вопроса, слова и образец ответа — подгружаются по нажатию; незнакомые слова из подсказок одной кнопкой уходят в колоду. Есть режим «сначала на слух»: текст вопроса скрыт, звучит только голос, а открыть его можно кнопкой — как на настоящем собеседовании. Тему и темп выбираете сами, включая совсем простые бытовые вопросы. Кнопка «Экзамен» — восемь вопросов по теме без подсказок и с оценкой.</p>
+
+  <p style="margin:10px 0 0"><b>Правила.</b> Двенадцать коротких разборов того, на чём чаще всего спотыкаются: ser или estar, прошедшее время, предлоги места и времени, род и согласование, por и para, возвратные глаголы, отрицание, три блока произношения и фразы, которыми можно переспросить. К каждому — тест из четырёх вопросов; правило считается освоенным с 75%. Объяснение можно прослушать.</p>
+
+  <p style="margin:10px 0 0"><b>Прогресс.</b> Готовность считается из оценок агента: (хорошо + 0,6 × сойдёт) ÷ все ответы, по каждой теме отдельно и не раньше пяти ответов. Общая цифра — 70% от средней по темам и 30% от доли выученных слов. Это оценка тренажёра, а не прогноз решения Polícia Federal. Там же история: последние пары «вопрос — ваш ответ — исправление» с озвучкой, переводом по кнопке и выгрузкой в файл.</p>
+
+  <p style="margin:10px 0 0"><b>Настройки.</b> Модель для каждого ключа подбирается сама; можно задать до трёх ключей — при сбое или перегрузке приложение переходит к следующему. Быстрый режим сокращает ответ модели и ускоряет вопросы. Внизу видно расход: запросы и токены за сессию и за день, и время последнего ответа.</p>
+
+  <p class="muted" style="margin:10px 0 0">Ключи, колода, история и прогресс хранятся только на вашем устройстве. Тренажёр не связан с Polícia Federal и не воспроизводит официальный протокол.</p>
+</details>
+
+<div class="nav">
+  <button class="tab on" id="tabVocab">Слова</button>
+  <button class="tab" id="tabChat">Собеседование</button>
+  <button class="tab" id="tabRegras">Правила</button>
+  <button class="tab" id="tabProg">Прогресс</button>
+</div>
+
+<div id="viewVocab">
+  <div class="panel">
+    <p class="proto" id="vTopo">—</p>
+    <div class="bar"><span id="vProg"></span></div>
+  </div>
+  <div class="panel">
+    <label for="baralho">Словарик</label>
+    <select id="baralho">
+      <option value="todos">Все слова</option>
+      <option value="documentos">Документы и процесс</option>
+      <option value="familia">Семья и личные данные</option>
+      <option value="trabalho">Работа</option>
+      <option value="estudo">Учёба и экзамен</option>
+      <option value="vida">Быт и жизнь в Бразилии</option>
+      <option value="frases">Вопросы и выручалочки</option>
+      <option value="meu">Мой случай</option>
+    </select>
+  </div>
+  <div id="vArea"></div>
+
+  <details id="ferramentas" class="panel">
+  <summary style="cursor:pointer;font-weight:700;color:var(--ink-soft)">Инструменты: свои слова, голос, перенос</summary>
+
+  <div class="panel" style="margin-top:12px">
+    <label for="novoPt">Своё слово в колоду</label>
+    <div class="row">
+      <div><input id="novoPt" placeholder="português"></div>
+      <div><input id="novoRu" placeholder="русский"></div>
+      <div style="flex:0 0 82px"><input id="novoEmoji" placeholder="значок" maxlength="4"></div>
+    </div>
+    <button class="ghost wide" id="addPalavra" style="margin-top:9px">Добавить</button>
+    <p class="muted" id="addMsg" style="margin:8px 0 0"></p>
+  </div>
+
+  <div class="panel">
+    <label for="limparQual">Убрать лишние слова</label>
+    <select id="limparQual">
+      <option value="">выберите словарик</option>
+      <option value="documentos">Документы и процесс</option>
+      <option value="familia">Семья и личные данные</option>
+      <option value="trabalho">Работа</option>
+      <option value="estudo">Учёба и экзамен</option>
+      <option value="vida">Быт и жизнь в Бразилии</option>
+      <option value="frases">Вопросы и выручалочки</option>
+      <option value="meu">Мой случай</option>
+    </select>
+    <button class="ghost wide" id="btnLimpar" style="margin-top:8px">Удалить весь словарик</button>
+    <p class="muted" id="limparMsg" style="margin:8px 0 0">Удаляется без возврата. Сначала выгрузите колоду файлом, если жалко.</p>
+  </div>
+
+  <div class="panel">
+    <label for="gerarN">Словарь под свой случай</label>
+    <p class="muted" style="margin:0 0 8px">Модель прочитает вашу анкету со вкладки «Собеседование» и составит слова именно под вашу профессию и обстоятельства. Нужен ключ API.</p>
+    <select id="gerarN">
+      <option value="15">15 слов</option>
+      <option value="25" selected>25 слов</option>
+      <option value="40">40 слов</option>
+    </select>
+    <button class="wide" id="btnGerar" style="margin-top:8px">Собрать словарь</button>
+    <p class="muted" id="gerarMsg" style="margin:8px 0 0"></p>
+  </div>
+
+  <div class="panel">
+    <label for="voz">Системный голос</label>
+    <select id="voz"><option value="">по умолчанию</option></select>
+    <label for="vozNuvem" style="margin-top:12px">Облачный голос — заметно живее системного</label>
+    <select id="vozNuvem">
+      <option value="nao">не использовать</option>
+      <option value="gcloud">Google Cloud Text-to-Speech (свой ключ)</option>
+    </select>
+    <div id="camposVoz" class="hidden" style="margin-top:8px">
+      <input id="chaveVoz" type="password" placeholder="ключ Google Cloud с включённым Text-to-Speech">
+      <input id="nomeVoz" placeholder="голос подберётся сам" style="margin-top:8px">
+      <button class="ghost wide" id="btnVozes" style="margin-top:8px">Проверить ключ и подобрать голос</button>
+      <p class="muted" id="vozMsg" style="margin:8px 0 0"></p>
+    </div>
+    <p class="muted" style="margin:8px 0 0">Голоса берутся из системы. Чтобы голос звучал живее, установите на телефоне «Речевые сервисы Google» и скачайте в них португальский (Бразилия).</p>
+  </div>
+
+  <div class="panel">
+    <label for="dump">Перенос прогресса между Claude и браузером</label>
+    <textarea id="dump" placeholder="«Выгрузить» — скопируйте текст. На другом устройстве вставьте его сюда и нажмите «Загрузить»."></textarea>
+    <div class="row" style="margin-top:8px">
+      <div><button class="ghost wide" id="btnDump">Выгрузить</button></div>
+      <div><button class="ghost wide" id="btnLoad">Загрузить</button></div>
+      <div><button class="ghost wide" id="btnBaixar">Файлом</button></div>
+    </div>
+    <p class="muted" id="dumpMsg" style="margin:8px 0 0"></p>
+  </div>
+
+  </details>
+</div>
+
+<div id="viewRegras" class="hidden">
+  <div class="panel">
+    <p class="proto" id="regrasTopo">—</p>
+    <div class="bar"><span id="regrasProg"></span></div>
+  </div>
+  <div id="regrasLista"></div>
+</div>
+
+<div id="viewProg" class="hidden">
+  <div class="panel">
+    <p class="proto" id="progTopo">—</p>
+    <div class="bar"><span id="progGeral"></span></div>
+  </div>
+  <div id="progLista"></div>
+  <div class="panel">
+    <label for="histFiltro">История вопросов и ответов</label>
+    <select id="histFiltro">
+      <option value="todos">Все темы</option>
+      <option value="pessoal">Личные данные и семья</option>
+      <option value="trabalho">Работа и профессия</option>
+      <option value="brasil">Жизнь в Бразилии</option>
+      <option value="exame">Экзамен и документы</option>
+      <option value="misto">Всё вперемешку</option>
+    </select>
+    <button class="ghost wide" id="btnHistFile" style="margin-top:8px">Скачать историю файлом</button>
+    <p class="muted" id="histMsg" style="margin:8px 0 0"></p>
+  </div>
+  <div id="histLista"></div>
+</div>
+
+<div id="viewChat" class="hidden">
+<div id="setup" class="panel">
+  <div class="field">
+    <label for="perfil">Кто вы — можно по-русски, потом перевести кнопкой ниже</label>
+    <textarea id="perfil"></textarea>
+    <div class="row" style="margin-top:8px">
+      <div><button class="ghost wide" id="btnTraduzir">Перевести на португальский</button></div>
+      <div style="flex:0 0 auto"><button class="ghost" id="btnOriginal" style="height:100%">Оригинал</button></div>
+    </div>
+    <p class="muted" id="traduMsg" style="margin:8px 0 0"></p>
+  </div>
+  <div class="row field">
+    <div>
+      <label for="tema">Тема</label>
+      <select id="tema">
+        <option data-k="pessoal" value="dados pessoais, família, endereço, documentos">Личные данные и семья</option>
+        <option data-k="trabalho" value="trabalho, profissão, renda, rotina profissional">Работа и профессия</option>
+        <option data-k="brasil" value="vida no Brasil, integração, planos, motivos do pedido">Жизнь в Бразилии и мотивы</option>
+        <option data-k="exame" value="o exame de Ensino Médio (supletivo) prestado: quando foi, onde, como foi o dia da prova, quantas matérias, como estudou, quando saiu o resultado. Pergunte de forma natural, sem exigir dados de papelada decorados">Экзамен и документы</option>
+        <option data-k="misto" value="mistura de todos os temas, ordem imprevisível">Всё вперемешку</option>
+      </select>
+    </div>
+    <div>
+      <label for="nivel">Сложность</label>
+      <select id="nivel">
+        <option value="informal">Простые бытовые вопросы, неформально</option>
+        <option value="A2">Медленно, короткие фразы</option>
+        <option value="B1" selected>Обычный темп</option>
+        <option value="B2">Быстро, уточняющие и каверзные</option>
+      </select>
+    </div>
+  </div>
+  <details id="cfgModelo" class="field" style="border:2px solid var(--rule);border-radius:14px;padding:12px">
+  <summary style="cursor:pointer;font-weight:700;color:var(--ink-soft)">Модель и ключи API</summary>
+  <div class="field">
+    <label for="provedor">Откуда берётся модель</label>
+    <select id="provedor">
+      <option value="claude">Claude — внутри артефакта, ключ не нужен</option>
+      <option value="gemini">Google Gemini — бесплатный ключ из AI Studio</option>
+      <option value="groq">Groq — бесплатно, открытые модели (Llama, gpt-oss)</option>
+      <option value="cerebras">Cerebras — бесплатно, gpt-oss</option>
+      <option value="openrouter">OpenRouter — бесплатные модели с суффиксом :free</option>
+      <option value="anthropic">Anthropic — свой ключ, тот же Claude</option>
+      <option value="xai">xAI Grok — платный ключ</option>
+      <option value="openai">Другой OpenAI-совместимый — адрес вручную</option>
+    </select>
+  </div>
+  <div id="camposApi" class="field hidden">
+    <p class="muted" id="linkChave" style="margin:0 0 8px"></p>
+    <details style="margin-bottom:8px">
+      <summary class="muted" style="cursor:pointer">Адрес и модель вручную — обычно не нужно</summary>
+      <div class="row" style="margin-top:8px">
+        <div><input id="apiBase" placeholder="https://api.x.ai/v1"></div>
+        <div><input id="apiModel" placeholder="grok-4"></div>
+      </div>
+    </details>
+    <input id="apiKey" type="password" placeholder="API-ключ">
+    <button class="ghost wide" id="btnModelos" style="margin-top:8px">Проверить ключ и подобрать модель</button>
+    <p class="muted" id="modelosMsg" style="margin:6px 0 0"></p>
+    <p class="muted" style="margin:6px 0 0">Ключ хранится только в этом приложении, на вашем устройстве, и уходит напрямую выбранному провайдеру.</p>
+  </div>
+  <p class="muted" id="ondeChave" style="margin:-4px 0 12px"></p>
+  <div class="field" style="margin-top:12px">
+    <label for="prioridade">Что важнее при подборе модели</label>
+    <select id="prioridade">
+      <option value="economia">Экономия лимита — lite-модели, больше запросов в день</option>
+      <option value="qualidade">Качество ответов — старшая модель, лимит кончится быстрее</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="provedor2">Запасные ключи — пробуются по очереди, если основной не отвечает</label>
+    <div class="row" style="margin-bottom:8px">
+      <div><select id="provedor2">
+        <option value="nao">— нет —</option>
+        <option value="gemini">Google Gemini</option>
+        <option value="groq">Groq</option>
+        <option value="cerebras">Cerebras</option>
+        <option value="openrouter">OpenRouter</option>
+        <option value="xai">xAI Grok</option>
+        <option value="anthropic">Anthropic</option>
+      </select></div>
+      <div><input id="apiKey2" type="password" placeholder="ключ"></div>
+    </div>
+    <label for="provedor3" style="margin-top:10px">Второй запасной</label>
+    <div class="row">
+      <div><select id="provedor3">
+        <option value="nao">— нет —</option>
+        <option value="gemini">Google Gemini</option>
+        <option value="groq">Groq</option>
+        <option value="cerebras">Cerebras</option>
+        <option value="openrouter">OpenRouter</option>
+        <option value="xai">xAI Grok</option>
+        <option value="anthropic">Anthropic</option>
+      </select></div>
+      <div><input id="apiKey3" type="password" placeholder="ключ"></div>
+    </div>
+    <p class="muted" style="margin:6px 0 0">Модель для каждого ключа подбирается автоматически. Бесплатные ключи:
+      <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Google Gemini (AI&nbsp;Studio)</a> ·
+      <a href="https://console.groq.com" target="_blank" rel="noopener noreferrer">Groq</a> ·
+      <a href="https://cloud.cerebras.ai" target="_blank" rel="noopener noreferrer">Cerebras</a> ·
+      <a href="https://openrouter.ai/models" target="_blank" rel="noopener noreferrer">OpenRouter</a>
+    </p>
+  </div>
+  </details>
+  <div class="field">
+    <label><input type="checkbox" id="rapido" checked style="width:auto;margin-right:8px">Быстрый режим: подсказки подгружаются по нажатию</label>
+    <label style="margin-top:6px"><input type="checkbox" id="autoVoz" style="width:auto;margin-right:8px">Озвучивать вопрос сразу</label>
+    <label style="margin-top:6px"><input type="checkbox" id="soOuvido" style="width:auto;margin-right:8px">Сначала на слух: текст вопроса скрыт, пока не нажмёте «Показать»</label>
+  </div>
+  <button class="wide" id="start">Начать собеседование</button>
+  <button class="ghost wide" id="startExame" style="margin-top:8px">Экзамен: 8 вопросов без подсказок</button>
+  <p class="muted" id="stats" style="margin-bottom:0"></p>
+</div>
+
+<div id="erro" class="err hidden"></div>
+<div id="loading" class="load hidden">Агент печатает<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span><span id="loadExtra"></span></div>
+
+<div id="jogo" class="hidden">
+  <div id="fbBox"></div>
+
+  <div class="qcard">
+    <span class="stamp" id="qnum">01</span>
+    <p class="q" id="pergunta"></p>
+    <div id="revelar"></div>
+    <div class="tools" id="dicasPergunta">
+      <button class="ghost" id="btnSay">🔊 Прослушать</button>
+      <button class="ghost" id="btnSayLento">🐢 Медленно</button>
+      <button class="ghost" id="btnTr">Перевод</button>
+      <button class="ghost" id="btnDica">Слова-подсказки</button>
+      <button class="ghost" id="btnMod">Образец ответа</button>
+    </div>
+    <div id="aux"></div>
+  </div>
+
+  <div class="field">
+    <label for="resp">Ваш ответ по-португальски</label>
+    <textarea id="resp" placeholder="Escreva sua resposta aqui…"></textarea>
+  </div>
+  <div class="row">
+    <div><button class="wide" id="send">Ответить</button></div>
+    <div style="flex:0 0 auto"><button class="ghost" id="finish" style="height:100%">Разбор</button></div>
+  </div>
+</div>
+
+<div id="resumo" class="hidden"></div>
+</div>
+
+<p class="muted" id="uso" style="margin:16px 0 0"></p>
+
+<footer>
+  <p class="muted">Тренажёр не связан с Polícia Federal и не воспроизводит официальный протокол. Реальные вопросы зависят от отделения и агента.</p>
+</footer>
+
+</div>
+
+<script>
+const PERFIL_PADRAO =
+`Опишите себя своими словами — можно по-русски. Агент строит вопросы по этому тексту.
+
+Имя, возраст, гражданство.
+Где живёте в Бразилии, с какого времени, с кем.
+Кем работаете и как проходит рабочий день.
+Чем подтверждали португальский в деле (экзамен, сертификат, курс) и когда.
+Когда подали на натурализацию и с кем.
+Всё, о чём могут спросить: школа детей, планы, зачем вам гражданство.
+
+Имена и фамилии пишите латиницей, как в RNM и паспорте.
+Заполнив, нажмите «Перевести на португальский» — и проверьте перевод глазами.`;
+
+// Хранилище: внутри артефакта — window.storage, вне его — localStorage браузера
+const store = {
+  async get(k){
+    if(window.storage) return window.storage.get(k);
+    try{ const v = localStorage.getItem(k); return v === null ? null : {key:k, value:v}; }catch(e){ return null; }
+  },
+  async set(k, v){
+    if(window.storage) return window.storage.set(k, v);
+    try{ localStorage.setItem(k, v); return {key:k, value:v}; }catch(e){ return null; }
+  }
+};
+
+const $ = id => document.getElementById(id);
+let msgs = [], n = 0, atual = null, stats = {sessoes:0, ultima:null, erros:[]};
+
+const SYS = (perfil, tema, nivel, curto) => `Você é um agente da Polícia Federal do Brasil conduzindo a entrevista de um requerente de naturalização. Fale português brasileiro natural, tom cordial mas formal, tratando o entrevistado por "o senhor".
+
+PERFIL DO ENTREVISTADO (pode estar escrito em russo; entenda-o normalmente, mas fale SEMPRE em português):
+${perfil}
+
+TEMA DESTA SESSÃO: ${tema}
+NÍVEL DE LINGUAGEM: ${nivel} — ajuste velocidade, vocabulário e comprimento das perguntas a esse nível.
+${nivel === "informal" ? "Neste nível, faça sobretudo perguntas simples e informais, do tipo que um agente faz enquanto confere papéis: como foi a viagem até aqui, se gosta da cidade, se o calor incomoda, quantos filhos tem, se as crianças já falam português, o que gosta de comer no Brasil. Frases curtas, tom de conversa, nada de burocracia." : ""}
+
+REGRAS:
+- Uma pergunta por vez. Perguntas curtas e realistas, como as feitas de fato num guichê da PF.
+- Às vezes faça uma pergunta de acompanhamento sobre a resposta anterior, em vez de mudar de assunto.
+- Avalie a resposta anterior pelo critério real da entrevista: dá para entender? responde ao que foi perguntado? Erros de gênero, concordância ou preposição não reprovam ninguém — aponte, mas não dramatize.
+- Não cobre detalhes de papelada decorados: números de sala, CNPJ, números de resolução, nomes de funcionários. Pergunte como um agente pergunta a uma pessoa, e aceite respostas do tipo "isso está no documento que entreguei".
+- NUNCA invente dados pessoais que não estejam no perfil — sobrenome, nomes de escolas, endereços, números de documento. Se um dado faltar, escreva um marcador entre colchetes, como [sobrenome], em vez de inventar.
+- O comentário em russo deve ser curto, específico e útil.
+
+Responda SEMPRE e SOMENTE com um objeto JSON, sem markdown, sem crases, neste formato:
+{"feedback": null ou {"nivel":"bom|ok|fraco","correcao":"a resposta dele reescrita em português correto e natural","erros":["cite a palavra ou trecho exato que o candidato escreveu → forma correta, e entre parênteses o motivo em russo, ex.: chamo → me chamo (потеряна возвратная частица)"],"comentario_ru":"1-2 предложения по-русски"},
+ "pergunta":"a próxima pergunta em português",
+ "pergunta_ru":"перевод вопроса на русский",
+ "dica":"3-5 palavras ou expressões úteis para responder, com tradução curta em russo",
+ "resposta_modelo":"uma resposta modelo de 2-4 frases, na primeira pessoa, coerente com o perfil"}
+No primeiro turno "feedback" é null.
+${curto ? "MODO RÁPIDO: responda SOMENTE com os campos \"feedback\" e \"pergunta\". NÃO inclua pergunta_ru, dica nem resposta_modelo — eles serão pedidos à parte se o candidato precisar. Isso deixa a resposta mais curta e rápida." : ""}`;
+
+let uso = {ent:0, sai:0, req:0};
+let ultimoMs = 0;
+let usoDia = {dia:null, req:0, ent:0, sai:0};
+
+async function loadUso(){
+  try{
+    const r = await store.get("pfshare_uso");
+    if(r && r.value) usoDia = Object.assign(usoDia, JSON.parse(r.value));
+  }catch(e){}
+  if(usoDia.dia !== new Date().toISOString().slice(0,10)) usoDia = {dia:new Date().toISOString().slice(0,10), req:0, ent:0, sai:0};
+  renderUso();
+}
+function renderUso(){
+  if(!uso.req && !usoDia.req) return;
+  $("uso").textContent =
+    "Сессия: " + uso.req + " запросов, " + uso.ent + " вх. + " + uso.sai + " исх. токенов · " +
+    "сегодня: " + usoDia.req + " запросов, " + (usoDia.ent + usoDia.sai) + " токенов" +
+    (ultimoMs ? " · последний ответ за " + (ultimoMs / 1000).toFixed(1) + " с" : "");
+}
+
+async function erroHTTP(r, onde){
+  let det = "";
+  try{
+    const t = await r.text();
+    try{ const j = JSON.parse(t); det = (j.error && (j.error.message || j.error.type)) || ""; }catch(e){ det = t.slice(0, 200); }
+  }catch(e){}
+  const dica = r.status === 404 ? " (проверьте имя модели кнопкой «Проверить ключ и подобрать модель»)"
+             : r.status === 401 || r.status === 403 ? " (ключ не принят)"
+             : r.status === 429 ? " (превышен лимит запросов — подождите или смените модель)" : "";
+  return new Error((onde ? onde + ": " : "") + "сервис ответил " + r.status + dica + (det ? " — " + det : ""));
+}
+
+const PROV = {
+  gemini:     { tipo:"gemini",    base:"https://generativelanguage.googleapis.com/v1beta", nome:"Google Gemini",
+                chaveUrl:"https://aistudio.google.com/", chaveOnde:"AI Studio → ☰ → API keys → Create API key", gratis:true },
+  groq:       { tipo:"openai",    base:"https://api.groq.com/openai/v1", nome:"Groq",
+                chaveUrl:"https://console.groq.com/", chaveOnde:"Groq Console → API Keys → Create API Key", gratis:true },
+  cerebras:   { tipo:"openai",    base:"https://api.cerebras.ai/v1", nome:"Cerebras",
+                chaveUrl:"https://cloud.cerebras.ai/", chaveOnde:"Cerebras Cloud → API Keys", gratis:true },
+  openrouter: { tipo:"openai",    base:"https://openrouter.ai/api/v1", nome:"OpenRouter",
+                chaveUrl:"https://openrouter.ai/", chaveOnde:"OpenRouter → Keys; модели с суффиксом :free", gratis:true },
+  xai:        { tipo:"openai",    base:"https://api.x.ai/v1", nome:"xAI Grok",
+                chaveUrl:"https://x.ai/api", chaveOnde:"консоль xAI → API Keys (платно)", gratis:false },
+  anthropic:  { tipo:"anthropic", base:"https://api.anthropic.com/v1", nome:"Anthropic",
+                chaveUrl:"https://console.anthropic.com/", chaveOnde:"Anthropic Console → API Keys (платно)", gratis:false },
+  openai:     { tipo:"openai",    base:"https://api.x.ai/v1", nome:"OpenAI-совместимый",
+                chaveUrl:"", chaveOnde:"адрес и ключ берутся у вашего провайдера", gratis:false }
+};
+
+let modelosPorProvedor = {};
+let modelosDisponiveis = [];
+
+function cfgAtual(){
+  const p = $("provedor").value;
+  const d = PROV[p];
+  return {
+    provedor: p,
+    tipo: p === "claude" ? "claude" : (d ? d.tipo : p),
+    base: ($("apiBase").value || (d ? d.base : "")).trim().replace(/\/+$/, ""),
+    modelo: ($("apiModel").value || modelosPorProvedor[p] || "").trim(),
+    chave: $("apiKey").value.trim(),
+    nome: p === "claude" ? "Claude" : (d ? d.nome : p)
+  };
+}
+function reservas(){
+  const out = [];
+  [2, 3].forEach(i => {
+    const el = $("provedor" + i);
+    if(!el) return;
+    const p = el.value, k = ($("apiKey" + i).value || "").trim();
+    if(p === "nao" || !k || !PROV[p]) return;
+    const d = PROV[p];
+    out.push({ provedor:p, tipo:d.tipo, base:d.base, modelo: modelosPorProvedor[p] || "", chave:k, nome:d.nome });
+  });
+  return out;
+}
+function candidatos(){
+  return [cfgAtual()].concat(reservas()).filter(s => s.tipo === "claude" || s.chave);
+}
+function contar(ent, sai){
+  uso.ent += ent||0; uso.sai += sai||0; uso.req++;
+  const h = new Date().toISOString().slice(0,10);
+  if(usoDia.dia !== h) usoDia = {dia:h, req:0, ent:0, sai:0};
+  usoDia.req++; usoDia.ent += ent||0; usoDia.sai += sai||0;
+  try{ store.set("pfshare_uso", JSON.stringify(usoDia)); }catch(e){}
+  renderUso();
+}
+
+const esperar = ms => new Promise(r => setTimeout(r, ms));
+function temporario(msg){
+  const m = String(msg || "");
+  return /\b(429|500|502|503|504)\b/.test(m) ||
+         /high demand|overload|temporar|try again|unavailable|rate limit/i.test(m);
+}
+function statusRede(t){ const le = $("loadExtra"); if(le) le.textContent = t ? " " + t : ""; }
+
+async function listarModelos(slot){
+  let url = slot.base + "/models", headers;
+  if(slot.tipo === "gemini") headers = { "x-goog-api-key": slot.chave };
+  else if(slot.tipo === "anthropic") headers = {
+    "x-api-key": slot.chave, "anthropic-version":"2023-06-01",
+    "anthropic-dangerous-direct-browser-access":"true" };
+  else headers = { "Authorization": "Bearer " + slot.chave };
+  const r = await fetch(url, { headers });
+  if(!r.ok) throw await erroHTTP(r, slot.nome);
+  const d = await r.json();
+  const nomes = slot.tipo === "gemini"
+    ? (d.models || []).filter(m => (m.supportedGenerationMethods || []).indexOf("generateContent") >= 0)
+        .map(m => String(m.name).replace("models/", ""))
+    : (d.data || d.models || []).map(m => String(m.id || m.name));
+  const ruim = /embedding|tts|image|imagen|vision|audio|live|veo|aqa|whisper|moderation|rerank/i;
+  return nomes.filter(n => !ruim.test(n));
+}
+async function garantirModelo(slot){
+  if(slot.tipo === "claude" || slot.modelo) return slot;
+  statusRede("подбираю модель у " + slot.nome + "…");
+  const bons = await listarModelos(slot);
+  if(!bons.length) throw new Error(slot.nome + ": моделей для диалога не нашлось");
+  slot.modelo = melhorModelo(bons);
+  modelosPorProvedor[slot.provedor] = slot.modelo;
+  if(slot.provedor === $("provedor").value && !$("apiModel").value) $("apiModel").value = slot.modelo;
+  await salvarCfg();
+  return slot;
+}
+
+async function callAPI(system, messages, tokens){
+  const t0 = Date.now();
+  try{ return await callAPIinterno(system, messages, tokens); }
+  finally{ ultimoMs = Math.max(1, Date.now() - t0); renderUso(); }
+}
+async function callAPIinterno(system, messages, tokens){
+  try{ await salvarCfg(); }catch(e){}
+  const lista = candidatos();
+  if(!lista.length) throw new Error("не задан ключ: " + cfgAtual().nome +
+    ". Вставьте ключ или выберите другой источник модели.");
+  let ultimo = null;
+  for(let s = 0; s < lista.length; s++){
+    const slot = lista[s];
+    if(s > 0) statusRede("переключаюсь на запасной ключ: " + slot.nome);
+    try{ await garantirModelo(slot); }
+    catch(e){ ultimo = e; continue; }
+    for(let i = 0; i < 3; i++){
+      try{ return await umaChamada(slot, system, messages, tokens); }
+      catch(e){
+        ultimo = e;
+        if(!temporario(e && e.message)) break;
+        statusRede(slot.nome + " перегружен, попытка " + (i + 2) + " из 3");
+        await esperar(800 * (i + 1));
+      }
+    }
+  }
+  throw ultimo;
+}
+
+async function umaChamada(c, system, messages, tokens){
+  if(c.tipo === "openai") return callOpenAI(c, system, messages, tokens);
+  if(c.tipo === "anthropic") return callAnthropicKey(c, system, messages, tokens);
+  if(c.tipo === "gemini") return callGemini(c, system, messages, tokens);
+  return callClaude(system, messages, tokens);
+}
+
+function melhorModelo(nomes, modo){
+  const economia = (modo || ($("prioridade") ? $("prioridade").value : "economia")) === "economia";
+  const pontos = n => {
+    let p = 0;
+    if(/flash|mini|nano|small|haiku/i.test(n)) p += 10;
+    if(/latest/i.test(n)) p += 6;
+    if(/lite/i.test(n)) p += economia ? 7 : -4;
+    if(/\bpro\b|-pro|opus|ultra/i.test(n)) p -= economia ? 8 : 2;
+    if(/^gemma|^grok-2|^gpt-3/i.test(n)) p -= 6;
+    if(/preview|exp|beta/i.test(n)) p -= 3;
+    const v = (n.match(/(\d+(?:\.\d+)?)/) || [])[1];
+    if(v) p += Math.min(parseFloat(v), 20);
+    return p;
+  };
+  return nomes.slice().sort((a, b) => pontos(b) - pontos(a))[0];
+}
+
+async function callGemini(c, system, messages, tokens, jaTentou){
+  if(!c.chave) throw new Error("не задан ключ Google AI Studio");
+  const modelo = /gemini/.test(c.modelo) ? c.modelo : "gemini-flash-latest";
+  const base = /googleapis/.test(c.base) ? c.base : "https://generativelanguage.googleapis.com/v1beta";
+  const r = await fetch(base + "/models/" + modelo + ":generateContent",{
+    method:"POST",
+    headers:{"content-type":"application/json", "x-goog-api-key": c.chave},
+    body:JSON.stringify({
+      systemInstruction:{ parts:[{ text: system }] },
+      contents: messages.map(m => ({ role: m.role === "assistant" ? "model" : "user", parts:[{ text: m.content }] })),
+      generationConfig:{ maxOutputTokens: tokens||2048 }
+    })
+  });
+  if(!r.ok){
+    const err = await erroHTTP(r, "Gemini");
+    if(r.status === 404 && !jaTentou){
+      const sugeridos = (String(err.message).match(/models\/[A-Za-z0-9._-]+/g) || [])
+        .map(x => x.replace("models/", ""))
+        .filter(x => x !== modelo);
+      if(sugeridos.length){
+        c.modelo = sugeridos[0];
+        modelosPorProvedor[c.provedor] = c.modelo;
+        if(c.provedor === $("provedor").value) $("apiModel").value = c.modelo;
+        await salvarCfg();
+        return callGemini(c, system, messages, tokens, true);
+      }
+    }
+    throw err;
+  }
+  const d = await r.json();
+  const u = d.usageMetadata || {};
+  if(u.promptTokenCount || u.candidatesTokenCount) contar(u.promptTokenCount, u.candidatesTokenCount);
+  const cand = d.candidates && d.candidates[0];
+  const parts = cand && cand.content && cand.content.parts;
+  const texto = (parts || []).map(p => p.text || "").join("\n");
+  if(cand && cand.finishReason === "MAX_TOKENS" && !texto.trim())
+    throw new Error("модель израсходовала лимит на размышления и не выдала текст — выберите другую модель");
+  return texto;
+}
+
+async function callAnthropicKey(c, system, messages, tokens){
+  if(!c.chave) throw new Error("не задан API-ключ Anthropic");
+  const base = /anthropic/.test(c.base) ? c.base : "https://api.anthropic.com/v1";
+  const r = await fetch(base + "/messages",{
+    method:"POST",
+    headers:{
+      "content-type":"application/json",
+      "x-api-key": c.chave,
+      "anthropic-version":"2023-06-01",
+      "anthropic-dangerous-direct-browser-access":"true"
+    },
+    body:JSON.stringify({
+      model: /claude/.test(c.modelo) ? c.modelo : "claude-sonnet-5",
+      max_tokens: tokens||2048, system, messages
+    })
+  });
+  if(!r.ok) throw await erroHTTP(r, "Claude");
+  const d = await r.json();
+  if(d.usage) contar(d.usage.input_tokens, d.usage.output_tokens);
+  return (d.content||[]).map(i => i.type === "text" ? i.text : "").join("\n");
+}
+
+async function callOpenAI(c, system, messages, tokens){
+  if(!c.chave) throw new Error("не задан API-ключ");
+  const r = await fetch(c.base + "/chat/completions",{
+    method:"POST",
+    headers:{"Content-Type":"application/json", "Authorization":"Bearer " + c.chave},
+    body:JSON.stringify({
+      model: c.modelo, max_tokens: tokens||2048,
+      messages: [{role:"system", content:system}].concat(messages)
+    })
+  });
+  if(!r.ok) throw await erroHTTP(r, "OpenAI-совместимый");
+  const d = await r.json();
+  const u = d.usage || {};
+  if(u.prompt_tokens || u.completion_tokens) contar(u.prompt_tokens, u.completion_tokens);
+  const m = d.choices && d.choices[0] && d.choices[0].message;
+  return (m && m.content) || "";
+}
+
+async function callClaude(system, messages, tokens){
+  if(!window.storage) throw new Error(
+    "файл открыт вне Claude. Режим «Claude» работает только внутри артефакта — переключите «Откуда берётся модель» на «Свой ключ» и укажите свой API-ключ. Словарь работает и без этого.");
+  const r = await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:"claude-sonnet-4-6", max_tokens: tokens||2048, system, messages})
+  });
+  if(!r.ok) throw new Error("Сервис ответил "+r.status);
+  const d = await r.json();
+  if(d.usage) contar(d.usage.input_tokens, d.usage.output_tokens);
+  return (d.content||[]).map(i=>i.type==="text"?i.text:"").join("\n");
+}
+function cortarHistorico(){
+  if(msgs.length <= 11) return;
+  msgs = msgs.slice(-11);
+  while(msgs.length && msgs[0].role !== "user") msgs.shift();
+}
+function parseJSON(t){
+  const c = t.replace(/```json|```/g,"").trim();
+  const a = c.indexOf("{"), b = c.lastIndexOf("}");
+  return JSON.parse(c.slice(a, b+1));
+}
+
+async function loadState(){
+  try{
+    const r = await store.get("pfshare_trainer");
+    if(r && r.value){
+      const s = JSON.parse(r.value);
+      stats = Object.assign(stats, s.stats||{});
+      perfilRu = s.perfilRu || "";
+      $("perfil").value = s.perfil || PERFIL_PADRAO;
+    } else $("perfil").value = PERFIL_PADRAO;
+  }catch(e){ $("perfil").value = PERFIL_PADRAO; }
+  renderStats();
+}
+async function saveState(){
+  try{ await store.set("pfshare_trainer", JSON.stringify({perfil:$("perfil").value, perfilRu, stats})); }catch(e){}
+}
+function renderStats(){
+  const d = new Date().toLocaleDateString("pt-BR");
+  $("proto").textContent = "PROTOCOLO DE TREINO · " + d + " · SESSÃO " + (stats.sessoes+1);
+  $("stats").textContent = stats.sessoes ? "Пройдено сессий: "+stats.sessoes+(stats.ultima?" · последняя: "+stats.ultima:"") : "";
+}
+function showErr(m){ $("erro").textContent = m; $("erro").classList.remove("hidden"); }
+function busy(on){ if(!on && $("loadExtra")) $("loadExtra").textContent = "";
+  $("loading").classList.toggle("hidden", !on); $("send").disabled = on; $("start").disabled = on; }
+
+function renderTurn(o){
+  perguntaAnterior = atual ? atual.pergunta : "";
+  atual = o;
+  n++;
+  $("qnum").textContent = String(n).padStart(2,"0");
+  const oculto = $("soOuvido").checked;
+  $("pergunta").textContent = oculto ? "🎧" : o.pergunta;
+  const rev = $("revelar");
+  while(rev.firstChild) rev.removeChild(rev.firstChild);
+  if(oculto){
+    const cx = document.createElement("div"); cx.className = "tools"; cx.style.marginBottom = "10px";
+    const som = document.createElement("button");
+    som.className = "ghost"; som.id = "btnRepetir"; som.textContent = "🔊 Ещё раз";
+    som.onclick = () => falar(o.pergunta, msg => aux("Звук", msg, "som"), 1);
+    const lento = document.createElement("button");
+    lento.className = "ghost"; lento.id = "btnRepetirLento"; lento.textContent = "🐢 Медленно";
+    lento.onclick = () => falar(o.pergunta, msg => aux("Звук", msg, "som"), 0.6);
+    const ver = document.createElement("button");
+    ver.className = "ghost"; ver.id = "btnMostrar"; ver.textContent = "👁 Показать текст";
+    ver.onclick = () => {
+      $("pergunta").textContent = o.pergunta;
+      ver.disabled = true; ver.textContent = "Текст открыт";
+    };
+    cx.appendChild(som); cx.appendChild(lento); cx.appendChild(ver);
+    rev.appendChild(cx);
+  }
+  $("aux").innerHTML = "";
+  $("resp").value = "";
+  const fb = $("fbBox"); fb.innerHTML = "";
+  if(o.feedback){
+    const f = o.feedback;
+    const div = document.createElement("div");
+    div.className = "fb" + (f.nivel==="fraco" ? " weak" : "");
+    const h3 = document.createElement("h3"); h3.textContent = "Разбор предыдущего ответа";
+    div.appendChild(h3);
+    if(ultimaResposta){
+      const partes = difPalavras(ultimaResposta, f.correcao || ultimaResposta);
+      div.appendChild(linhaDif("Вы написали", partes, "-", "difOut", "difSeu"));
+      div.appendChild(linhaDif("Правильно", partes, "+", "difIn", "difCerto"));
+    } else {
+      const p = document.createElement("p"); p.className = "difLinha"; p.id = "difCerto";
+      const r = document.createElement("span"); r.className = "difRotulo"; r.textContent = "Правильно";
+      p.appendChild(r); p.appendChild(document.createTextNode(f.correcao || ""));
+      div.appendChild(p);
+    }
+    if(f.correcao){
+      const par = parDeSom(f.correcao, "fbSay", msg => aux("Звук", msg, "som"));
+      par.style.marginBottom = "10px";
+      div.appendChild(par);
+    }
+    if(f.erros && f.erros.length){
+      const ul = document.createElement("ul"); ul.id = "listaErros";
+      f.erros.forEach(e => { const li = document.createElement("li"); li.textContent = e; ul.appendChild(li); });
+      div.appendChild(ul);
+    }
+    if(f.comentario_ru){
+      const c = document.createElement("p"); c.className = "muted"; c.id = "comentario";
+      c.style.margin = "8px 0 0"; c.textContent = f.comentario_ru;
+      div.appendChild(c);
+    }
+    fb.appendChild(div);
+    if(f.erros) stats.erros = (stats.erros||[]).concat(f.erros).slice(-60);
+    anotar(exame ? exame.tema : temaAtual(), f.nivel);
+    guardarTurno(f);
+    if(exame && (f.nivel === "bom" || f.nivel === "ok" || f.nivel === "fraco")) exame[f.nivel]++;
+  }
+  $("jogo").classList.remove("hidden");
+  if($("autoVoz").checked || oculto) falar(o.pergunta, msg => aux("Звук", msg, "som"), 1);
+  $("resp").focus();
+}
+function difPalavras(a, b){
+  const A = String(a || "").split(/\s+/).filter(Boolean);
+  const B = String(b || "").split(/\s+/).filter(Boolean);
+  const n = A.length, m = B.length;
+  const dp = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+  for(let i = n - 1; i >= 0; i--)
+    for(let j = m - 1; j >= 0; j--)
+      dp[i][j] = norm(A[i]) === norm(B[j]) ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+  const out = []; let i = 0, j = 0;
+  while(i < n && j < m){
+    if(norm(A[i]) === norm(B[j])){ out.push(["=", B[j]]); i++; j++; }
+    else if(dp[i + 1][j] >= dp[i][j + 1]){ out.push(["-", A[i]]); i++; }
+    else { out.push(["+", B[j]]); j++; }
+  }
+  while(i < n) out.push(["-", A[i++]]);
+  while(j < m) out.push(["+", B[j++]]);
+  return out;
+}
+function linhaDif(rotulo, partes, mostrar, classe, id){
+  const p = document.createElement("p");
+  p.className = "difLinha"; p.id = id;
+  const r = document.createElement("span"); r.className = "difRotulo"; r.textContent = rotulo;
+  p.appendChild(r);
+  partes.forEach(([tipo, palavra]) => {
+    if(tipo !== "=" && tipo !== mostrar) return;
+    if(tipo === "="){ p.appendChild(document.createTextNode(palavra + " ")); return; }
+    const sp = document.createElement("span");
+    sp.className = classe; sp.textContent = palavra;
+    p.appendChild(sp); p.appendChild(document.createTextNode(" "));
+  });
+  return p;
+}
+function esc(s){ return String(s==null?"":s).replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+
+function aux(tag, txt, chave){
+  const id = "aux-" + (chave || tag);
+  let d = document.getElementById(id);
+  if(!d){
+    d = document.createElement("div");
+    d.className = "aux"; d.id = id;
+    $("aux").appendChild(d);
+  }
+  d.innerHTML = '<span class="tag">'+tag+"</span>"+esc(txt);
+  return d;
+}
+
+const EXTRAS = {
+  pergunta_ru: ["Перевод", "Traduza a pergunta abaixo para o russo. Responda apenas com a tradução, sem aspas."],
+  dica: ["Слова", "Liste de 3 a 5 palavras ou expressões úteis para responder à pergunta abaixo, em português, cada uma com tradução curta em russo entre parênteses, separadas por vírgula. Responda apenas com a lista."],
+  resposta_modelo: ["Образец", "Escreva uma resposta modelo de 2 a 4 frases, em primeira pessoa, coerente com o perfil, para a pergunta abaixo. Responda apenas com a resposta."]
+};
+async function mostrarExtra(campo){
+  if(!atual) return;
+  const [rotulo, instrucao] = EXTRAS[campo];
+  if(atual[campo]){ aux(rotulo, atual[campo], campo); if(campo === "dica") botaoAddDica(); return; }
+  aux(rotulo, "загружаю…", campo);
+  try{
+    const txt = await callAPI(instrucao,
+      [{ role:"user", content: "Perfil: " + $("perfil").value + "\n\nPergunta: " + atual.pergunta }], 1200);
+    atual[campo] = String(txt || "").trim();
+    aux(rotulo, atual[campo], campo);
+    if(campo === "dica") botaoAddDica();
+  }catch(e){ aux(rotulo, "не вышло — " + e.message, campo); }
+}
+
+function palavrasDaDica(texto){
+  const achadas = [];
+  String(texto || "").split(/[,;\n]+/).forEach(parte => {
+    const m = parte.match(/^\s*([^()]{2,60}?)\s*[(\[]\s*([^()\[\]]{2,60}?)\s*[)\]]\s*$/);
+    if(!m) return;
+    const pt = m[1].trim(), ru = m[2].trim();
+    if(!pt || !ru || !/[а-яё]/i.test(ru)) return;
+    if(vocab.some(c => norm(c.pt) === norm(pt))) return;
+    if(achadas.some(c => norm(c.pt) === norm(pt))) return;
+    achadas.push({ pt, ru });
+  });
+  return achadas;
+}
+function botaoAddDica(){
+  const bloco = document.getElementById("aux-dica");
+  if(!bloco || document.getElementById("btnAddDica")) return;
+  const novas = palavrasDaDica(atual.dica);
+  if(!novas.length) return;
+  const b = document.createElement("button");
+  b.className = "ghost"; b.id = "btnAddDica"; b.style.marginTop = "8px";
+  b.textContent = "Добавить " + novas.length + " слов в колоду";
+  b.onclick = async () => {
+    let id = Math.max(0, ...vocab.map(c => c.id));
+    novas.forEach(c => vocab.push({ id: ++id, pt: c.pt, ru: c.ru, box: 0, due: hoje(), tema: "meu" }));
+    await saveVocab();
+    b.disabled = true; b.textContent = "Добавлено: " + novas.length;
+    vTopo();
+  };
+  bloco.appendChild(document.createElement("br"));
+  bloco.appendChild(b);
+}
+$("btnTr").onclick = () => mostrarExtra("pergunta_ru");
+$("btnDica").onclick = () => mostrarExtra("dica");
+$("btnMod").onclick = () => mostrarExtra("resposta_modelo");
+$("btnSay").onclick = () => {
+  if(!atual) return;
+  falar(atual.pergunta, msg => aux("Звук", msg), 1);
+};
+$("btnSayLento").onclick = () => {
+  if(!atual) return;
+  falar(atual.pergunta, msg => aux("Звук", msg), 0.6);
+};
+
+$("startExame").onclick = async () => {
+  exame = { tema: temaAtual(), restantes: 8, bom:0, ok:0, fraco:0 };
+  modoExame(true);
+  await $("start").onclick();
+  if(!vis0($("jogo"))){ exame = null; modoExame(false); }
+};
+function vis0(el){ return el && !el.classList.contains("hidden"); }
+
+let perfilRu = "";
+$("btnTraduzir").onclick = async () => {
+  const t = ($("perfil").value || "").trim();
+  if(t.length < 20){ $("traduMsg").textContent = "Сначала опишите себя — хотя бы несколько строк."; return; }
+  if(!/[а-яё]/i.test(t)){ $("traduMsg").textContent = "Текст уже не на русском — переводить нечего."; return; }
+  $("btnTraduzir").disabled = true;
+  $("traduMsg").textContent = "Перевожу…";
+  try{
+    const raw = await callAPI(
+      "Você traduz para o português do Brasil a ficha pessoal de um estrangeiro que vai à entrevista de naturalização. " +
+      "Traduza fielmente, sem inventar nada e sem acrescentar dados que não estejam no original. " +
+      "Mantenha nomes próprios, datas e números exatamente como estão. Se algo estiver ambíguo, escolha a leitura mais literal. " +
+      "Responda apenas com o texto traduzido, sem comentários, sem aspas e sem markdown.",
+      [{ role:"user", content: t }], 1500);
+    const pt = String(raw || "").trim();
+    if(!pt) throw new Error("пустой ответ");
+    perfilRu = t;
+    $("perfil").value = pt;
+    await saveState();
+    $("traduMsg").textContent = "Переведено. Проверьте глазами: имена и фамилии, даты, названия города и школы, " +
+      "числа и сроки. Модель переводит близко к тексту, но ошибку в имени или дате вы заметите только сами. " +
+      "Кнопка «Оригинал» вернёт русский текст.";
+  }catch(e){ $("traduMsg").textContent = "Не вышло: " + e.message; }
+  $("btnTraduzir").disabled = false;
+};
+
+$("btnOriginal").onclick = async () => {
+  if(!perfilRu){ $("traduMsg").textContent = "Русского оригинала нет — анкету ещё не переводили."; return; }
+  const atual = $("perfil").value;
+  $("perfil").value = perfilRu;
+  perfilRu = atual;
+  await saveState();
+  $("traduMsg").textContent = "Показан другой вариант анкеты. Нажмите «Оригинал» ещё раз, чтобы вернуться.";
+};
+
+$("start").onclick = async () => {
+  $("erro").classList.add("hidden");
+  busy(true);
+  msgs = [{role:"user", content:"Comece a entrevista. Cumprimente brevemente e faça a primeira pergunta."}];
+  try{
+    const raw = await callAPI(SYS($("perfil").value, $("tema").value, $("nivel").value, $("rapido").checked), msgs);
+    msgs.push({role:"assistant", content:raw});
+    renderTurn(parseJSON(raw));
+    $("setup").classList.add("hidden");
+    $("resumo").classList.add("hidden");
+    stats.sessoes++; stats.ultima = new Date().toLocaleDateString("pt-BR");
+    saveState();
+  }catch(e){ showErr("Не удалось начать: "+e.message+". Попробуйте ещё раз."); }
+  busy(false);
+};
+
+$("send").onclick = async () => {
+  const t = $("resp").value.trim();
+  if(!t) return;
+  $("erro").classList.add("hidden");
+  busy(true);
+  ultimaResposta = t;
+  msgs.push({role:"user", content:t});
+  cortarHistorico();
+  try{
+    const raw = await callAPI(SYS($("perfil").value, $("tema").value, $("nivel").value, $("rapido").checked), msgs);
+    msgs.push({role:"assistant", content:raw});
+    renderTurn(parseJSON(raw));
+    saveState();
+    if(exame){
+      exame.restantes--;
+      if(exame.restantes <= 0){ busy(false); return fimExame(); }
+    }
+  }catch(e){ showErr("Сбой запроса: "+e.message); msgs.pop(); }
+  busy(false);
+};
+
+$("finish").onclick = async () => {
+  busy(true);
+  try{
+    const raw = await callAPI(
+      "Você é professor de português para estrangeiros. Analise a entrevista simulada abaixo e responda EM RUSSO, em texto simples com quebras de linha, sem markdown, nesta ordem: 1) что уже звучит уверенно; 2) 3-5 повторяющихся ошибок с исправлением; 3) список из 10 слов и выражений для карточек в формате «português — русский»; 4) одна фраза, которую стоит выучить наизусть для реальной беседы.",
+      [{role:"user", content: msgs.map(m=>(m.role==="user"?"CANDIDATO: ":"AGENTE(json): ")+m.content).join("\n\n")}]
+    );
+    $("resumo").innerHTML = '<div class="panel"><h3 style="margin-top:0;font-size:.85rem;color:var(--ink-soft)">Разбор сессии</h3><div style="white-space:pre-wrap">'+esc(raw)+'</div></div><button class="wide" onclick="location.reload()">Новая сессия</button>';
+    const imp = importarPalavras(raw);
+    if(imp) $("resumo").insertBefore(imp, $("resumo").lastChild);
+    $("resumo").classList.remove("hidden");
+    $("jogo").classList.add("hidden");
+    $("resumo").scrollIntoView({behavior:"smooth"});
+  }catch(e){ showErr("Не удалось собрать разбор: "+e.message); }
+  busy(false);
+};
+
+$("resp").addEventListener("keydown", e => {
+  if((e.metaKey||e.ctrlKey) && e.key==="Enter") $("send").click();
+});
+
+// ================= СЛОВА =================
+const SEED = [
+["o requerimento","заявление (о выдаче)"],["a naturalização","натурализация"],["o processo","дело, производство"],
+["o certificado","сертификат"],["a declaração","справка, заявление"],["o comprovante","подтверждающий документ"],
+["a certidão","свидетельство, справка"],["o prazo","срок"],["assinar","подписывать"],
+["apresentar","предъявлять, представлять"],["conferir","сверять, проверять"],["comprovar","подтверждать документально"],
+["o guichê","окно приёма"],["a exigência","дополнительный запрос"],["o protocolo","регистрационный номер обращения"],
+["os antecedentes criminais","судимости"],["a residência","место жительства"],["o endereço","адрес"],
+["o vínculo","связь, привязка"],["preencher","заполнять бланк"],["o formulário","бланк"],
+["a taxa","пошлина"],["deferido","удовлетворён"],["indeferido","отклонён"],
+["o recurso","обжалование"],["a entrevista","собеседование"],["o agente","сотрудник полиции"],
+["a impressão digital","отпечаток пальца"],["o estado civil","семейное положение"],["a nacionalidade","гражданство"],
+["casado","женат"],["a esposa","жена"],["o filho","сын"],["a filha","дочь"],
+["nascer","родиться"],["a data de nascimento","дата рождения"],["o local de nascimento","место рождения"],
+["morar","жить, проживать"],["mudar-se","переезжать"],["desde","с (какого-то момента)"],
+["há dois anos","два года назад"],["natural de","уроженец"],["o sobrenome","фамилия"],
+["o emprego","работа, место работы"],["a profissão","профессия"],["o chefe","начальник"],
+["o colega","коллега"],["a equipe","команда"],["o horário","график, часы работы"],
+["o salário","зарплата"],["a carteira de trabalho","трудовая книжка"],["autônomo","самозанятый"],
+["a empresa","компания"],["o cliente","заказчик, клиент"],["o contrato","договор"],
+["a reunião","совещание"],["o prazo de entrega","срок сдачи"],["trabalhar remotamente","работать удалённо"],
+["o escritório","офис"],["a experiência","опыт"],["ganhar","зарабатывать"],
+["a tarefa","задача"],["o relatório","отчёт"],["a vaga","вакансия, место"],
+["a prova","экзамен, работа"],["a matéria","предмет"],["aprovado","сдал, прошёл"],
+["o ensino médio","среднее образование"],["presencial","очный"],["a sala","аудитория"],
+["o resultado","результат"],["estudar","учиться"],["a escola","школа"],
+["o bairro","район"],["o aluguel","аренда"],["o vizinho","сосед"],
+["a praia","пляж"],["o carro","машина"],["o ônibus","автобус"],
+["o posto de saúde","поликлиника"],["pretender","намереваться"],["o motivo","причина"],
+["gostar de","нравиться"],["o futuro","будущее"],["a família","семья"],
+["quando","когда"],["onde","где"],["por que","почему (в вопросе)"],
+["porque","потому что"],["quem","кто"],["quantos","сколько"],
+["qual","какой, который"],["como","как"],["já","уже"],
+["ainda","ещё, пока"],["também","тоже"],["sempre","всегда"],
+["às vezes","иногда"],["agora","сейчас"],["depois","потом"],
+["antes","раньше"],
+["pode repetir, por favor?","повторите, пожалуйста"],["não entendi","я не понял"],
+["mais devagar, por favor","помедленнее, пожалуйста"],["como se diz...?","как сказать...?"],
+["na verdade","на самом деле"],["com certeza","конечно, безусловно"],["tudo bem","всё в порядке"],
+["desculpe","извините"],["posso explicar","могу объяснить"],
+["está no documento que entreguei","это есть в документе, который я подал"]
+];
+
+const EMOJI = {
+"o emprego":"💼","a profissão":"🧑‍💼","o chefe":"🧑‍⚖️","o colega":"🧑‍🤝‍🧑","a equipe":"👥",
+"o horário":"🕘","o salário":"💵","a carteira de trabalho":"📗","autônomo":"🧑‍💻","a reunião":"🗣️",
+"o prazo de entrega":"⌛","o escritório":"🏢","a experiência":"⭐","ganhar":"💸","a tarefa":"✔️",
+"a vaga":"🪧",
+"o certificado":"📜","a declaração":"📄","o comprovante":"🧾","a certidão":"📑","o prazo":"⏳",
+"quando":"🕐","onde":"📍","por que":"❔","porque":"➡️","quem":"🧍","quantos":"🔢",
+"qual":"🤷","como":"❓","já":"✔️","ainda":"⏳","também":"➕","sempre":"🔁","às vezes":"〰️",
+"agora":"⏱️","depois":"⏭️","antes":"⏮️",
+
+"assinar":"✍️","apresentar":"🤝","conferir":"🔍","o guichê":"🪟","o protocolo":"🔢",
+"a impressão digital":"🫆","a residência":"🏠","o endereço":"📍","preencher":"📝","o formulário":"📋",
+"a taxa":"💰","deferido":"✅","indeferido":"❌","a entrevista":"💬","o agente":"👮",
+"a carteira":"🪪","o recurso":"⚖️","a nacionalidade":"🌍","os antecedentes criminais":"🚔",
+"casado":"💍","a esposa":"👩","o filho":"👦","a filha":"👧","nascer":"👶",
+"a data de nascimento":"📅","o local de nascimento":"🗺️","morar":"🏡","mudar-se":"📦",
+"a família":"👨‍👩‍👧‍👦","o sobrenome":"🔤","o estado civil":"💑",
+
+
+"o relatório":"📕","o contrato":"🖊️","a empresa":"🏬","o cliente":"🙋",
+"trabalhar remotamente":"💻",
+"a prova":"🧪","a matéria":"📚","aprovado":"🎉","o ensino médio":"🎓",
+"presencial":"🚶","a sala":"🚪","o resultado":"🏁","estudar":"📖","a escola":"🏫",
+"o bairro":"🏘️","o aluguel":"🔑","o vizinho":"👋","a praia":"🏖️","o carro":"🚗",
+"o ônibus":"🚌","o posto de saúde":"🏥","o futuro":"🔮","gostar de":"❤️","o motivo":"❓",
+"pretender":"🎯","desde":"⏱️","há dois anos":"🕰️","natural de":"🌱","desculpe":"🙏",
+"não entendi":"🤔","mais devagar, por favor":"🐢","pode repetir, por favor?":"🔁",
+"como se diz...?":"🗣️","tudo bem":"👌","com certeza":"💯","posso explicar":"💡",
+"está no documento que entreguei":"📎","na verdade":"🔄"
+};
+const REGRAS = [
+{id:"ser_estar", ex:["Sou russo.", "Sou engenheiro.", "Estou em São Paulo.", "Estou em casa.", "Tenho trinta e um anos."], t:"ser или estar", txt:"ser — постоянное: кто вы, откуда, профессия. estar — временное: где находитесь, состояние сейчас. «Sou russo» (я русский, навсегда), «Estou em São Paulo» (нахожусь в Ресифи).",
+ q:[["Я инженер.","Sou engenheiro.","Estou engenheiro.","Sou engenheiro é.","Estou de engenheiro."],
+    ["Я женат.","Sou casado.","Estou casado hoje.","Sou casando.","Estou casar."],
+    ["Я сейчас дома.","Estou em casa.","Sou em casa.","Estou de casa.","Sou na casa."],
+    ["Мне 31 год.","Tenho 31 anos.","Sou 31 anos.","Estou 31 anos.","Tenho 31 años."]]},
+{id:"passado", ex:["Prestei a prova em novembro.", "Cheguei ao Brasil em 2025.", "Estive no Rio.", "Nós compramos um carro.", "Fiz o exame."], t:"Прошедшее время: pretérito perfeito", txt:"Про то, что вы сделали: -ar → -ei (morei, trabalhei), -er/-ir → -i (comi, saí). Неправильные: fui (ser/ir), estive (estar), fiz (fazer), tive (ter). «Prestei a prova em novembro».",
+ q:[["Я сдал экзамен в ноябре.","Prestei a prova em novembro.","Presto a prova em novembro.","Prestar a prova em novembro.","Prestava a prova novembro."],
+    ["Я приехал в Бразилию в 2025 году.","Cheguei ao Brasil em 2025.","Chego ao Brasil em 2025.","Chegava no Brasil 2025.","Chegar ao Brasil em 2025."],
+    ["Я был в Рио.","Estive no Rio.","Sou no Rio.","Estou no Rio ontem.","Era no Rio."],
+    ["Мы купили машину.","Compramos um carro.","Compramos uma carro.","Compra um carro.","Comprar um carro."]]},
+{id:"lugar", ex:["Moro em São Paulo.", "Moro no Brasil.", "Sou da Rússia.", "Vou para Fortaleza.", "Trabalho na empresa."], t:"Предлоги места: em, de, para", txt:"em + артикль сливается: em+o=no, em+a=na. «Moro no São Paulo»? Нет — города без артикля: «Moro em São Paulo», но «no Brasil», «na Rússia». Откуда — de/do/da: «Sou da Rússia». Куда — para: «Vou para casa».",
+ q:[["Я живу в Ресифи.","Moro em São Paulo.","Moro no São Paulo.","Moro na São Paulo.","Moro de São Paulo."],
+    ["Я живу в Бразилии.","Moro no Brasil.","Moro em Brasil.","Moro na Brasil.","Moro do Brasil."],
+    ["Я из России.","Sou da Rússia.","Sou de Rússia.","Sou na Rússia.","Sou do Rússia."],
+    ["Я еду в Жоан-Песоа.","Vou para Fortaleza.","Vou em Fortaleza.","Vou no Fortaleza.","Vou de Fortaleza."]]},
+{id:"tempo", ex:["Moro aqui desde abril de 2025.", "Cheguei há dois anos.", "A prova foi em 30 de novembro.", "Dei entrada em agosto."], t:"Предлоги времени: em, há, desde", txt:"em — в каком году или месяце: «em 2025», «em novembro». há — сколько времени назад: «há dois anos». desde — с какого момента и до сих пор: «desde abril de 2025». Дата целиком: «em 30 de novembro de 2025».",
+ q:[["Я живу здесь с апреля 2025 года.","Moro aqui desde abril de 2025.","Moro aqui há abril de 2025.","Moro aqui em abril de 2025.","Moro aqui de abril 2025."],
+    ["Я приехал два года назад.","Cheguei há dois anos.","Cheguei desde dois anos.","Cheguei em dois anos.","Cheguei por dois anos."],
+    ["Экзамен был 30 ноября.","A prova foi em 30 de novembro.","A prova foi no 30 novembro.","A prova foi a 30 de novembro.","A prova foi de 30 novembro."],
+    ["Я подал заявление в августе.","Dei entrada em agosto.","Dei entrada no agosto.","Dei entrada desde agosto.","Dei entrada há agosto."]]},
+{id:"genero", ex:["O documento correto.", "A certidão correta.", "Muitas viagens.", "Minha esposa é russa.", "Esta declaração está correta."], t:"Род и согласование", txt:"Прилагательное и артикль подстраиваются под существительное: «o documento correto», «a certidão correta», «as provas corretas». Слова на -ão и -dade женского рода: a naturalização, a cidade. На -ma греческие — мужского: o problema.",
+ q:[["Много поездок.","Muitas viagens.","Muitos viagens.","Muita viagens.","Muito viagens."],
+    ["Нужный документ.","O documento necessário.","A documento necessária.","O documento necessária.","A documento necessário."],
+    ["Моя жена — русская.","Minha esposa é russa.","Minha esposa é russo.","Meu esposa é russa.","Minha esposa é russas."],
+    ["Эта справка верная.","Esta declaração está correta.","Este declaração está correto.","Esta declaração está correto.","Este declaração está correta."]]},
+{id:"por_para", ex:["Viajamos pelo Brasil.", "É um documento para a Polícia Federal.", "Obrigado pela ajuda.", "Vim para trabalhar."], t:"por или para", txt:"para — цель, направление, адресат: «para o Brasil», «para trabalhar». por — через, по, из-за, за какой срок: «pelo Brasil» (по Бразилии), «por dois anos», «obrigado por tudo». Слияния: por+o=pelo, por+a=pela.",
+ q:[["Мы путешествовали по Бразилии.","Viajamos pelo Brasil.","Viajamos para o Brasil.","Viajamos por Brasil.","Viajamos no Brasil todo."],
+    ["Это документ для Федеральной полиции.","É um documento para a Polícia Federal.","É um documento por a Polícia Federal.","É um documento pela Polícia Federal.","É um documento a Polícia Federal."],
+    ["Спасибо за помощь.","Obrigado pela ajuda.","Obrigado para ajuda.","Obrigado por ajuda.","Obrigado da ajuda."],
+    ["Я приехал, чтобы работать.","Vim para trabalhar.","Vim por trabalhar.","Vim para trabalho.","Vim de trabalhar."]]},
+{id:"reflexivos", ex:["Me chamo Ivan.", "Nos mudamos para São Paulo.", "Como o senhor se chama?", "Me casei em 2019."], t:"Возвратные глаголы", txt:"chamar-se, mudar-se, casar-se. В бразильской речи местоимение ставится перед глаголом: «me chamo Ivan», «nos mudamos para São Paulo». Забытое «me» — самая частая ошибка на собеседовании.",
+ q:[["Меня зовут Владимир.","Me chamo Ivan.","Chamo Ivan.","Me chama Ivan.","Eu chamo-me de Ivan."],
+    ["Мы переехали в Ресифи.","Nos mudamos para São Paulo.","Mudamos nos para São Paulo.","Nós mudamos-nos em São Paulo.","Nos mudamos em São Paulo."],
+    ["Как вас зовут?","Como o senhor se chama?","Como o senhor chama?","Como se o senhor chama?","Como chama o senhor se?"],
+    ["Я женился в 2019 году.","Me casei em 2019.","Casei me em 2019.","Me casou em 2019.","Eu casar em 2019."]]},
+{id:"negacao", ex:["Não entendi nada.", "Não tenho antecedentes criminais.", "Nunca estive lá.", "Não conheço ninguém aqui."], t:"Отрицание", txt:"não ставится перед глаголом: «Não entendi». Двойное отрицание — норма: «Não tenho nada», «Não conheço ninguém», «Nunca estive lá». Убирать второе отрицание, как в русском, нельзя.",
+ q:[["Я ничего не понял.","Não entendi nada.","Entendi nada.","Não entendi algo.","Nada não entendi."],
+    ["У меня нет судимостей.","Não tenho antecedentes criminais.","Tenho não antecedentes criminais.","Não tenho nenhum antecedentes.","Não tenho antecedente criminais."],
+    ["Я никогда там не был.","Nunca estive lá.","Não nunca estive lá.","Nunca não estive lá.","Não estive nunca lá não."],
+    ["Я никого здесь не знаю.","Não conheço ninguém aqui.","Conheço ninguém aqui.","Não conheço alguém aqui.","Ninguém não conheço aqui."]]},
+{id:"nasais", ex:["não", "bem", "sim", "mãe", "naturalização", "documentação"], t:"Произношение: носовые", txt:"ão, ãe, õe, а также -am, -em, -im, -om, -um в конце слова звучат в нос, без чистого «н» на конце. não ≈ «нау» в нос, mãe ≈ «май», bem ≈ «бей», sim ≈ «си». Если произнести «нао» раздельно, вас поймут, но акцент будет резать слух.",
+ q:[["Как звучит окончание в «naturalização»?","в нос, без чёткого «н»","как русское «-он»","как «-ао» двумя слогами","как «-ан» с твёрдым н"],
+    ["Слово «bem» ближе всего к","«бей» в нос","«бем» с чётким м","«бен»","«би»"],
+    ["Слово «mãe» произносится как","«май» в нос","«мае»","«ман»","«мэ»"],
+    ["Что общего у «não», «bem», «sim»?","все оканчиваются носовым звуком","все ударные на первый слог","все читаются буквально","все с открытым «э»"]]},
+{id:"sons", ex:["casa", "Fortaleza", "filho", "senhor", "Brasil", "carro"], t:"Произношение: s, r, lh, nh", txt:"s между гласными звучит как «з»: casa ≈ «каза», Brasil ≈ «Бразиу». r в начале слова и rr — как русское «х»: São Paulo ≈ «Хесифи», carro ≈ «кахо». lh ≈ «ль»: filho ≈ «фильу». nh ≈ «нь»: senhor ≈ «синьор». l в конце слова ≈ «у»: Brasil, papel.",
+ q:[["«casa» произносится","«каза»","«каса»","«каша»","«каца»"],
+    ["«São Paulo» начинается со звука","«х»","«р» раскатистого","«ж»","«с»"],
+    ["«filho» — это","«фильу»","«филхо»","«фило»","«фильо» с чётким о"],
+    ["«Brasil» на конце звучит как","«у»","«л» твёрдое","«ль»","«ж»"]]},
+{id:"deti", ex:["cidade", "dia", "gente", "Ivan", "Patrícia", "vinte"], t:"Произношение: de, di, te, ti", figura:"", txt:"В бразильском варианте de и di звучат как «джи», te и ti — как «чи». cidade ≈ «сидаджи», dia ≈ «джиа», gente ≈ «женчи», Ivan ≈ «Владжимир». Это одна из главных примет бразильского выговора.",
+ q:[["«cidade» звучит примерно как","«сидаджи»","«сидаде»","«китаде»","«сидад»"],
+    ["«gente» звучит как","«женчи»","«генте»","«хенте»","«женте» с чётким «те»"],
+    ["«dia» звучит как","«джиа»","«дия»","«диа» с чётким «д»","«жиа»"],
+    ["Сочетание «ti» в «Patricia» звучит как","«чи»","«ти»","«ци»","«си»"]]},
+{id:"perguntas", ex:["Desculpe, não entendi.", "Pode repetir, por favor?", "Mais devagar, por favor.", "Um momento, por favor.", "Como se diz isso em português?"], t:"Как переспросить и потянуть время", txt:"Не молчите, если не поняли. «Desculpe, não entendi» — извините, не понял. «Pode repetir, por favor?» — можете повторить? «Mais devagar, por favor» — помедленнее. «Um momento, por favor» — минуту. «Como se diz...?» — как сказать...? Это нормальные фразы, они не считаются провалом.",
+ q:[["Вы не расслышали вопрос.","Pode repetir, por favor?","Repete!","Que?","Não escuto nada."],
+    ["Агент говорит слишком быстро.","Mais devagar, por favor.","Fale devagar você.","Devagar!","Mais lento por favor faz."],
+    ["Вам нужна секунда подумать.","Um momento, por favor.","Espera aí.","Calma.","Momento!"],
+    ["Вы не знаете слова.","Como se diz isso em português?","Eu não sei falar.","Não tenho palavra.","Qual é a palavra desse?"]]}
+];
+
+const TEMAS_BARALHO = { documentos:"Документы и процесс", familia:"Семья и личные данные",
+  trabalho:"Работа", estudo:"Учёба и экзамен", vida:"Быт и жизнь в Бразилии",
+  frases:"Вопросы и выручалочки", meu:"Мой случай", outros:"Прочее" };
+function temaPorIndice(i){
+  if(i < 30) return "documentos";
+  if(i < 43) return "familia";
+  if(i < 64) return "trabalho";
+  if(i < 73) return "estudo";
+  if(i < 85) return "vida";
+  return "frases";
+}
+function temaDe(c){
+  if(c.tema) return c.tema;
+  const i = SEED.findIndex(p => p[0] === c.pt);
+  return i >= 0 ? temaPorIndice(i) : "outros";
+}
+function iconeDe(c){ return c.emoji || EMOJI[String(c.pt).toLowerCase().trim()] || ""; }
+
+const DIAS = [0,1,2,4,8,16,30];
+const hoje = () => new Date().toISOString().slice(0,10);
+const maisDias = (d,n) => { const x = new Date(d+"T12:00:00"); x.setDate(x.getDate()+n); return x.toISOString().slice(0,10); };
+const norm = s => String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+  .replace(/[^a-z0-9?! ]/g," ").replace(/\s+/g," ").trim().replace(/^(o|a|os|as|um|uma) /,"");
+const embaralhar = a => { const b = a.slice(); for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; };
+
+let vocab = [], vst = {streak:0, ultimo:null, feitos:0, dia:null, meta:20};
+let filaV = [], exAtual = null, sessaoAtiva = false;
+
+async function loadVocab(){
+  try{
+    const r = await store.get("pfshare_vocab");
+    if(r && r.value){ const s = JSON.parse(r.value); vocab = s.cards || []; vst = Object.assign(vst, s.stats || {}); }
+  }catch(e){}
+  if(!vocab.length) vocab = SEED.map((p,i) => ({id:i+1, pt:p[0], ru:p[1], box:0, due:hoje(), tema:temaPorIndice(i)}));
+  if(vst.dia !== hoje()){ vst.dia = hoje(); vst.feitos = 0; }
+  vTopo(); vInicio();
+}
+async function saveVocab(){
+  try{ await store.set("pfshare_vocab", JSON.stringify({cards:vocab, stats:vst})); }catch(e){}
+}
+function baralhoAtual(){ return ($("baralho") && $("baralho").value) || "todos"; }
+function noBaralho(c){ const b = baralhoAtual(); return b === "todos" || temaDe(c) === b; }
+function pendentes(){ const h = hoje(); return vocab.filter(c => c.due <= h && noBaralho(c)); }
+function vTopo(){
+  const p = pendentes().length;
+  const nb = vocab.filter(noBaralho).length;
+  $("vTopo").textContent = "СЛОВ: " + nb + (baralhoAtual() === "todos" ? "" : " из " + vocab.length) + " · К ПОВТОРУ: " + p +
+    " · СЕРИЯ: " + vst.streak + " дн. · СЕГОДНЯ: " + vst.feitos + "/" + vst.meta;
+  $("vProg").style.width = Math.min(100, Math.round(vst.feitos / vst.meta * 100)) + "%";
+}
+function limpar(el){ while(el.firstChild) el.removeChild(el.firstChild); }
+function bloco(cls){ const d = document.createElement("div"); d.className = cls; return d; }
+
+function vInicio(){
+  const a = $("vArea"); limpar(a);
+  const p = bloco("panel");
+  const pend = pendentes().length;
+  const h = document.createElement("p"); h.className = "prompt";
+  h.textContent = pend ? "К повтору: " + pend : "На сегодня всё повторено";
+  const s = document.createElement("p"); s.className = "promptSub";
+  s.textContent = pend
+    ? "Слово поднимается на уровень выше за верный ответ и опускается за ошибку. Повтор возвращается через 1, 2, 4, 8, 16 и 30 дней."
+    : "Можно добавить свои слова ниже или пройти собеседование.";
+  const b = document.createElement("button"); b.className = "wide"; b.id = "vStart";
+  b.textContent = pend ? "Начать" : "Повторить всё равно";
+  b.onclick = vComecar;
+  const bl = document.createElement("button");
+  bl.className = "ghost wide"; bl.id = "vBlitzBtn"; bl.style.marginTop = "8px";
+  bl.textContent = "Блиц: собрать пары за минуту" + (vst.blitz ? " · рекорд " + vst.blitz : "");
+  bl.onclick = vBlitz;
+  p.appendChild(h); p.appendChild(s); p.appendChild(b); p.appendChild(bl); a.appendChild(p);
+}
+let blitz = null;
+
+function vBlitz(){
+  const pool = embaralhar(vocab.filter(noBaralho));
+  if(pool.length < 4){ vInicio(); return; }
+  blitz = { fila: pool.slice(), pares: [], acertos: 0, erros: 0, restam: 60,
+            escolhido: null, fim: false };
+  for(let i = 0; i < 8 && blitz.fila.length; i++) blitz.pares.push(blitz.fila.shift());
+  sessaoAtiva = true;
+  blitz.timer = setInterval(() => {
+    blitz.restam--;
+    if(blitz.restam <= 0){ fimBlitz(); return; }
+    const t = $("blitzTempo");
+    if(t) t.textContent = blitz.restam + " с";
+  }, 1000);
+  desenharBlitz();
+}
+function desenharBlitz(){
+  const a = $("vArea"); limpar(a);
+  const p = bloco("panel");
+  const topo = document.createElement("p");
+  topo.className = "promptSub"; topo.style.display = "flex"; topo.style.justifyContent = "space-between";
+  const tempo = document.createElement("span"); tempo.id = "blitzTempo"; tempo.textContent = blitz.restam + " с";
+  const placar = document.createElement("span"); placar.id = "blitzPlacar";
+  placar.textContent = "пар собрано: " + blitz.acertos;
+  topo.appendChild(tempo); topo.appendChild(placar);
+  p.appendChild(topo);
+
+  const grade = document.createElement("div");
+  grade.style.cssText = "display:flex;gap:8px";
+  const colPt = document.createElement("div"); colPt.style.flex = "1";
+  const colRu = document.createElement("div"); colRu.style.flex = "1";
+
+  const esq = embaralhar(blitz.pares), dir = embaralhar(blitz.pares);
+  esq.forEach(c => colPt.appendChild(fichaBlitz(c, "pt")));
+  dir.forEach(c => colRu.appendChild(fichaBlitz(c, "ru")));
+  grade.appendChild(colPt); grade.appendChild(colRu);
+  p.appendChild(grade);
+
+  const sair = document.createElement("button");
+  sair.className = "ghost wide"; sair.id = "blitzSair"; sair.style.marginTop = "12px";
+  sair.textContent = "Закончить";
+  sair.onclick = fimBlitz;
+  p.appendChild(sair);
+  a.appendChild(p);
+}
+function fichaBlitz(c, lado){
+  const b = document.createElement("button");
+  b.className = "opt"; b.id = "blitz-" + lado + "-" + c.id;
+  b.dataset.id = String(c.id); b.dataset.lado = lado;
+  b.style.cssText = "padding:11px 9px;margin-bottom:8px;font-size:.92rem";
+  b.textContent = lado === "pt" ? c.pt : c.ru;
+  b.onclick = () => tocarBlitz(b, c, lado);
+  return b;
+}
+function tocarBlitz(botao, c, lado){
+  if(blitz.fim || botao.disabled) return;
+  const sel = blitz.escolhido;
+  if(!sel){
+    blitz.escolhido = { botao, c, lado };
+    botao.classList.add("certa");
+    return;
+  }
+  if(sel.botao === botao){ botao.classList.remove("certa"); blitz.escolhido = null; return; }
+  if(sel.lado === lado){
+    sel.botao.classList.remove("certa");
+    blitz.escolhido = { botao, c, lado };
+    botao.classList.add("certa");
+    return;
+  }
+  sel.botao.classList.remove("certa");
+  blitz.escolhido = null;
+  if(sel.c.id === c.id){
+    blitz.acertos++;
+    [sel.botao, botao].forEach(x => { x.disabled = true; x.classList.add("certa"); x.style.opacity = "0.25"; });
+    const proximo = blitz.fila.shift();
+    setTimeout(() => {
+      if(blitz.fim) return;
+      blitz.pares = blitz.pares.filter(x => x.id !== c.id);
+      if(proximo) blitz.pares.push(proximo);
+      if(!blitz.pares.length){ fimBlitz(); return; }
+      desenharBlitz();
+    }, 260);
+  } else {
+    blitz.erros++;
+    [sel.botao, botao].forEach(x => {
+      x.classList.add("errada");
+      setTimeout(() => x.classList.remove("errada"), 350);
+    });
+  }
+  const pl = $("blitzPlacar");
+  if(pl) pl.textContent = "пар собрано: " + blitz.acertos;
+}
+function fimBlitz(){
+  if(!blitz || blitz.fim) return;
+  blitz.fim = true;
+  clearInterval(blitz.timer);
+  sessaoAtiva = false;
+  const melhor = Math.max(vst.blitz || 0, blitz.acertos);
+  vst.blitz = melhor;
+  saveVocab();
+  const a = $("vArea"); limpar(a);
+  const p = bloco("panel"); const f = bloco("fim");
+  const big = document.createElement("p"); big.className = "big"; big.id = "blitzResultado";
+  big.textContent = String(blitz.acertos);
+  const t = document.createElement("p"); t.style.margin = "0 0 4px";
+  t.textContent = "пар за минуту · ошибок: " + blitz.erros;
+  const r = document.createElement("p"); r.className = "muted"; r.style.margin = "0 0 16px";
+  r.textContent = "Ваш рекорд: " + melhor + " пар. Блиц тренирует скорость узнавания и не меняет уровни слов.";
+  const b = document.createElement("button"); b.className = "wide"; b.id = "blitzDeNovo";
+  b.textContent = "Ещё раз"; b.onclick = vBlitz;
+  const v = document.createElement("button"); v.className = "ghost wide"; v.id = "blitzVoltar";
+  v.style.marginTop = "8px"; v.textContent = "К обычной тренировке"; v.onclick = () => { blitz = null; vInicio(); };
+  f.appendChild(big); f.appendChild(t); f.appendChild(r); f.appendChild(b); f.appendChild(v);
+  p.appendChild(f); a.appendChild(p);
+  vTopo();
+}
+
+function vComecar(){
+  const pend = pendentes();
+  const todos = vocab.filter(noBaralho);
+  filaV = embaralhar(pend.length ? pend : todos).slice(0, Math.max(vst.meta, 5));
+  sessaoAtiva = true;
+  vProximo();
+}
+function vProximo(){
+  if(!filaV.length){ return vFim(); }
+  const c = filaV[0];
+  const outros = embaralhar(vocab.filter(x => x.id !== c.id)).slice(0,3);
+  const palavras = String(c.pt).split(/\s+/).filter(Boolean);
+  const tipo = c.box === 0 ? "pt_ru"
+             : c.box === 1 ? "ru_pt"
+             : c.box === 2 ? "ouvir"
+             : c.box === 3 ? (palavras.length >= 2 ? "montar" : "digitar")
+             : c.box === 4 ? "ouvir_digitar"
+             : (palavras.length >= 2 ? "lacuna" : "digitar");
+  exAtual = { card:c, tipo, opcoes: tipo === "digitar" ? [] : embaralhar([c].concat(outros)) };
+  if(tipo === "lacuna") exAtual.lacunaIdx = lacunaSorteia(c);
+  vDesenhar();
+}
+function lacunaSorteia(c){
+  const ps = String(c.pt).split(/\s+/);
+  const bons = ps.map((w, i) => i).filter(i => ps[i].replace(/[^\wÀ-ÿ]/g, "").length >= 3);
+  const lista = bons.length ? bons : ps.map((w, i) => i);
+  return lista[Math.floor(Math.random() * lista.length)];
+}
+function lacunaPalavra(c, i){
+  const ps = String(c.pt).split(/\s+/);
+  return ps[(i === undefined || i === null) ? 0 : i];
+}
+function lacunaTexto(c, i){
+  const ps = String(c.pt).split(/\s+/);
+  return ps.map((w, k) => k === i ? "___" : w).join(" ") + "  —  " + c.ru;
+}
+function parDeSom(texto, idBase, aoFalhar){
+  const cx = document.createElement("div");
+  cx.className = "tools"; cx.style.marginBottom = "12px";
+  const normal = document.createElement("button");
+  normal.className = "ghost"; normal.id = idBase;
+  normal.textContent = "🔊 Прослушать";
+  normal.onclick = () => falar(texto, aoFalhar || avisoSom, 1);
+  const lento = document.createElement("button");
+  lento.className = "ghost"; lento.id = idBase + "Lento";
+  lento.textContent = "🐢 Медленно";
+  lento.onclick = () => falar(texto, aoFalhar || avisoSom, 0.6);
+  cx.appendChild(normal); cx.appendChild(lento);
+  return cx;
+}
+function avisoSom(m){
+  if($("vAvisoSom")) return;
+  const w = document.createElement("p");
+  w.className = "muted"; w.id = "vAvisoSom"; w.textContent = m;
+  const alvo = $("vArea").firstChild;
+  if(alvo) alvo.appendChild(w);
+}
+function vDesenhar(){
+  const { card, tipo, opcoes } = exAtual;
+  const a = $("vArea"); limpar(a);
+  const p = bloco("panel");
+
+  const sub = document.createElement("p"); sub.className = "promptSub"; sub.id = "vSub";
+  const q = document.createElement("p"); q.className = "prompt"; q.id = "vPergunta";
+
+  if(tipo === "pt_ru"){ sub.textContent = "Что это значит?"; q.textContent = card.pt; }
+  if(tipo === "ru_pt"){ sub.textContent = "Как это по-португальски?"; q.textContent = card.ru; }
+  if(tipo === "ouvir"){ sub.textContent = "Послушайте и выберите"; q.textContent = "🔊"; }
+  if(tipo === "digitar"){ sub.textContent = "Напишите по-португальски"; q.textContent = card.ru; }
+  if(tipo === "montar"){ sub.textContent = "Соберите фразу из слов"; q.textContent = card.ru; }
+  if(tipo === "ouvir_digitar"){ sub.textContent = "Послушайте и напишите"; q.textContent = "🎧"; }
+  if(tipo === "lacuna"){ sub.textContent = "Вставьте пропущенное слово"; q.textContent = lacunaTexto(card, exAtual.lacunaIdx); }
+  p.appendChild(q); p.appendChild(sub);
+
+  if(tipo === "ouvir" || tipo === "pt_ru"){
+    p.appendChild(parDeSom(card.pt, "vSay"));
+    if(tipo === "ouvir") falar(card.pt, avisoSom);
+  }
+
+  if(tipo === "ouvir_digitar"){
+    p.appendChild(parDeSom(card.pt, "vSay", avisoSom));
+    const i = document.createElement("input"); i.id = "vInput"; i.placeholder = "português";
+    i.setAttribute("autocapitalize","none"); i.setAttribute("autocorrect","off");
+    i.addEventListener("keydown", e => { if(e.key === "Enter") $("vCheck").onclick(); });
+    const b = document.createElement("button"); b.className = "wide"; b.id = "vCheck";
+    b.style.marginTop = "10px"; b.textContent = "Проверить";
+    b.onclick = () => vResponder(norm(i.value) === norm(card.pt), card.pt);
+    p.appendChild(i); p.appendChild(b);
+    falar(card.pt, avisoSom, 1);
+  } else if(tipo === "lacuna"){
+    const faltando = lacunaPalavra(card, exAtual.lacunaIdx);
+    const outras = embaralhar(vocab.filter(x => x.id !== card.id)
+      .flatMap(x => String(x.pt).split(/\s+/))
+      .filter(x => x.length > 2 && norm(x) !== norm(faltando))).slice(0, 3);
+    embaralhar([faltando].concat(outras)).forEach((op, k) => {
+      const b = document.createElement("button");
+      b.className = "opt"; b.id = "vOpt" + k; b.textContent = op;
+      b.onclick = () => vResponder(norm(op) === norm(faltando), faltando, b);
+      p.appendChild(b);
+    });
+  } else if(tipo === "montar"){
+    const alvo = document.createElement("p");
+    alvo.id = "vMontado"; alvo.style.cssText = "min-height:44px;font-size:1.15rem;font-weight:700;border-bottom:2px dashed var(--rule);padding:8px 0;margin:0 0 12px";
+    p.appendChild(alvo);
+    const caixa = document.createElement("div"); caixa.className = "tools"; caixa.id = "vPecas";
+    const pecas = embaralhar(String(card.pt).split(/\s+/).filter(Boolean));
+    let montado = [];
+    pecas.forEach((w, k) => {
+      const b = document.createElement("button");
+      b.className = "ghost"; b.id = "vPeca" + k; b.textContent = w;
+      b.onclick = () => { if(b.disabled) return; b.disabled = true; montado.push(w); alvo.textContent = montado.join(" "); };
+      caixa.appendChild(b);
+    });
+    const limpar = document.createElement("button");
+    limpar.className = "ghost"; limpar.id = "vLimpar"; limpar.textContent = "Стереть";
+    limpar.onclick = () => { montado = []; alvo.textContent = ""; caixa.querySelectorAll("button").forEach(b => { if(b.id !== "vLimpar") b.disabled = false; }); };
+    caixa.appendChild(limpar);
+    p.appendChild(caixa);
+    const ok2 = document.createElement("button");
+    ok2.className = "wide"; ok2.id = "vCheck"; ok2.style.marginTop = "12px"; ok2.textContent = "Проверить";
+    ok2.onclick = () => vResponder(norm(montado.join(" ")) === norm(card.pt), card.pt);
+    p.appendChild(ok2);
+  } else if(tipo === "digitar"){
+    const i = document.createElement("input"); i.id = "vInput"; i.placeholder = "português";
+    i.setAttribute("autocapitalize","none"); i.setAttribute("autocorrect","off");
+    i.addEventListener("keydown", e => { if(e.key === "Enter") $("vCheck").onclick(); });
+    const b = document.createElement("button"); b.className = "wide"; b.id = "vCheck";
+    b.style.marginTop = "10px"; b.textContent = "Проверить";
+    b.onclick = () => vResponder(norm(i.value) === norm(card.pt), card.pt);
+    p.appendChild(i); p.appendChild(b);
+  } else if(tipo !== "montar"){
+    opcoes.forEach((o,k) => {
+      const b = document.createElement("button");
+      b.className = "opt"; b.dataset.id = String(o.id); b.id = "vOpt" + k;
+      b.textContent = tipo === "ru_pt" ? o.pt : o.ru;
+      b.onclick = () => vResponder(o.id === card.id, tipo === "ru_pt" ? card.pt : card.ru, b);
+      p.appendChild(b);
+    });
+  }
+  a.appendChild(p);
+  vTopo();
+  if(tipo === "digitar" && $("vInput")) $("vInput").focus();
+}
+const audioCache = new Map();
+function cfgVoz(){
+  return { modo: $("vozNuvem") ? $("vozNuvem").value : "nao",
+           chave: $("chaveVoz") ? $("chaveVoz").value.trim() : "",
+           nome: $("nomeVoz") ? $("nomeVoz").value.trim() : "" };
+}
+function mostrarCamposVoz(){
+  if($("camposVoz")) $("camposVoz").classList.toggle("hidden", $("vozNuvem").value !== "gcloud");
+}
+async function falarNuvem(texto, ritmo){
+  const c = cfgVoz();
+  if(c.modo !== "gcloud" || !c.chave) return false;
+  const chaveCache = c.nome + "|" + ritmo + "|" + texto;
+  try{
+    let b64 = audioCache.get(chaveCache);
+    if(!b64){
+      const r = await fetch("https://texttospeech.googleapis.com/v1/text:synthesize", {
+        method:"POST",
+        headers:{ "content-type":"application/json", "x-goog-api-key": c.chave },
+        body: JSON.stringify({
+          input:{ text: texto },
+          voice:{ languageCode:"pt-BR", name: c.nome || undefined },
+          audioConfig:{ audioEncoding:"MP3", speakingRate: ritmo || 1 }
+        })
+      });
+      if(!r.ok) throw await erroHTTP(r, "Голос");
+      const d = await r.json();
+      b64 = d.audioContent;
+      if(!b64) throw new Error("пустой ответ");
+      if(audioCache.size > 60) audioCache.clear();
+      audioCache.set(chaveCache, b64);
+    }
+    const a = new Audio("data:audio/mp3;base64," + b64);
+    await a.play();
+    return true;
+  }catch(e){
+    if($("vozMsg")) $("vozMsg").textContent = "Облачный голос не сработал (" + e.message + "), читаю системным.";
+    return false;
+  }
+}
+function podeFalar(){
+  return typeof window.speechSynthesis !== "undefined" && typeof window.SpeechSynthesisUtterance !== "undefined";
+}
+function vozPT(){
+  try{
+    const vs = speechSynthesis.getVoices() || [];
+    const escolhida = $("voz") && $("voz").value;
+    if(escolhida){ const v = vs.find(x => x.name === escolhida); if(v) return v; }
+    return vs.find(v => /^pt[-_]?BR/i.test(v.lang)) || vs.find(v => /^pt/i.test(v.lang)) || null;
+  }catch(e){ return null; }
+}
+function listarVozes(){
+  const sel = $("voz");
+  if(!sel || typeof speechSynthesis === "undefined") return;
+  let vs = [];
+  try{ vs = speechSynthesis.getVoices() || []; }catch(e){ return; }
+  const pt = vs.filter(v => /^pt/i.test(v.lang));
+  if(!pt.length) return;
+  const atual = sel.value;
+  while(sel.options.length > 1) sel.remove(1);
+  pt.forEach(v => {
+    const o = document.createElement("option");
+    o.value = v.name; o.textContent = v.name + " (" + v.lang + ")";
+    sel.appendChild(o);
+  });
+  if(atual) sel.value = atual;
+}
+function falar(t, aoFalhar, ritmo){
+  const aviso = m => { if(aoFalhar) aoFalhar(m); };
+  if(cfgVoz().modo === "gcloud" && cfgVoz().chave){
+    falarNuvem(t, ritmo || 1).then(ok => { if(!ok) falarSistema(t, aviso, ritmo); });
+    return true;
+  }
+  return falarSistema(t, aviso, ritmo);
+}
+function falarSistema(t, aviso, ritmo){
+  if(!podeFalar()){
+    aviso("Синтез речи в этом окне недоступен. В приложении Claude звук часто заблокирован — скачайте файл и откройте его в Chrome.");
+    return false;
+  }
+  try{
+    const u = new SpeechSynthesisUtterance(t);
+    u.lang = "pt-BR";
+    u.rate = ritmo || 1;
+    const v = vozPT(); if(v) u.voice = v;
+    let comecou = false;
+    u.onstart = () => { comecou = true; };
+    u.onerror = e => aviso("Не удалось воспроизвести: " + ((e && e.error) || "ошибка браузера") +
+      ". Попробуйте открыть файл в Chrome.");
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+    setTimeout(() => { if(!comecou) aviso("Голос не запустился: в этом окне звук заблокирован или в системе нет голоса pt-BR. Откройте файл в Chrome."); }, 1500);
+    return true;
+  }catch(e){ aviso("Сбой озвучки: " + e.message); return false; }
+}
+try{
+  if(typeof speechSynthesis !== "undefined"){
+    speechSynthesis.getVoices();
+    speechSynthesis.onvoiceschanged = listarVozes;
+  }
+}catch(e){}
+function vResponder(certo, solucao, botao){
+  const c = filaV.shift();
+  if(certo){ c.box = Math.min(DIAS.length - 1, c.box + 1); c.due = maisDias(hoje(), DIAS[c.box]); }
+  else { c.box = Math.max(0, c.box - 1); c.due = hoje(); filaV.push(c); }
+  vst.feitos++;
+  saveVocab();
+
+  const p = $("vArea").firstChild;
+  p.querySelectorAll("button.opt").forEach(b => {
+    b.disabled = true;
+    if(b.dataset.id === String(c.id)) b.classList.add("certa");
+  });
+  if(botao && !certo) botao.classList.add("errada");
+  const inp = $("vInput"); if(inp) inp.disabled = true;
+  if($("vCheck")) $("vCheck").disabled = true;
+  if($("vPecas")) $("vPecas").querySelectorAll("button").forEach(b => b.disabled = true);
+
+  const v = bloco("veredito " + (certo ? "bom" : "ruim"));
+  v.id = "vVeredito";
+  const icoR = iconeDe(c);
+  if(icoR){
+    const e = document.createElement("p");
+    e.id = "vIcone"; e.style.cssText = "font-size:3.4rem;line-height:1;margin:0 0 4px;text-align:center";
+    e.textContent = icoR;
+    p.appendChild(e);
+  }
+  v.textContent = certo ? "Верно" : "Неверно";
+  const s = document.createElement("span"); s.className = "sol";
+  s.textContent = (certo ? c.pt + " — " + c.ru : "Правильно: " + solucao) + " · уровень " + c.box + "/6";
+  v.appendChild(s);
+  p.appendChild(v);
+
+  p.appendChild(parDeSom(c.pt, "vSayResp"));
+
+  const rm = document.createElement("button");
+  rm.className = "ghost"; rm.id = "vRemover"; rm.style.marginTop = "10px";
+  rm.textContent = "Убрать это слово из колоды";
+  rm.onclick = async () => {
+    vocab = vocab.filter(x => x.id !== c.id);
+    filaV = filaV.filter(x => x.id !== c.id);
+    await saveVocab();
+    rm.disabled = true; rm.textContent = "Убрано: " + c.pt;
+    vTopo();
+  };
+  p.appendChild(rm);
+
+  const n = document.createElement("button"); n.className = "wide"; n.id = "vNext";
+  n.style.marginTop = "10px"; n.textContent = filaV.length ? "Дальше" : "Завершить";
+  n.onclick = vProximo;
+  p.appendChild(n);
+  falar(c.pt, avisoSom, 1);
+  vTopo();
+}
+function vFim(){
+  sessaoAtiva = false;
+  const h = hoje();
+  if(vst.feitos > 0 && vst.ultimo !== h){
+    vst.streak = (vst.ultimo === maisDias(h, -1)) ? vst.streak + 1 : 1;
+    vst.ultimo = h;
+  }
+  saveVocab();
+  const a = $("vArea"); limpar(a);
+  const p = bloco("panel"); const f = bloco("fim");
+  const big = document.createElement("p"); big.className = "big"; big.id = "vFeitos";
+  big.textContent = String(vst.feitos);
+  const t = document.createElement("p"); t.style.margin = "0 0 4px";
+  t.textContent = "ответов сегодня · серия " + vst.streak + " дн.";
+  const s = document.createElement("p"); s.className = "muted"; s.style.margin = "0 0 16px";
+  s.textContent = "Следующие повторы: " + pendentes().length + " слов ждут сегодня, остальные вернутся по расписанию.";
+  const b = document.createElement("button"); b.className = "wide"; b.id = "vAgain";
+  b.textContent = "Ещё круг"; b.onclick = vComecar;
+  f.appendChild(big); f.appendChild(t); f.appendChild(s); f.appendChild(b);
+  p.appendChild(f); a.appendChild(p);
+  vTopo();
+}
+
+$("baralho").onchange = () => { vTopo(); if(!sessaoAtiva) vInicio(); };
+$("addPalavra").onclick = async () => {
+  const pt = $("novoPt").value.trim(), ru = $("novoRu").value.trim();
+  if(!pt || !ru){ $("addMsg").textContent = "Заполните оба поля."; return; }
+  if(vocab.some(c => norm(c.pt) === norm(pt))){ $("addMsg").textContent = "Такое слово уже есть в колоде."; return; }
+  const em = ($("novoEmoji").value || "").trim();
+  vocab.push({ id: Math.max(0, ...vocab.map(c => c.id)) + 1, pt, ru, box:0, due: hoje(), emoji: em });
+  await saveVocab();
+  $("novoPt").value = ""; $("novoRu").value = ""; $("novoEmoji").value = "";
+  $("addMsg").textContent = "Добавлено: " + pt;
+  vTopo();
+  if(!sessaoAtiva) vInicio();
+};
+
+$("btnModelos").onclick = async () => {
+  const c = cfgAtual();
+  const msg = $("modelosMsg");
+  if(!c.chave){ msg.textContent = "Сначала вставьте ключ."; return; }
+  msg.textContent = "Проверяю…";
+  try{
+    const bons = await listarModelos(c);
+    if(!bons.length) throw new Error("моделей для диалога не нашлось");
+    modelosDisponiveis = bons;
+    const preferida = melhorModelo(bons);
+    modelosPorProvedor[c.provedor] = preferida;
+    $("apiModel").value = preferida;
+    await salvarCfg();
+    $("erro").classList.add("hidden");
+    msg.textContent = "Ключ принят. Выбрана модель: " + preferida + ". Доступны также: " + bons.slice(0, 10).join(", ");
+  }catch(e){ msg.textContent = "Не вышло: " + e.message; }
+};
+
+$("vozNuvem").onchange = () => { mostrarCamposVoz(); salvarCfg(); };
+["chaveVoz","nomeVoz"].forEach(id => $(id).addEventListener("change", salvarCfg));
+
+$("btnVozes").onclick = async () => {
+  const c = cfgVoz();
+  if(!c.chave){ $("vozMsg").textContent = "Сначала вставьте ключ."; return; }
+  $("vozMsg").textContent = "Спрашиваю список голосов…";
+  try{
+    const r = await fetch("https://texttospeech.googleapis.com/v1/voices?languageCode=pt-BR",
+      { headers:{ "x-goog-api-key": c.chave } });
+    if(!r.ok) throw await erroHTTP(r, "Голос");
+    const d = await r.json();
+    const nomes = (d.voices || []).map(v => v.name).filter(n => /pt-BR/i.test(n));
+    if(!nomes.length) throw new Error("голосов pt-BR не вернулось");
+    const pontos = n => (/Chirp3|Chirp-3/i.test(n) ? 40 : /Neural2/i.test(n) ? 30 : /Wavenet/i.test(n) ? 20 : 10)
+                      + (/-F$|Female|Aoede|Kore|Leda/i.test(n) ? 1 : 0);
+    const melhor = nomes.slice().sort((a, b) => pontos(b) - pontos(a))[0];
+    $("nomeVoz").value = melhor;
+    await salvarCfg();
+    $("vozMsg").textContent = "Ключ принят. Выбран голос: " + melhor + ". Доступны также: " + nomes.slice(0, 8).join(", ");
+  }catch(e){ $("vozMsg").textContent = "Не вышло: " + e.message; }
+};
+
+let limparConfirma = "";
+$("btnLimpar").onclick = async () => {
+  const t = $("limparQual").value;
+  if(!t){ $("limparMsg").textContent = "Сначала выберите словарик."; return; }
+  const quantos = vocab.filter(c => temaDe(c) === t).length;
+  if(!quantos){ $("limparMsg").textContent = "В этом словарике слов нет."; return; }
+  if(limparConfirma !== t){
+    limparConfirma = t;
+    $("btnLimpar").textContent = "Точно удалить " + quantos + " слов? Нажмите ещё раз";
+    $("limparMsg").textContent = "Второе нажатие удалит их без возврата.";
+    return;
+  }
+  vocab = vocab.filter(c => temaDe(c) !== t);
+  filaV = filaV.filter(c => temaDe(c) !== t);
+  await saveVocab();
+  limparConfirma = "";
+  $("btnLimpar").textContent = "Удалить весь словарик";
+  $("limparMsg").textContent = "Удалено слов: " + quantos + ". В колоде осталось: " + vocab.length;
+  vTopo(); if(!sessaoAtiva) vInicio();
+};
+
+$("btnGerar").onclick = async () => {
+  const n = parseInt($("gerarN").value, 10) || 25;
+  const perfil = ($("perfil").value || "").trim();
+  if(perfil.length < 40){ $("gerarMsg").textContent = "Сначала заполните анкету на вкладке «Собеседование»."; return; }
+  $("btnGerar").disabled = true;
+  $("gerarMsg").textContent = "Составляю словарь…";
+  try{
+    const raw = await callAPI(
+      "Você monta listas de vocabulário para um estrangeiro que vai passar pela entrevista de naturalização na Polícia Federal do Brasil. " +
+      "A partir do perfil dado, escolha palavras e expressões em português que ESSA pessoa precisará para falar de si, do seu trabalho e da sua situação. " +
+      "Evite palavras genéricas de curso de idioma e evite repetir vocabulário óbvio de nível básico. " +
+      "Responda SOMENTE com um array JSON, sem markdown: [{\"pt\":\"a palavra em português com artigo quando for substantivo\",\"ru\":\"перевод на русский, кратко\",\"emoji\":\"um único emoji ou string vazia se for abstrato\"}]",
+      [{ role:"user", content: "Perfil:\n" + perfil + "\n\nGere exatamente " + n + " itens." }], 2000);
+    const t = raw.replace(/```json|```/g, "").trim();
+    const arr = JSON.parse(t.slice(t.indexOf("["), t.lastIndexOf("]") + 1));
+    let id = Math.max(0, ...vocab.map(c => c.id));
+    let novos = 0;
+    arr.forEach(x => {
+      const pt = String(x.pt || "").trim(), ru = String(x.ru || "").trim();
+      if(!pt || !ru) return;
+      if(vocab.some(c => norm(c.pt) === norm(pt))) return;
+      vocab.push({ id: ++id, pt, ru, box:0, due: hoje(), tema:"meu", emoji: String(x.emoji || "").trim() });
+      novos++;
+    });
+    await saveVocab();
+    $("baralho").value = "meu";
+    vTopo(); vInicio();
+    $("gerarMsg").textContent = novos
+      ? "Добавлено " + novos + " слов в словарик «Мой случай». Дубликаты пропущены."
+      : "Новых слов не нашлось — всё уже есть в колоде.";
+  }catch(e){ $("gerarMsg").textContent = "Не вышло: " + e.message; }
+  $("btnGerar").disabled = false;
+};
+
+$("btnBaixar").onclick = () => {
+  const linhas = vocab.map(c => [c.pt, c.ru, iconeDe(c), TEMAS_BARALHO[temaDe(c)] || "", "уровень " + c.box].join("\t"));
+  const texto = "português\tрусский\tзначок\tсловарик\tуровень\n" + linhas.join("\n");
+  try{
+    const a = document.createElement("a");
+    a.href = "data:text/plain;charset=utf-8," + encodeURIComponent(texto);
+    a.download = "meu-vocabulario.txt";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    $("dumpMsg").textContent = "Файл meu-vocabulario.txt сохранён: " + vocab.length + " слов.";
+  }catch(e){
+    $("dump").value = texto;
+    $("dumpMsg").textContent = "Скачать не вышло, текст колоды в поле ниже — скопируйте вручную.";
+  }
+};
+
+$("btnDump").onclick = () => {
+  $("dump").value = JSON.stringify({
+    v: 2,
+    cards: vocab, stats: vst,
+    perfil: $("perfil").value, perfilRu: perfilRu,
+    prog: prog, hist: hist, regras: regras, uso: usoDia
+  });
+  $("dumpMsg").textContent = "Выгружено: " + vocab.length + " слов, история " + hist.length +
+    ", правила " + Object.keys(regras).length + ". Скопируйте весь текст из поля.";
+  try{ $("dump").select(); }catch(e){}
+};
+$("btnLoad").onclick = async () => {
+  try{
+    const d = JSON.parse($("dump").value);
+    if(!Array.isArray(d.cards) || !d.cards.length) throw new Error("в тексте нет списка слов");
+
+    const chegando = d.cards.map((c, i) => ({
+      id: c.id || i + 1, pt: String(c.pt || ""), ru: String(c.ru || ""),
+      box: Number(c.box) || 0, due: c.due || hoje(),
+      tema: c.tema || "", emoji: c.emoji || ""
+    })).filter(c => c.pt && c.ru);
+
+    let atualizados = 0, adicionados = 0;
+    let maiorId = Math.max(0, ...vocab.map(c => c.id));
+    chegando.forEach(novo => {
+      const existente = vocab.find(c => norm(c.pt) === norm(novo.pt));
+      if(existente){
+        existente.box = novo.box; existente.due = novo.due;
+        if(novo.emoji) existente.emoji = novo.emoji;
+        atualizados++;
+      } else {
+        novo.id = ++maiorId;
+        if(!novo.tema) novo.tema = "meu";
+        vocab.push(novo); adicionados++;
+      }
+    });
+
+    if(d.stats) vst = Object.assign(vst, d.stats);
+    if(d.perfil) $("perfil").value = d.perfil;
+    if(d.perfilRu) perfilRu = d.perfilRu;
+    if(d.prog && typeof d.prog === "object"){ prog = Object.assign(prog, d.prog); await saveProg(); }
+    if(Array.isArray(d.hist)){ hist = d.hist.concat(hist).slice(-300); await saveHist(); }
+    if(d.regras && typeof d.regras === "object"){ regras = Object.assign(regras, d.regras); await saveRegras(); }
+    if(d.uso && d.uso.dia === hoje()) { usoDia = Object.assign(usoDia, d.uso); renderUso(); }
+
+    await saveVocab(); await saveState();
+    $("dumpMsg").textContent = "Перенесено. Слов обновлено: " + atualizados + ", добавлено: " + adicionados +
+      ". В колоде: " + vocab.length + ". История: " + hist.length + ". Серия: " + vst.streak + " дн.";
+    vTopo(); vInicio(); renderProg(); renderHist(); renderRegras();
+  }catch(e){ $("dumpMsg").textContent = "Не удалось прочитать: " + e.message; }
+};
+
+// ================= ПРОГРЕСС И ЭКЗАМЕН =================
+const TEMAS_NOME = { pessoal:"Личные данные и семья", trabalho:"Работа и профессия",
+  brasil:"Жизнь в Бразилии", exame:"Экзамен и документы", misto:"Всё вперемешку" };
+let prog = {};
+let exame = null;
+let hist = [];
+let perguntaAnterior = "";
+
+async function loadHist(){
+  try{
+    const r = await store.get("pfshare_hist");
+    if(r && r.value){ const j = JSON.parse(r.value); hist = Array.isArray(j) ? j : []; }
+  }catch(e){ hist = []; }
+  if(!Array.isArray(hist)) hist = [];
+  renderHist();
+}
+async function saveHist(){
+  if(hist.length > 300) hist = hist.slice(-300);
+  try{ await store.set("pfshare_hist", JSON.stringify(hist)); }catch(e){}
+}
+function guardarTurno(f){
+  if(!perguntaAnterior || !ultimaResposta) return;
+  hist.push({ d: new Date().toISOString().slice(0,10), t: exame ? exame.tema : temaAtual(),
+              q: perguntaAnterior, a: ultimaResposta, c: f.correcao || "",
+              e: f.erros || [], n: f.nivel || "", ru: "" });
+  saveHist();
+}
+
+function temaAtual(){
+  const o = $("tema").options[$("tema").selectedIndex];
+  return (o && o.dataset.k) || "misto";
+}
+async function loadProg(){
+  try{
+    const r = await store.get("pfshare_prog");
+    if(r && r.value) prog = JSON.parse(r.value) || {};
+  }catch(e){}
+  renderProg();
+}
+async function saveProg(){ try{ await store.set("pfshare_prog", JSON.stringify(prog)); }catch(e){} }
+function anotar(tema, nivel){
+  const p = prog[tema] || (prog[tema] = { bom:0, ok:0, fraco:0, ultimo:null, teste:null });
+  if(nivel === "bom" || nivel === "ok" || nivel === "fraco") p[nivel]++;
+  p.ultimo = new Date().toISOString().slice(0,10);
+  saveProg();
+}
+function prontidao(p){
+  if(!p) return null;
+  const total = p.bom + p.ok + p.fraco;
+  if(total < 5) return { total, pct:null };
+  return { total, pct: Math.round((p.bom + p.ok * 0.6) / total * 100) };
+}
+function prontidaoGeral(){
+  const vals = Object.keys(TEMAS_NOME).map(k => prontidao(prog[k])).filter(x => x && x.pct !== null);
+  const palavras = vocab.length ? Math.round(vocab.filter(c => c.box >= 3).length / vocab.length * 100) : 0;
+  const temas = vals.length ? Math.round(vals.reduce((a, b) => a + b.pct, 0) / vals.length) : null;
+  return { temas, palavras, medidos: vals.length,
+    geral: temas === null ? null : Math.round(temas * 0.7 + palavras * 0.3) };
+}
+function renderProg(){
+  const g = prontidaoGeral();
+  $("progTopo").textContent = g.geral === null
+    ? "ГОТОВНОСТЬ: мало данных · пройдите 5 вопросов хотя бы по одной теме"
+    : "ГОТОВНОСТЬ: " + g.geral + "% · темы " + g.temas + "% (измерено: " + g.medidos + " из 5) · слова " + g.palavras + "%";
+  $("progGeral").style.width = (g.geral || 0) + "%";
+
+  const alvo = $("progLista");
+  while(alvo.firstChild) alvo.removeChild(alvo.firstChild);
+  Object.keys(TEMAS_NOME).forEach(k => {
+    const p = prog[k], pr = prontidao(p) || { total:0, pct:null };
+    const box = document.createElement("div"); box.className = "panel";
+    const h = document.createElement("p"); h.style.margin = "0 0 4px"; h.style.fontWeight = "650";
+    h.textContent = TEMAS_NOME[k];
+    const d = document.createElement("p"); d.className = "muted"; d.style.margin = "0";
+    d.id = "prog-" + k;
+    if(!p || !pr.total) d.textContent = "ещё не тренировалось";
+    else if(pr.pct === null) d.textContent = "ответов: " + pr.total + " из 5, нужных для оценки";
+    else d.textContent = "готовность " + pr.pct + "% · ответов " + pr.total +
+      " (хорошо " + p.bom + ", сойдёт " + p.ok + ", слабо " + p.fraco + ")" +
+      (p.teste !== null && p.teste !== undefined ? " · лучший экзамен " + p.teste + "%" : " · экзамен не сдавался");
+    const bar = document.createElement("div"); bar.className = "bar";
+    const sp = document.createElement("span"); sp.style.width = (pr.pct || 0) + "%";
+    bar.appendChild(sp);
+    box.appendChild(h); box.appendChild(d); box.appendChild(bar);
+    alvo.appendChild(box);
+  });
+}
+
+let regras = {};
+let testeRegra = null;
+
+async function loadRegras(){
+  try{
+    const r = await store.get("pfshare_regras");
+    if(r && r.value){ const j = JSON.parse(r.value); regras = (j && typeof j === "object") ? j : {}; }
+  }catch(e){ regras = {}; }
+  renderRegras();
+}
+async function saveRegras(){ try{ await store.set("pfshare_regras", JSON.stringify(regras)); }catch(e){} }
+
+function renderRegras(){
+  const alvo = $("regrasLista");
+  if(!alvo) return;
+  const feitas = REGRAS.filter(r => (regras[r.id] || {}).melhor >= 75).length;
+  $("regrasTopo").textContent = "ПРАВИЛА ОСВОЕНО: " + feitas + " из " + REGRAS.length +
+    " · освоенным считается тест от 75%";
+  $("regrasProg").style.width = Math.round(feitas / REGRAS.length * 100) + "%";
+
+  while(alvo.firstChild) alvo.removeChild(alvo.firstChild);
+  REGRAS.forEach((r, i) => {
+    const box = document.createElement("div"); box.className = "panel"; box.id = "regra-" + r.id;
+    const h = document.createElement("p"); h.style.cssText = "margin:0 0 6px;font-weight:800;font-size:1.05rem";
+    const res = regras[r.id];
+    h.textContent = (res && res.melhor >= 75 ? "✅ " : "") + (i + 1) + ". " + r.t;
+    const p = document.createElement("p"); p.style.margin = "0 0 10px";
+    p.textContent = r.txt;
+    const st = document.createElement("p"); st.className = "muted"; st.id = "regraSt-" + r.id;
+    st.style.margin = "0 0 10px";
+    st.textContent = res ? "лучший результат теста: " + res.melhor + "% · попыток: " + res.feitos : "тест ещё не проходили";
+    const som = parDeSom((r.ex || []).join(" … "), "regraSay-" + r.id, m => { st.textContent = m; });
+    const legenda = document.createElement("p"); legenda.className = "muted"; legenda.id = "regraEx-" + r.id;
+    legenda.style.margin = "0 0 6px"; legenda.textContent = "Примеры вслух: " + (r.ex || []).join(" · ");
+    const b = document.createElement("button"); b.className = "wide"; b.id = "regraTeste-" + r.id;
+    b.textContent = "Проверить себя — 4 вопроса";
+    b.onclick = () => iniciarTeste(r.id);
+    box.appendChild(h); box.appendChild(p); box.appendChild(st); box.appendChild(legenda); box.appendChild(som); box.appendChild(b);
+    alvo.appendChild(box);
+  });
+}
+
+function iniciarTeste(id){
+  const r = REGRAS.find(x => x.id === id);
+  testeRegra = { id, i: 0, certos: 0, ordem: embaralhar(r.q.map((_, k) => k)) };
+  desenharTeste();
+}
+function desenharTeste(){
+  const r = REGRAS.find(x => x.id === testeRegra.id);
+  const q = r.q[testeRegra.ordem[testeRegra.i]];
+  const alvo = $("regrasLista");
+  while(alvo.firstChild) alvo.removeChild(alvo.firstChild);
+  const box = document.createElement("div"); box.className = "panel"; box.id = "testeCaixa";
+  const sub = document.createElement("p"); sub.className = "promptSub";
+  sub.textContent = r.t + " · вопрос " + (testeRegra.i + 1) + " из " + r.q.length;
+  const pergunta = document.createElement("p"); pergunta.className = "prompt"; pergunta.id = "testePergunta";
+  pergunta.style.fontSize = "1.15rem"; pergunta.textContent = q[0];
+  box.appendChild(pergunta); box.appendChild(sub);
+
+  const certa = q[1];
+  embaralhar(q.slice(1)).forEach((op, k) => {
+    const b = document.createElement("button");
+    b.className = "opt"; b.id = "testeOpt" + k; b.textContent = op;
+    b.onclick = () => responderTeste(op === certa, certa, b, box);
+    box.appendChild(b);
+  });
+  alvo.appendChild(box);
+}
+function responderTeste(certo, certa, botao, box){
+  if(certo) testeRegra.certos++;
+  box.querySelectorAll("button.opt").forEach(b => {
+    b.disabled = true;
+    if(b.textContent === certa) b.classList.add("certa");
+  });
+  if(!certo) botao.classList.add("errada");
+  const v = document.createElement("div");
+  v.className = "veredito " + (certo ? "bom" : "ruim"); v.id = "testeVeredito";
+  v.textContent = certo ? "Верно" : "Неверно";
+  const sp = document.createElement("span"); sp.className = "sol";
+  sp.textContent = certo ? certa : "Правильно: " + certa;
+  v.appendChild(sp);
+  box.appendChild(v);
+  if(!/[а-яё]/i.test(certa)) box.appendChild(parDeSom(certa, "testeSay", m => { sp.textContent = m; }));
+  const n = document.createElement("button"); n.className = "wide"; n.id = "testeNext";
+  n.style.marginTop = "10px";
+  const r = REGRAS.find(x => x.id === testeRegra.id);
+  const ultimo = testeRegra.i >= r.q.length - 1;
+  n.textContent = ultimo ? "Результат" : "Дальше";
+  n.onclick = async () => {
+    if(!ultimo){ testeRegra.i++; desenharTeste(); return; }
+    const nota = Math.round(testeRegra.certos / r.q.length * 100);
+    const rec = regras[testeRegra.id] || (regras[testeRegra.id] = { melhor: 0, feitos: 0 });
+    rec.feitos++;
+    if(nota > rec.melhor) rec.melhor = nota;
+    await saveRegras();
+    testeRegra = null;
+    renderRegras();
+    const alvoR = $("regrasLista");
+    const fim = document.createElement("div"); fim.className = "panel";
+    const big = document.createElement("p"); big.className = "big"; big.id = "notaRegra";
+    big.style.cssText = "font-size:2.6rem;font-weight:800;margin:0 0 4px;color:var(--verde);text-align:center";
+    big.textContent = nota + "%";
+    fim.appendChild(big);
+    alvoR.insertBefore(fim, alvoR.firstChild);
+  };
+  box.appendChild(n);
+}
+$("tabRegras").onclick = () => aba("regras");
+
+function renderHist(){
+  const alvo = $("histLista");
+  if(!alvo) return;
+  if(!Array.isArray(hist)) hist = [];
+  while(alvo.firstChild) alvo.removeChild(alvo.firstChild);
+  const f = $("histFiltro") ? $("histFiltro").value : "todos";
+  const lista = hist.filter(x => f === "todos" || x.t === f).slice(-50).reverse();
+  if($("histMsg")) $("histMsg").textContent = hist.length
+    ? "Сохранено пар вопрос-ответ: " + hist.length + (lista.length < hist.length ? ", показаны последние " + lista.length : "")
+    : "Пока пусто — история наполняется после разборов в собеседовании.";
+  lista.forEach((x, k) => {
+    const box = document.createElement("div"); box.className = "panel"; box.id = "hist" + k;
+    const q = document.createElement("p"); q.style.cssText = "margin:0 0 8px;font-weight:700";
+    q.textContent = x.q;
+    const meu = document.createElement("p"); meu.className = "muted"; meu.style.margin = "0 0 4px";
+    meu.textContent = "Вы: " + x.a;
+    const cer = document.createElement("p"); cer.style.margin = "0 0 8px";
+    cer.innerHTML = '<span class="corr">' + esc(x.c || x.a) + "</span>";
+    const tools = document.createElement("div"); tools.className = "tools";
+    const som = document.createElement("button");
+    som.className = "ghost"; som.id = "histSay" + k; som.textContent = "🔊";
+    som.onclick = () => falar(x.c || x.q, null, 1);
+    const tr = document.createElement("button");
+    tr.className = "ghost"; tr.id = "histTr" + k; tr.textContent = x.ru ? "Перевод" : "Перевод";
+    const linha = document.createElement("p"); linha.className = "muted"; linha.id = "histRu" + k;
+    linha.style.margin = "8px 0 0";
+    if(x.ru) linha.textContent = x.ru;
+    tr.onclick = async () => {
+      if(x.ru){ linha.textContent = x.ru; return; }
+      linha.textContent = "загружаю…";
+      try{
+        const t = await callAPI("Traduza para o russo a pergunta e a resposta abaixo. Responda apenas com a tradução, duas linhas.",
+          [{ role:"user", content: "Pergunta: " + x.q + "\nResposta: " + (x.c || x.a) }], 800);
+        x.ru = String(t || "").trim();
+        await saveHist();
+        linha.textContent = x.ru;
+      }catch(e){ linha.textContent = "не вышло — " + e.message; }
+    };
+    tools.appendChild(som); tools.appendChild(tr);
+    box.appendChild(q); box.appendChild(meu); box.appendChild(cer);
+    box.appendChild(tools); box.appendChild(linha);
+    alvo.appendChild(box);
+  });
+}
+
+function modoExame(on){
+  const t = $("dicasPergunta");
+  if(t) t.style.display = on ? "none" : "";
+  $("startExame").disabled = !!on;
+}
+function fimExame(){
+  const total = exame.bom + exame.ok + exame.fraco;
+  const nota = total ? Math.round((exame.bom + exame.ok * 0.6) / total * 100) : 0;
+  const p = prog[exame.tema] || (prog[exame.tema] = { bom:0, ok:0, fraco:0, ultimo:null, teste:null });
+  if(p.teste === null || p.teste === undefined || nota > p.teste) p.teste = nota;
+  saveProg(); renderProg();
+  $("jogo").classList.add("hidden");
+  $("resumo").innerHTML = "";
+  const box = document.createElement("div"); box.className = "panel";
+  const h = document.createElement("p"); h.className = "prompt"; h.id = "notaExame";
+  h.textContent = nota + "%";
+  const d = document.createElement("p"); d.style.margin = "0 0 12px";
+  d.textContent = "Экзамен по теме «" + TEMAS_NOME[exame.tema] + "»: " + total + " ответов — " +
+    exame.bom + " хорошо, " + exame.ok + " сойдёт, " + exame.fraco + " слабо.";
+  const b = document.createElement("button"); b.className = "wide";
+  b.textContent = "К настройкам"; b.onclick = () => location.reload();
+  box.appendChild(h); box.appendChild(d); box.appendChild(b);
+  $("resumo").appendChild(box);
+  $("resumo").classList.remove("hidden");
+  exame = null;
+  modoExame(false);
+}
+
+function aba(qual){
+  const v = qual === "vocab", c = qual === "chat", p = qual === "prog", g = qual === "regras";
+  $("viewVocab").classList.toggle("hidden", !v);
+  $("viewChat").classList.toggle("hidden", !c);
+  $("viewProg").classList.toggle("hidden", !p);
+  $("viewRegras").classList.toggle("hidden", !g);
+  $("tabVocab").classList.toggle("on", v);
+  $("tabChat").classList.toggle("on", c);
+  $("tabProg").classList.toggle("on", p);
+  $("tabRegras").classList.toggle("on", g);
+  if(p){ renderProg(); renderHist(); }
+  if(g && !testeRegra) renderRegras();
+}
+$("tabVocab").onclick = () => aba("vocab");
+$("tabChat").onclick = () => aba("chat");
+$("tabProg").onclick = () => aba("prog");
+
+function importarPalavras(texto){
+  const achadas = [];
+  texto.split("\n").forEach(l => {
+    const m = l.match(/^\s*(?:[-•*\d.)\s]*)([^—]{2,60}?)\s+—\s+(.{2,60}?)\s*$/);
+    if(!m) return;
+    const pt = m[1].trim(), ru = m[2].trim();
+    if(!pt || !ru) return;
+    if(vocab.some(c => norm(c.pt) === norm(pt))) return;
+    if(achadas.some(c => norm(c.pt) === norm(pt))) return;
+    achadas.push({pt, ru});
+  });
+  if(!achadas.length) return null;
+  const b = document.createElement("button");
+  b.className = "wide"; b.id = "vImport"; b.style.marginTop = "10px";
+  b.textContent = "Добавить " + achadas.length + " слов в колоду";
+  b.onclick = async () => {
+    let id = Math.max(0, ...vocab.map(c => c.id));
+    achadas.forEach(c => vocab.push({ id: ++id, pt:c.pt, ru:c.ru, box:0, due: hoje() }));
+    await saveVocab();
+    b.disabled = true; b.textContent = "Добавлено: " + achadas.length;
+    vTopo(); if(!sessaoAtiva) vInicio();
+  };
+  return b;
+}
+
+async function loadCfg(){
+  try{
+    const r = await store.get("pfshare_cfg");
+    if(r && r.value){
+      const c = JSON.parse(r.value);
+      $("provedor").value = c.provedor || "claude";
+      $("apiBase").value = c.base || "";
+      $("apiModel").value = c.modelo || "";
+      $("apiKey").value = c.chave || "";
+      modelosPorProvedor = c.modelos || {};
+      if(c.prioridade) $("prioridade").value = c.prioridade;
+      if(c.voz){
+        $("vozNuvem").value = c.voz.modo || "nao";
+        $("chaveVoz").value = c.voz.chave || "";
+        $("nomeVoz").value = c.voz.nome || "";
+      }
+      (c.extras || []).forEach((e, i) => {
+        if(!e) return;
+        $("provedor" + (i + 2)).value = e.p || "nao";
+        $("apiKey" + (i + 2)).value = e.k || "";
+      });
+    }
+  }catch(e){}
+  mostrarCampos();
+  mostrarCamposVoz();
+  const precisaChave = !$("apiKey").value && (!window.storage || $("provedor").value !== "claude");
+  if(precisaChave && $("cfgModelo")) $("cfgModelo").open = true;
+}
+async function salvarCfg(){
+  const c = cfgAtual();
+  c.extras = [2, 3].map(i => ({ p: $("provedor" + i).value, k: $("apiKey" + i).value.trim() }));
+  c.modelos = modelosPorProvedor;
+  c.prioridade = $("prioridade").value;
+  c.voz = { modo: $("vozNuvem").value, chave: $("chaveVoz").value.trim(), nome: $("nomeVoz").value.trim(), sistema: $("voz").value };
+  try{ await store.set("pfshare_cfg", JSON.stringify(c)); }catch(e){}
+}
+function renderOndeChave(){
+  const el = $("ondeChave");
+  if(!el) return;
+  const p = $("provedor").value;
+  const d = PROV[p];
+  while(el.firstChild) el.removeChild(el.firstChild);
+  if(p === "claude"){
+    el.textContent = "Ключ не нужен: модель берётся из окружения артефакта Claude.";
+    return;
+  }
+  if(d && d.chaveUrl){
+    el.appendChild(document.createTextNode("Где взять ключ: "));
+    const a = document.createElement("a");
+    a.href = d.chaveUrl; a.target = "_blank"; a.rel = "noopener noreferrer";
+    a.textContent = d.chaveUrl.replace(/^https:\/\//, "").replace(/\/$/, "");
+    el.appendChild(a);
+    el.appendChild(document.createTextNode(" — " + d.chaveOnde + (d.gratis ? " · бесплатный тариф есть" : " · тариф платный")));
+  } else if(d){
+    el.textContent = d.chaveOnde;
+  }
+}
+
+const CHAVES_URL = {
+  gemini:     ["https://aistudio.google.com/apikey", "aistudio.google.com/apikey", "бесплатно, без карты"],
+  groq:       ["https://console.groq.com", "console.groq.com", "бесплатно, адрес страницы ключей не проверен"],
+  cerebras:   ["https://cloud.cerebras.ai", "cloud.cerebras.ai", "бесплатно, адрес не проверен"],
+  openrouter: ["https://openrouter.ai/models", "openrouter.ai", "бесплатные модели с суффиксом :free"],
+  xai:        ["https://docs.x.ai", "docs.x.ai", "платный, бесплатного тарифа нет"],
+  anthropic:  ["https://console.anthropic.com", "console.anthropic.com", "платный, адрес не проверен"],
+  openai:     ["", "", "адрес и ключ берутся у выбранного вами провайдера"]
+};
+function mostrarLinkChave(){
+  const alvo = $("linkChave");
+  if(!alvo) return;
+  while(alvo.firstChild) alvo.removeChild(alvo.firstChild);
+  const d = CHAVES_URL[$("provedor").value];
+  if(!d) return;
+  if(d[0]){
+    alvo.appendChild(document.createTextNode("Где взять ключ: "));
+    const a = document.createElement("a");
+    a.href = d[0]; a.target = "_blank"; a.rel = "noopener noreferrer"; a.textContent = d[1];
+    alvo.appendChild(a);
+    alvo.appendChild(document.createTextNode(" — " + d[2]));
+  } else {
+    alvo.appendChild(document.createTextNode(d[2]));
+  }
+}
+
+function mostrarCampos(){ $("camposApi").classList.toggle("hidden", $("provedor").value === "claude");
+  renderOndeChave();
+  const p = $("provedor").value;
+  const modelos = { gemini:"подберётся автоматически", anthropic:"claude-sonnet-5",
+    groq:"подберётся автоматически", cerebras:"подберётся автоматически",
+    openrouter:"подберётся автоматически", xai:"grok-4" };
+  $("apiBase").placeholder = (PROV[p] && PROV[p].base) || "адрес API";
+  $("apiModel").placeholder = modelos[p] || "подберётся автоматически";
+  mostrarLinkChave(); }
+$("prioridade").onchange = async () => { modelosPorProvedor = {}; $("apiModel").value = ""; await salvarCfg(); };
+$("provedor").onchange = () => { $("apiBase").value = ""; $("apiModel").value = ""; $("modelosMsg").textContent = ""; mostrarCampos(); salvarCfg(); };
+["apiBase","apiModel","apiKey","prioridade","provedor2","apiKey2","provedor3","apiKey3"]
+  .forEach(id => $(id).addEventListener("change", salvarCfg));
+
+function avisoAmbiente(){
+  if(window.storage) return;
+  const p = document.createElement("p");
+  p.className = "muted"; p.id = "avisoFora"; p.style.margin = "0 0 12px";
+  p.textContent = "Файл открыт вне Claude: собеседование заработает только со своим API-ключом (см. «Откуда берётся модель»). Словарь работает полностью.";
+  $("setup").insertBefore(p, $("setup").firstChild);
+}
+
+loadState();
+loadVocab();
+loadProg();
+loadHist();
+loadRegras();
+$("histFiltro").onchange = renderHist;
+$("btnHistFile").onclick = () => {
+  if(!hist.length){ $("histMsg").textContent = "История пуста."; return; }
+  const linhas = hist.map(x => [x.d, TEMAS_NOME[x.t] || x.t, x.q, x.a, x.c, (x.e || []).join("; "), x.ru || ""].join("\t"));
+  const texto = "дата\tтема\tвопрос\tваш ответ\tисправлено\tошибки\tперевод\n" + linhas.join("\n");
+  try{
+    const a = document.createElement("a");
+    a.href = "data:text/plain;charset=utf-8," + encodeURIComponent(texto);
+    a.download = "historico-entrevista.txt";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    $("histMsg").textContent = "Файл historico-entrevista.txt сохранён: " + hist.length + " записей.";
+  }catch(e){ $("histMsg").textContent = "Скачать не вышло: " + e.message; }
+};
+listarVozes();
+loadCfg();
+loadUso();
+avisoAmbiente();
+</script>
+</body>
+</html>
