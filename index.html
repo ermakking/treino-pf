@@ -825,6 +825,15 @@ function cortarHistorico(){
   msgs = msgs.slice(-11);
   while(msgs.length && msgs[0].role !== "user") msgs.shift();
 }
+function extrairLista(raw){
+  const t = String(raw || "").replace(/```json|```/g, "").trim();
+  const a = t.indexOf("["), b = t.lastIndexOf("]");
+  if(a >= 0 && b > a){ try{ const j = JSON.parse(t.slice(a, b + 1)); if(Array.isArray(j)) return j; }catch(e){} }
+  // ответ оборван или испорчен — спасаем целые объекты по одному
+  const itens = [];
+  (t.match(/\{[^{}]*\}/g) || []).forEach(s => { try{ itens.push(JSON.parse(s)); }catch(e){} });
+  return itens;
+}
 function parseJSON(t){
   const c = t.replace(/```json|```/g,"").trim();
   const a = c.indexOf("{"), b = c.lastIndexOf("}");
@@ -2009,14 +2018,38 @@ $("btnGerar").onclick = async () => {
   $("btnGerar").disabled = true;
   $("gerarMsg").textContent = "Составляю словарь…";
   try{
-    const raw = await callAPI(
+    const SYS_GERAR =
       "Você monta listas de vocabulário para um estrangeiro que vai passar pela entrevista de naturalização na Polícia Federal do Brasil. " +
       "A partir do perfil dado, escolha palavras e expressões em português que ESSA pessoa precisará para falar de si, do seu trabalho e da sua situação. " +
       "Evite palavras genéricas de curso de idioma e evite repetir vocabulário óbvio de nível básico. " +
-      "Responda SOMENTE com um array JSON, sem markdown: [{\"pt\":\"a palavra em português com artigo quando for substantivo\",\"ru\":\"перевод на русский, кратко\",\"emoji\":\"um único emoji ou string vazia se for abstrato\"}]",
-      [{ role:"user", content: "Perfil:\n" + perfil + "\n\nGere exatamente " + n + " itens." }], 2000);
-    const t = raw.replace(/```json|```/g, "").trim();
-    const arr = JSON.parse(t.slice(t.indexOf("["), t.lastIndexOf("]") + 1));
+      "Responda SOMENTE com um array JSON, sem markdown: [{\"pt\":\"a palavra em português com artigo quando for substantivo\",\"ru\":\"перевод на русский, кратко\",\"emoji\":\"um único emoji ou string vazia se for abstrato\"}]";
+    // больше 25 слов просим частями: длинный ответ модели обрывается на середине
+    const nPartes = n <= 25 ? 1 : Math.ceil(n / 20);
+    const partes = Array.from({ length: nPartes }, (_, i) =>
+      Math.floor(n / nPartes) + (i < n % nPartes ? 1 : 0));
+    const arr = [];
+    let aviso = "";
+    for(let p = 0; p < partes.length; p++){
+      if(partes.length > 1) $("gerarMsg").textContent = "Составляю словарь… часть " + (p + 1) + " из " + partes.length;
+      const ja = arr.map(x => x.pt).join("; ");
+      let parte = [];
+      try{
+        for(let tentativa = 0; tentativa < 2 && !parte.length; tentativa++){
+          const raw = await callAPI(SYS_GERAR,
+            [{ role:"user", content: "Perfil:\n" + perfil + "\n\nGere exatamente " + partes[p] + " itens." +
+              (ja ? "\nNão repita estas: " + ja : "") }], 8192);
+          parte = extrairLista(raw);
+        }
+      }catch(e){
+        if(!arr.length) throw e;
+        aviso = " Часть не пришла: " + e.message; break;
+      }
+      if(!parte.length){
+        if(!arr.length) throw new Error("модель ответила не списком или ответ оборвался. Попробуйте ещё раз, выберите 15 слов или другую модель.");
+        aviso = " Одна из частей пришла пустой."; break;
+      }
+      arr.push(...parte);
+    }
     let id = Math.max(0, ...vocab.map(c => c.id));
     let novos = 0;
     arr.forEach(x => {
@@ -2030,8 +2063,8 @@ $("btnGerar").onclick = async () => {
     $("baralho").value = "meu";
     vTopo(); vInicio();
     $("gerarMsg").textContent = novos
-      ? "Добавлено " + novos + " слов в словарик «Мой случай». Дубликаты пропущены."
-      : "Новых слов не нашлось — всё уже есть в колоде.";
+      ? "Добавлено " + novos + " слов в словарик «Мой случай». Дубликаты пропущены." + aviso
+      : "Новых слов не нашлось — всё уже есть в колоде." + aviso;
   }catch(e){ $("gerarMsg").textContent = "Не вышло: " + e.message; }
   $("btnGerar").disabled = false;
 };
@@ -2473,7 +2506,7 @@ async function novoConto(){
       [{ role:"user", content: "Exatamente " + Math.max(2, Math.round(n / 2)) + " perguntas do agente, cada uma com a resposta do candidato. " +
         (sorteio.length ? "Inclua perguntas parecidas com estas: " + sorteio.join(" | ") + ". " : "") +
         "\n\nPerfil para inspiração:\n" + perfil }],
-      2000) : await callAPI(
+      8192) : await callAPI(
       "Você escreve pequenas histórias em português do Brasil para um estrangeiro de nível A2 que treina a compreensão auditiva antes da entrevista de naturalização. " +
       "Linguagem natural, falada, frases curtas e médias, vocabulário do dia a dia. Narração em primeira pessoa, como se fosse a própria pessoa contando. " +
       "Use o perfil abaixo só como inspiração; NÃO invente nomes, endereços nem números de documentos. " +
@@ -2483,9 +2516,13 @@ async function novoConto(){
       "\"distratores\":[{\"pt\":\"palavra plausível do mesmo tema que NÃO aparece no texto\",\"ru\":\"tradução\"}]}. " +
       "Dê 7 palavras-chave e 4 distratores.",
       [{ role:"user", content: "Tema: " + $("contoTema").value + ". Exatamente " + n + " frases.\n\nPerfil:\n" + perfil }],
-      2000);
+      8192);
     const t = String(raw || "").replace(/```json|```/g, "").trim();
-    const conto = validarConto(JSON.parse(t.slice(t.indexOf("{"), t.lastIndexOf("}") + 1)));
+    const ia = t.indexOf("{"), ib = t.lastIndexOf("}");
+    let bruto = null;
+    try{ if(ia >= 0 && ib > ia) bruto = JSON.parse(t.slice(ia, ib + 1)); }catch(e){}
+    if(!bruto) throw new Error("ответ модели оборвался или пришёл не в том виде. Попробуйте ещё раз, выберите рассказ короче или другую модель.");
+    const conto = validarConto(bruto);
     conto.dialogo = dialogo;
     conto.palavras = conto.palavras.filter(x => !/^(agente|candidat[oa])$/i.test(norm(x.pt)));
     conto.id = Date.now(); conto.d = hoje(); conto.nota = null;
