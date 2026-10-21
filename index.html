@@ -105,9 +105,19 @@
   @keyframes b{0%,100%{opacity:.25}50%{opacity:1}}
   @media (prefers-reduced-motion:reduce){.dot{animation:none;opacity:.6}button{transition:none}}
   footer{margin-top:22px;padding-top:14px;border-top:2px solid var(--rule)}
-  .nav{display:flex;gap:8px;margin-bottom:16px}
-  .tab{flex:1;background:#fff;color:var(--ink-soft);border:2px solid var(--rule);border-bottom-width:4px;
-    font-weight:800;padding:11px 4px;font-size:.9rem;border-radius:14px}
+  .nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+  .tab{flex:1 1 auto;background:#fff;color:var(--ink-soft);border:2px solid var(--rule);border-bottom-width:4px;
+    font-weight:800;padding:10px 8px;font-size:.86rem;border-radius:14px}
+  .chip{display:inline-block;background:#fff;color:var(--ink);border:2px solid var(--rule);border-bottom-width:4px;
+    font-weight:700;padding:8px 12px;margin:0 6px 8px 0;border-radius:999px;font-size:.95rem}
+  .chip.on{border-color:var(--verde);background:#EAF7EE;color:var(--verde-escuro)}
+  .chip.ok{border-color:var(--verde);background:#EAF7EE;color:var(--verde-escuro)}
+  .chip.falta{border-color:var(--mark);background:#FFF6DC;color:#7A5A00}
+  .chip.falso{border-color:var(--stamp);background:#FDF1EF;color:#A8321F;text-decoration:line-through}
+  .frase{cursor:pointer;border-radius:6px;padding:1px 2px}
+  .frase:hover{background:#EAF7EE}
+  .marcaOk{background:#CDEED6;border-radius:4px;padding:0 3px}
+  .marcaFalta{background:var(--mark);border-radius:4px;padding:0 3px;font-weight:800}
   .tab.on{background:var(--verde);color:#fff;border-color:var(--verde-escuro)}
   .bar{height:14px;background:#E4EBE2;border-radius:999px;margin-top:10px;overflow:hidden}
   .bar span{display:block;height:100%;background:var(--verde);width:0;border-radius:999px;transition:width .3s}
@@ -141,13 +151,15 @@
 
 <details id="sobre" class="panel" style="margin-bottom:16px">
   <summary style="cursor:pointer;font-weight:650">Что это и как пользоваться</summary>
-  <p style="margin:10px 0 0">Тренажёр к собеседованию на натурализацию в Polícia Federal. Четыре вкладки.</p>
+  <p style="margin:10px 0 0">Тренажёр к собеседованию на натурализацию в Polícia Federal. Пять вкладок.</p>
 
   <p style="margin:10px 0 0"><b>Слова.</b> Карточки с интервальным повторением: работают без интернета и без ключей. Слово поднимается на уровень за верный ответ и падает за ошибку, повтор возвращается через 1, 2, 4, 8, 16 и 30 дней. Упражнение меняется с уровнем: выбрать перевод, назвать по-португальски, узнать на слух, собрать фразу из слов, написать самому. Значок-картинка показывается только после ответа — так запоминается лучше. Две кнопки озвучки везде: 🔊 обычная скорость и 🐢 замедленная.</p>
 
-  <p style="margin:10px 0 0"><b>Словарики.</b> Колода разбита по темам: документы, семья, работа, учёба, быт, фразы-выручалочки. Выберите словарик — и повторяться будет только он. В «Инструментах»: своё слово со своим значком, кнопка «Собрать словарь» (модель читает вашу анкету и составляет слова под вашу профессию — они идут в словарик «Мой случай»), выбор голоса, перенос прогресса между устройствами и выгрузка колоды в файл для Excel, Anki или DuoCards.</p>
+  <p style="margin:10px 0 0"><b>Словарики.</b> Колода разбита по темам: документы, семья, работа, учёба, быт, фразы-выручалочки, реальные вопросы агента (шесть — со слов тех, кто проходил собеседование, остальные похожие) и слова для ответов на них. Выберите словарик — и повторяться будет только он. В «Инструментах»: своё слово со своим значком, кнопка «Собрать словарь» (модель читает вашу анкету и составляет слова под вашу профессию — они идут в словарик «Мой случай»), выбор голоса, перенос прогресса между устройствами и выгрузка колоды в файл для Excel, Anki или DuoCards.</p>
 
   <p style="margin:10px 0 0"><b>Собеседование.</b> Диалог с агентом на португальском. Вопросы сочиняет языковая модель по вашей анкете, поэтому нужен ключ API — бесплатного хватает. Анкету можно писать по-русски и перевести кнопкой, проверив результат. После каждого ответа — разбор: ваш текст с зачёркнутыми ошибками, исправленная фраза с подсветкой правок, список ошибок с причинами и озвучка правильного варианта. Подсказки — перевод вопроса, слова и образец ответа — подгружаются по нажатию; незнакомые слова из подсказок одной кнопкой уходят в колоду. Есть режим «сначала на слух»: текст вопроса скрыт, звучит только голос, а открыть его можно кнопкой — как на настоящем собеседовании. Тему и темп выбираете сами, включая совсем простые бытовые вопросы. Кнопка «Экзамен» — восемь вопросов по теме без подсказок и с оценкой.</p>
+
+  <p style="margin:10px 0 0"><b>Рассказы.</b> Тренировка распознавания слов в потоке речи. Модель сочиняет короткий рассказ на тему собеседования или диалог чужого собеседования с похожей на вашу историей (вопросы и детали каждый раз другие, агент и кандидат — разными голосами, если в системе их два), он звучит без текста — целиком, медленно или по фразам. Вы отмечаете слова, которые расслышали (среди вариантов есть и не прозвучавшие), потом открывается текст: расслышанное подсвечено зелёным, пропущенное — жёлтым, пропущенные слова одной кнопкой уходят в колоду. Последние 20 рассказов сохраняются и переслушиваются без запросов к модели. Голос — системный, как и везде в приложении.</p>
 
   <p style="margin:10px 0 0"><b>Правила.</b> Двенадцать коротких разборов того, на чём чаще всего спотыкаются: ser или estar, прошедшее время, предлоги места и времени, род и согласование, por и para, возвратные глаголы, отрицание, три блока произношения и фразы, которыми можно переспросить. К каждому — тест из четырёх вопросов; правило считается освоенным с 75%. Объяснение можно прослушать.</p>
 
@@ -161,6 +173,7 @@
 <div class="nav">
   <button class="tab on" id="tabVocab">Слова</button>
   <button class="tab" id="tabChat">Собеседование</button>
+  <button class="tab" id="tabContos">Рассказы</button>
   <button class="tab" id="tabRegras">Правила</button>
   <button class="tab" id="tabProg">Прогресс</button>
 </div>
@@ -180,6 +193,9 @@
       <option value="estudo">Учёба и экзамен</option>
       <option value="vida">Быт и жизнь в Бразилии</option>
       <option value="frases">Вопросы и выручалочки</option>
+      <option value="reais">Реальные вопросы</option>
+      <option value="respostas">Слова к ним</option>
+      <option value="contos">Из рассказов</option>
       <option value="meu">Мой случай</option>
     </select>
   </div>
@@ -209,6 +225,9 @@
       <option value="estudo">Учёба и экзамен</option>
       <option value="vida">Быт и жизнь в Бразилии</option>
       <option value="frases">Вопросы и выручалочки</option>
+      <option value="reais">Реальные вопросы</option>
+      <option value="respostas">Слова к ним</option>
+      <option value="contos">Из рассказов</option>
       <option value="meu">Мой случай</option>
     </select>
     <button class="ghost wide" id="btnLimpar" style="margin-top:8px">Удалить весь словарик</button>
@@ -266,6 +285,37 @@
   <div id="regrasLista"></div>
 </div>
 
+<div id="viewContos" class="hidden">
+  <div class="panel">
+    <p class="proto" id="contosTopo">—</p>
+    <label for="contoTema" style="margin-top:10px">О чём рассказ</label>
+    <select id="contoTema">
+      <option value="DIALOGO">Чужое собеседование — похожая история</option>
+      <option value="mudança para o Brasil e os primeiros meses">Переезд в Бразилию</option>
+      <option value="o trabalho e a rotina de um dia comum">Работа и обычный день</option>
+      <option value="a família, os filhos e a escola">Семья, дети, школа</option>
+      <option value="a vida na cidade onde mora: o bairro, o calor, a comida, os vizinhos">Жизнь в вашем городе</option>
+      <option value="uma viagem pelo Nordeste do Brasil">Поездка по Бразилии</option>
+      <option value="o estudo do português e o exame">Учёба и экзамен</option>
+      <option value="os planos para o futuro no Brasil">Планы на будущее</option>
+      <option value="um dia na Polícia Federal entregando documentos">Визит в Полицию Федерал</option>
+    </select>
+    <label for="contoTam" style="margin-top:10px">Длина</label>
+    <select id="contoTam">
+      <option value="4">Короткий — 4 предложения</option>
+      <option value="7" selected>Средний — 7 предложений</option>
+      <option value="10">Длинный — 10 предложений</option>
+    </select>
+    <button class="wide" id="btnConto" style="margin-top:10px">Новый рассказ</button>
+    <p class="muted" id="contoMsg" style="margin:8px 0 0">Рассказ сначала только звучит. Отметьте слова, которые расслышали, — потом откроется текст.</p>
+  </div>
+  <div id="contoArea"></div>
+  <div class="panel">
+    <label>Прошлые рассказы — можно переслушать без запросов к модели</label>
+    <div id="contosLista"></div>
+  </div>
+</div>
+
 <div id="viewProg" class="hidden">
   <div class="panel">
     <p class="proto" id="progTopo">—</p>
@@ -276,6 +326,7 @@
     <label for="histFiltro">История вопросов и ответов</label>
     <select id="histFiltro">
       <option value="todos">Все темы</option>
+      <option value="reais">Реальные вопросы</option>
       <option value="pessoal">Личные данные и семья</option>
       <option value="trabalho">Работа и профессия</option>
       <option value="brasil">Жизнь в Бразилии</option>
@@ -303,10 +354,11 @@
     <div>
       <label for="tema">Тема</label>
       <select id="tema">
+        <option data-k="reais" value="perguntas reais de uma entrevista recente na Polícia Federal, feitas tratando o candidato por você, como estas: Qual é o seu nome completo? Quantos anos você tem? Você é de qual país? Fala russo? Inglês? Quando você chegou ao Brasil? Por que você escolheu a nossa cidade? Você já morou em outra cidade no Brasil? Você tem filhos? Eles nasceram aqui? Eles estudam onde? Sua família está bem adaptada? Seus pais ainda moram no seu país de origem? Sente saudades deles? Eles costumam visitar você? Você trabalha atualmente? O que você faz? Gosta do que faz? Você acha fácil ou difícil a vida no Brasil? O que você gosta e o que acha difícil? Você fala bem o português! Onde aprendeu? Fez algum curso? Já fez o exame de português? Onde foi? Como foi a experiência? Por que esse exame? Qual é o número do diploma? O exame foi presencial? Você tem amigos brasileiros? Já participou de São João ou Carnaval? Assiste TV ou ouve música brasileira? Algum artista? Pretende continuar morando no Brasil? Gostaria que seus filhos crescessem aqui? O que espera do seu futuro no Brasil? Faça perguntas dessa lista e parecidas, em ordem variada, curtas e amigáveis, sem pegadinhas; às vezes uma pergunta de acompanhamento simples sobre a resposta">Реальные вопросы — как у знакомых</option>
         <option data-k="pessoal" value="dados pessoais, família, endereço, documentos">Личные данные и семья</option>
         <option data-k="trabalho" value="trabalho, profissão, renda, rotina profissional">Работа и профессия</option>
         <option data-k="brasil" value="vida no Brasil, integração, planos, motivos do pedido">Жизнь в Бразилии и мотивы</option>
-        <option data-k="exame" value="o exame de Ensino Médio (supletivo) prestado: quando foi, onde, como foi o dia da prova, quantas matérias, como estudou, quando saiu o resultado. Pergunte de forma natural, sem exigir dados de papelada decorados">Экзамен и документы</option>
+        <option data-k="exame" value="o exame de Ensino Médio (supletivo) prestado: quando foi, onde, como foi o dia da prova, quantas matérias, como estudou, quando saiu o resultado, se foi presencial, por que escolheu esse exame, qual é o número do diploma. Pergunte de forma natural">Экзамен и документы</option>
         <option data-k="misto" value="mistura de todos os temas, ordem imprevisível">Всё вперемешку</option>
       </select>
     </div>
@@ -472,7 +524,7 @@ const store = {
 const $ = id => document.getElementById(id);
 let msgs = [], n = 0, atual = null, stats = {sessoes:0, ultima:null, erros:[]};
 
-const SYS = (perfil, tema, nivel, curto) => `Você é um agente da Polícia Federal do Brasil conduzindo a entrevista de um requerente de naturalização. Fale português brasileiro natural, tom cordial mas formal, tratando o entrevistado por "o senhor".
+const SYS = (perfil, tema, nivel, curto) => `Você é um agente da Polícia Federal do Brasil conduzindo a entrevista de um requerente de naturalização. Fale português brasileiro natural, tom cordial e simples, tratando o entrevistado por "você", como os agentes costumam fazer (às vezes "o senhor").
 
 PERFIL DO ENTREVISTADO (pode estar escrito em russo; entenda-o normalmente, mas fale SEMPRE em português):
 ${perfil}
@@ -485,7 +537,7 @@ REGRAS:
 - Uma pergunta por vez. Perguntas curtas e realistas, como as feitas de fato num guichê da PF.
 - Às vezes faça uma pergunta de acompanhamento sobre a resposta anterior, em vez de mudar de assunto.
 - Avalie a resposta anterior pelo critério real da entrevista: dá para entender? responde ao que foi perguntado? Erros de gênero, concordância ou preposição não reprovam ninguém — aponte, mas não dramatize.
-- Não cobre detalhes de papelada decorados: números de sala, CNPJ, números de resolução, nomes de funcionários. Pergunte como um agente pergunta a uma pessoa, e aceite respostas do tipo "isso está no documento que entreguei".
+- Não cobre detalhes de papelada decorados: números de sala, CNPJ, números de resolução, nomes de funcionários. Exceção: o número do diploma ou certificado de português pode ser perguntado, e também se o exame foi presencial. Pergunte como um agente pergunta a uma pessoa, e aceite respostas do tipo "isso está no documento que entreguei".
 - NUNCA invente dados pessoais que não estejam no perfil — sobrenome, nomes de escolas, endereços, números de documento. Se um dado faltar, escreva um marcador entre colchetes, como [sobrenome], em vez de inventar.
 - O comentário em russo deve ser curto, específico e útil.
 
@@ -1122,10 +1174,140 @@ const SEED = [
 ["mais devagar, por favor","помедленнее, пожалуйста"],["como se diz...?","как сказать...?"],
 ["na verdade","на самом деле"],["com certeza","конечно, безусловно"],["tudo bem","всё в порядке"],
 ["desculpe","извините"],["posso explicar","могу объяснить"],
-["está no documento que entreguei","это есть в документе, который я подал"]
+["está no documento que entreguei","это есть в документе, который я подал"],
+// v2: реальные вопросы агента (6 первых — со слов знакомых) и слова к ним
+["Por que o senhor escolheu o Brasil?","Почему вы выбрали Бразилию?","reais",2],
+["Há quanto tempo o senhor está no Brasil?","Как давно вы в Бразилии?","reais",2],
+["Em que o senhor trabalha?","Кем вы работаете?","reais",2],
+["O senhor gosta daqui?","Вам здесь нравится?","reais",2],
+["Quais são os seus planos para o futuro?","Какие у вас планы на будущее?","reais",2],
+["Onde os seus filhos estudam?","Где учатся ваши дети?","reais",2],
+["Quando o senhor chegou ao Brasil?","Когда вы приехали в Бразилию?","reais",2],
+["Onde o senhor mora?","Где вы живёте?","reais",2],
+["Com quem o senhor mora?","С кем вы живёте?","reais",2],
+["O senhor é casado?","Вы женаты?","reais",2],
+["Quantos filhos o senhor tem?","Сколько у вас детей?","reais",2],
+["Quantos anos têm os seus filhos?","Сколько лет вашим детям?","reais",2],
+["Os seus filhos falam português?","Ваши дети говорят по-португальски?","reais",2],
+["O senhor trabalha de casa?","Вы работаете из дома?","reais",2],
+["Como o senhor aprendeu português?","Как вы выучили португальский?","reais",2],
+["O que o senhor mais gosta no Brasil?","Что вам больше всего нравится в Бразилии?","reais",2],
+["O senhor gosta da comida brasileira?","Вам нравится бразильская еда?","reais",2],
+["O senhor já viajou pelo Brasil?","Вы уже путешествовали по Бразилии?","reais",2],
+["Qual cidade o senhor mais gostou?","Какой город вам понравился больше всего?","reais",2],
+["O que o senhor faz no tempo livre?","Чем вы занимаетесь в свободное время?","reais",2],
+["O senhor sente falta do seu país?","Скучаете по родине?","reais",2],
+["Por que o senhor quer ser brasileiro?","Почему вы хотите стать гражданином Бразилии?","reais",2],
+["A sua esposa também pediu a naturalização?","Жена тоже подала на гражданство?","reais",2],
+["O senhor pretende continuar morando aqui?","Вы собираетесь и дальше жить здесь?","reais",2],
+["Como foi a viagem até aqui hoje?","Как вы сегодня сюда добрались?","reais",2],
+["escolher","выбирать","respostas",2],
+["chegar","приезжать, прибывать","respostas",2],
+["há um ano e meio","полтора года назад","respostas",2],
+["mais ou menos","примерно, более-менее","respostas",2],
+["o clima","климат, погода","respostas",2],
+["o calor","жара","respostas",2],
+["o mar","море","respostas",2],
+["a segurança","безопасность","respostas",2],
+["a qualidade de vida","качество жизни","respostas",2],
+["tranquilo","спокойный","respostas",2],
+["a natureza","природа","respostas",2],
+["as pessoas","люди","respostas",2],
+["simpático","приветливый, дружелюбный","respostas",2],
+["acolhedor","гостеприимный","respostas",2],
+["a comida","еда","respostas",2],
+["sentir falta de","скучать по","respostas",2],
+["a saudade","тоска, скучание","respostas",2],
+["o plano","план","respostas",2],
+["ficar","оставаться","respostas",2],
+["continuar","продолжать","respostas",2],
+["voltar","возвращаться","respostas",2],
+["viajar","путешествовать","respostas",2],
+["conhecer","знакомиться, побывать (о месте)","respostas",2],
+["o tempo livre","свободное время","respostas",2],
+["a creche","детский сад","respostas",2],
+["o colégio","школа (часто частная)","respostas",2],
+["particular","частный","respostas",2],
+["pública","государственная (школа)","respostas",2],
+["a série","класс (в школе)","respostas",2],
+["aprender","учить(ся), осваивать","respostas",2],
+["a aula","урок, занятие","respostas",2],
+["o curso","курс","respostas",2],
+["o ano que vem","в следующем году","respostas",2],
+["daqui a dois anos","через два года","respostas",2],
+["feliz","счастливый","respostas",2],
+["adaptar-se","приспосабливаться","respostas",2],
+// v3: вопросы с реального собеседования знакомого (обращение на você) и слова к ним
+["Qual é o seu nome completo?","Как ваше полное имя?","reais",3],
+["Quantos anos você tem?","Сколько вам лет?","reais",3],
+["Você é de qual país?","Из какой вы страны?","reais",3],
+["Você fala russo? E inglês?","Вы говорите по-русски? А по-английски?","reais",3],
+["Quando você chegou ao Brasil?","Когда вы приехали в Бразилию?","reais",3],
+["Por que você escolheu a nossa cidade?","Почему вы выбрали наш город?","reais",3],
+["Você já morou em outra cidade no Brasil ou sempre morou aqui?","Вы жили в другом городе Бразилии или всегда здесь?","reais",3],
+["Você tem filhos?","У вас есть дети?","reais",3],
+["Eles nasceram aqui no Brasil?","Они родились здесь, в Бразилии?","reais",3],
+["Eles estudam onde?","Где они учатся?","reais",3],
+["Eles estão gostando da escola?","Им нравится в школе?","reais",3],
+["Sua família está bem adaptada aqui?","Ваша семья хорошо освоилась здесь?","reais",3],
+["Seus pais ainda moram no seu país de origem?","Ваши родители всё ещё живут на родине?","reais",3],
+["Você sente saudades deles?","Вы по ним скучаете?","reais",3],
+["Eles costumam visitar você aqui no Brasil?","Они приезжают к вам в Бразилию?","reais",3],
+["Você trabalha atualmente? O que você faz?","Вы сейчас работаете? Чем занимаетесь?","reais",3],
+["Você gosta do que faz?","Вам нравится ваша работа?","reais",3],
+["Pretende continuar nessa área?","Собираетесь продолжать в этой сфере?","reais",3],
+["Você acha fácil ou difícil a vida no Brasil?","Жизнь в Бразилии для вас лёгкая или трудная?","reais",3],
+["Tem algo que você gosta muito aqui?","Есть что-то, что вам здесь очень нравится?","reais",3],
+["E algo que você acha difícil?","А что кажется трудным?","reais",3],
+["Você fala bem o português! Onde você aprendeu?","Вы хорошо говорите по-португальски! Где учились?","reais",3],
+["Você fez algum curso ou aprendeu no dia a dia?","Вы ходили на курсы или учились в повседневной жизни?","reais",3],
+["Você já fez o exame de português?","Вы уже сдавали экзамен по португальскому?","reais",3],
+["Onde foi o exame?","Где проходил экзамен?","reais",3],
+["Como foi a experiência?","Как всё прошло?","reais",3],
+["Por que você escolheu esse exame?","Почему вы выбрали этот экзамен?","reais",3],
+["Qual é o número do diploma?","Какой номер диплома?","reais",3],
+["O exame foi presencial?","Экзамен был очный?","reais",3],
+["Você tem amigos brasileiros?","У вас есть друзья-бразильцы?","reais",3],
+["Você já participou de alguma festa brasileira, como São João ou Carnaval?","Вы бывали на бразильских праздниках, например Сан-Жуан или Карнавал?","reais",3],
+["Você costuma assistir TV ou cinema brasileiro?","Вы смотрите бразильское ТВ или кино?","reais",3],
+["Você costuma ouvir música brasileira? Algum artista que você gosta?","Вы слушаете бразильскую музыку? Есть любимый исполнитель?","reais",3],
+["Você pretende continuar morando no Brasil pelos próximos anos?","Вы собираетесь жить в Бразилии в ближайшие годы?","reais",3],
+["Você gostaria que seus filhos crescessem e estudassem aqui?","Хотели бы вы, чтобы дети росли и учились здесь?","reais",3],
+["O que você espera do seu futuro no Brasil?","Чего вы ждёте от будущего в Бразилии?","reais",3],
+["o nome completo","полное имя","respostas",3],
+["o país de origem","страна происхождения, родина","respostas",3],
+["russo","русский (язык)","respostas",3],
+["inglês","английский (язык)","respostas",3],
+["os pais","родители","respostas",3],
+["os avós","бабушки и дедушки","respostas",3],
+["sentir saudades","скучать","respostas",3],
+["costumar","иметь привычку, обычно делать","respostas",3],
+["visitar","навещать, посещать","respostas",3],
+["adaptado","освоившийся, адаптированный","respostas",3],
+["atualmente","в настоящее время","respostas",3],
+["a área","сфера, область","respostas",3],
+["fácil","лёгкий","respostas",3],
+["difícil","трудный","respostas",3],
+["o dia a dia","повседневная жизнь","respostas",3],
+["o diploma","диплом, аттестат","respostas",3],
+["o número","номер","respostas",3],
+["os amigos","друзья","respostas",3],
+["a festa","праздник","respostas",3],
+["a tradição","традиция","respostas",3],
+["o São João","Сан-Жуан (июньский праздник)","respostas",3],
+["o Carnaval","Карнавал","respostas",3],
+["assistir","смотреть (ТВ, фильм)","respostas",3],
+["ouvir música","слушать музыку","respostas",3],
+["o artista","исполнитель, артист","respostas",3],
+["crescer","расти","respostas",3],
+["esperar","ждать, надеяться","respostas",3],
+["os próximos anos","ближайшие годы","respostas",3],
+["o estado","штат","respostas",3]
 ];
 
 const EMOJI = {
+"qual é o seu nome completo?":"🪪","quantos anos você tem?":"🎂","você é de qual país?":"🌍","você fala russo? e inglês?":"🗣️","quando você chegou ao brasil?":"🛬","por que você escolheu a nossa cidade?":"🏙️","você já morou em outra cidade no brasil ou sempre morou aqui?":"🗺️","você tem filhos?":"👶","eles nasceram aqui no brasil?":"🍼","eles estudam onde?":"🏫","eles estão gostando da escola?":"🎒","sua família está bem adaptada aqui?":"🏡","seus pais ainda moram no seu país de origem?":"👴","você sente saudades deles?":"🥲","eles costumam visitar você aqui no brasil?":"✈️","você trabalha atualmente? o que você faz?":"💼","você gosta do que faz?":"👍","pretende continuar nessa área?":"📈","você acha fácil ou difícil a vida no brasil?":"⚖️","tem algo que você gosta muito aqui?":"❤️","e algo que você acha difícil?":"🧗","você fala bem o português! onde você aprendeu?":"📖","você fez algum curso ou aprendeu no dia a dia?":"🎓","você já fez o exame de português?":"📝","onde foi o exame?":"📍","como foi a experiência?":"💬","por que você escolheu esse exame?":"🤔","qual é o número do diploma?":"🔢","o exame foi presencial?":"🏛️","você tem amigos brasileiros?":"🤝","você já participou de alguma festa brasileira, como são joão ou carnaval?":"🎉","você costuma assistir tv ou cinema brasileiro?":"📺","você costuma ouvir música brasileira? algum artista que você gosta?":"🎵","você pretende continuar morando no brasil pelos próximos anos?":"📌","você gostaria que seus filhos crescessem e estudassem aqui?":"🌱","o que você espera do seu futuro no brasil?":"🔮","o nome completo":"🪪","o país de origem":"🌍","russo":"🇷🇺","inglês":"🇬🇧","os pais":"👪","os avós":"👵","sentir saudades":"💭","costumar":"🔁","visitar":"🚪","adaptado":"🧩","atualmente":"⏱️","a área":"🧭","fácil":"🙂","difícil":"😓","o dia a dia":"☕","o diploma":"📜","o número":"🔢","os amigos":"🤝","a festa":"🎉","a tradição":"🎎","o são joão":"🌽","o carnaval":"🎭","assistir":"📺","ouvir música":"🎧","o artista":"🎤","crescer":"🌱","esperar":"🙏","os próximos anos":"📅","o estado":"🗾",
+"por que o senhor escolheu o brasil?":"❓","há quanto tempo o senhor está no brasil?":"⏳","em que o senhor trabalha?":"💼","o senhor gosta daqui?":"😊","quais são os seus planos para o futuro?":"🔮","onde os seus filhos estudam?":"🏫","quando o senhor chegou ao brasil?":"✈️","onde o senhor mora?":"🏠","com quem o senhor mora?":"👨‍👩‍👧‍👦","o senhor é casado?":"💍","quantos filhos o senhor tem?":"👶","quantos anos têm os seus filhos?":"🎂","os seus filhos falam português?":"🗣️","o senhor trabalha de casa?":"💻","como o senhor aprendeu português?":"📖","o que o senhor mais gosta no brasil?":"❤️","o senhor gosta da comida brasileira?":"🍲","o senhor já viajou pelo brasil?":"🧳","qual cidade o senhor mais gostou?":"🏙️","o que o senhor faz no tempo livre?":"🎣","o senhor sente falta do seu país?":"🥲","por que o senhor quer ser brasileiro?":"🇧🇷","a sua esposa também pediu a naturalização?":"👩","o senhor pretende continuar morando aqui?":"📌","como foi a viagem até aqui hoje?":"🚗","escolher":"👉","chegar":"🛬","há um ano e meio":"🕰️","mais ou menos":"〰️","o clima":"🌤️","o calor":"☀️","o mar":"🌊","a segurança":"🛡️","a qualidade de vida":"🌱","tranquilo":"😌","a natureza":"🌳","as pessoas":"🧑‍🤝‍🧑","simpático":"🙂","acolhedor":"🤗","a comida":"🍲","sentir falta de":"🥲","a saudade":"💭","o plano":"🗺️","ficar":"📍","continuar":"➡️","voltar":"↩️","viajar":"🧳","conhecer":"🧭","o tempo livre":"🎣","a creche":"🧸","o colégio":"🏫","particular":"🔐","pública":"🏛️","a série":"🔢","aprender":"🧠","a aula":"📚","o curso":"🎓","o ano que vem":"📆","daqui a dois anos":"⏩","feliz":"😄","adaptar-se":"🔧",
 "o emprego":"💼","a profissão":"🧑‍💼","o chefe":"🧑‍⚖️","o colega":"🧑‍🤝‍🧑","a equipe":"👥",
 "o horário":"🕘","o salário":"💵","a carteira de trabalho":"📗","autônomo":"🧑‍💻","a reunião":"🗣️",
 "o prazo de entrega":"⌛","o escritório":"🏢","a experiência":"⭐","ganhar":"💸","a tarefa":"✔️",
@@ -1156,7 +1338,7 @@ const EMOJI = {
 "está no documento que entreguei":"📎","na verdade":"🔄"
 };
 const REGRAS = [
-{id:"ser_estar", ex:["Sou russo.", "Sou engenheiro.", "Estou em São Paulo.", "Estou em casa.", "Tenho trinta e um anos."], t:"ser или estar", txt:"ser — постоянное: кто вы, откуда, профессия. estar — временное: где находитесь, состояние сейчас. «Sou russo» (я русский, навсегда), «Estou em São Paulo» (нахожусь в Ресифи).",
+{id:"ser_estar", ex:["Sou russo.", "Sou engenheiro.", "Estou em São Paulo.", "Estou em casa.", "Tenho trinta e um anos."], t:"ser или estar", txt:"ser — постоянное: кто вы, откуда, профессия. estar — временное: где находитесь, состояние сейчас. «Sou russo» (я русский, навсегда), «Estou em São Paulo» (нахожусь в Сан-Паулу).",
  q:[["Я инженер.","Sou engenheiro.","Estou engenheiro.","Sou engenheiro é.","Estou de engenheiro."],
     ["Я женат.","Sou casado.","Estou casado hoje.","Sou casando.","Estou casar."],
     ["Я сейчас дома.","Estou em casa.","Sou em casa.","Estou de casa.","Sou na casa."],
@@ -1167,10 +1349,10 @@ const REGRAS = [
     ["Я был в Рио.","Estive no Rio.","Sou no Rio.","Estou no Rio ontem.","Era no Rio."],
     ["Мы купили машину.","Compramos um carro.","Compramos uma carro.","Compra um carro.","Comprar um carro."]]},
 {id:"lugar", ex:["Moro em São Paulo.", "Moro no Brasil.", "Sou da Rússia.", "Vou para Fortaleza.", "Trabalho na empresa."], t:"Предлоги места: em, de, para", txt:"em + артикль сливается: em+o=no, em+a=na. «Moro no São Paulo»? Нет — города без артикля: «Moro em São Paulo», но «no Brasil», «na Rússia». Откуда — de/do/da: «Sou da Rússia». Куда — para: «Vou para casa».",
- q:[["Я живу в Ресифи.","Moro em São Paulo.","Moro no São Paulo.","Moro na São Paulo.","Moro de São Paulo."],
+ q:[["Я живу в Сан-Паулу.","Moro em São Paulo.","Moro no São Paulo.","Moro na São Paulo.","Moro de São Paulo."],
     ["Я живу в Бразилии.","Moro no Brasil.","Moro em Brasil.","Moro na Brasil.","Moro do Brasil."],
     ["Я из России.","Sou da Rússia.","Sou de Rússia.","Sou na Rússia.","Sou do Rússia."],
-    ["Я еду в Жоан-Песоа.","Vou para Fortaleza.","Vou em Fortaleza.","Vou no Fortaleza.","Vou de Fortaleza."]]},
+    ["Я еду в Форталезу.","Vou para Fortaleza.","Vou em Fortaleza.","Vou no Fortaleza.","Vou de Fortaleza."]]},
 {id:"tempo", ex:["Moro aqui desde abril de 2025.", "Cheguei há dois anos.", "A prova foi em 30 de novembro.", "Dei entrada em agosto."], t:"Предлоги времени: em, há, desde", txt:"em — в каком году или месяце: «em 2025», «em novembro». há — сколько времени назад: «há dois anos». desde — с какого момента и до сих пор: «desde abril de 2025». Дата целиком: «em 30 de novembro de 2025».",
  q:[["Я живу здесь с апреля 2025 года.","Moro aqui desde abril de 2025.","Moro aqui há abril de 2025.","Moro aqui em abril de 2025.","Moro aqui de abril 2025."],
     ["Я приехал два года назад.","Cheguei há dois anos.","Cheguei desde dois anos.","Cheguei em dois anos.","Cheguei por dois anos."],
@@ -1188,7 +1370,7 @@ const REGRAS = [
     ["Я приехал, чтобы работать.","Vim para trabalhar.","Vim por trabalhar.","Vim para trabalho.","Vim de trabalhar."]]},
 {id:"reflexivos", ex:["Me chamo Ivan.", "Nos mudamos para São Paulo.", "Como o senhor se chama?", "Me casei em 2019."], t:"Возвратные глаголы", txt:"chamar-se, mudar-se, casar-se. В бразильской речи местоимение ставится перед глаголом: «me chamo Ivan», «nos mudamos para São Paulo». Забытое «me» — самая частая ошибка на собеседовании.",
  q:[["Меня зовут Владимир.","Me chamo Ivan.","Chamo Ivan.","Me chama Ivan.","Eu chamo-me de Ivan."],
-    ["Мы переехали в Ресифи.","Nos mudamos para São Paulo.","Mudamos nos para São Paulo.","Nós mudamos-nos em São Paulo.","Nos mudamos em São Paulo."],
+    ["Мы переехали в Сан-Паулу.","Nos mudamos para São Paulo.","Mudamos nos para São Paulo.","Nós mudamos-nos em São Paulo.","Nos mudamos em São Paulo."],
     ["Как вас зовут?","Como o senhor se chama?","Como o senhor chama?","Como se o senhor chama?","Como chama o senhor se?"],
     ["Я женился в 2019 году.","Me casei em 2019.","Casei me em 2019.","Me casou em 2019.","Eu casar em 2019."]]},
 {id:"negacao", ex:["Não entendi nada.", "Não tenho antecedentes criminais.", "Nunca estive lá.", "Não conheço ninguém aqui."], t:"Отрицание", txt:"não ставится перед глаголом: «Não entendi». Двойное отрицание — норма: «Não tenho nada», «Não conheço ninguém», «Nunca estive lá». Убирать второе отрицание, как в русском, нельзя.",
@@ -1220,7 +1402,7 @@ const REGRAS = [
 
 const TEMAS_BARALHO = { documentos:"Документы и процесс", familia:"Семья и личные данные",
   trabalho:"Работа", estudo:"Учёба и экзамен", vida:"Быт и жизнь в Бразилии",
-  frases:"Вопросы и выручалочки", meu:"Мой случай", outros:"Прочее" };
+  frases:"Вопросы и выручалочки", reais:"Реальные вопросы", respostas:"Слова к ним", contos:"Из рассказов", meu:"Мой случай", outros:"Прочее" };
 function temaPorIndice(i){
   if(i < 30) return "documentos";
   if(i < 43) return "familia";
@@ -1229,10 +1411,11 @@ function temaPorIndice(i){
   if(i < 85) return "vida";
   return "frases";
 }
+function temaSeed(i){ return SEED[i][2] || temaPorIndice(i); }
 function temaDe(c){
   if(c.tema) return c.tema;
   const i = SEED.findIndex(p => p[0] === c.pt);
-  return i >= 0 ? temaPorIndice(i) : "outros";
+  return i >= 0 ? temaSeed(i) : "outros";
 }
 function iconeDe(c){ return c.emoji || EMOJI[String(c.pt).toLowerCase().trim()] || ""; }
 
@@ -1251,7 +1434,22 @@ async function loadVocab(){
     const r = await store.get("pfshare_vocab");
     if(r && r.value){ const s = JSON.parse(r.value); vocab = s.cards || []; vst = Object.assign(vst, s.stats || {}); }
   }catch(e){}
-  if(!vocab.length) vocab = SEED.map((p,i) => ({id:i+1, pt:p[0], ru:p[1], box:0, due:hoje(), tema:temaPorIndice(i)}));
+  const SEED_VER = 3;
+  if(!vocab.length){
+    vocab = SEED.map((p,i) => ({id:i+1, pt:p[0], ru:p[1], box:0, due:hoje(), tema:temaSeed(i)}));
+    vst.seedVer = SEED_VER;
+  } else if((vst.seedVer || 1) < SEED_VER){
+    let id = Math.max(0, ...vocab.map(c => c.id));
+    let n = 0;
+    SEED.forEach((p, i) => {
+      if((p[3] || 1) <= (vst.seedVer || 1)) return;
+      if(vocab.some(c => norm(c.pt) === norm(p[0]))) return;
+      vocab.push({ id: ++id, pt:p[0], ru:p[1], box:0, due:hoje(), tema:temaSeed(i) }); n++;
+    });
+    vst.seedVer = SEED_VER;
+    vst.novasV2 = n;
+    saveVocab();
+  }
   if(vst.dia !== hoje()){ vst.dia = hoje(); vst.feitos = 0; }
   vTopo(); vInicio();
 }
@@ -1906,7 +2104,7 @@ $("btnLoad").onclick = async () => {
 };
 
 // ================= ПРОГРЕСС И ЭКЗАМЕН =================
-const TEMAS_NOME = { pessoal:"Личные данные и семья", trabalho:"Работа и профессия",
+const TEMAS_NOME = { reais:"Реальные вопросы", pessoal:"Личные данные и семья", trabalho:"Работа и профессия",
   brasil:"Жизнь в Бразилии", exame:"Экзамен и документы", misto:"Всё вперемешку" };
 let prog = {};
 let exame = null;
@@ -1968,7 +2166,7 @@ function renderProg(){
   const g = prontidaoGeral();
   $("progTopo").textContent = g.geral === null
     ? "ГОТОВНОСТЬ: мало данных · пройдите 5 вопросов хотя бы по одной теме"
-    : "ГОТОВНОСТЬ: " + g.geral + "% · темы " + g.temas + "% (измерено: " + g.medidos + " из 5) · слова " + g.palavras + "%";
+    : "ГОТОВНОСТЬ: " + g.geral + "% · темы " + g.temas + "% (измерено: " + g.medidos + " из " + Object.keys(TEMAS_NOME).length + ") · слова " + g.palavras + "%";
   $("progGeral").style.width = (g.geral || 0) + "%";
 
   const alvo = $("progLista");
@@ -2175,8 +2373,268 @@ function fimExame(){
   modoExame(false);
 }
 
+// ================= РАССКАЗЫ =================
+let contos = [];
+let contoAtual = null;
+
+async function loadContos(){
+  try{
+    const r = await store.get("pfshare_contos");
+    if(r && r.value){ const j = JSON.parse(r.value); contos = Array.isArray(j) ? j : []; }
+  }catch(e){ contos = []; }
+  renderContos();
+}
+async function saveContos(){
+  if(contos.length > 20) contos = contos.slice(-20);
+  try{ await store.set("pfshare_contos", JSON.stringify(contos)); }catch(e){}
+}
+function frasesDe(texto){
+  return String(texto || "").split(/\n+/).map(l => l.replace(/\s+/g, " ").trim()).filter(Boolean)
+    .flatMap(l => /^(Agente|Candidat[oa]):/i.test(l) ? [l] : l.split(/(?<=[.!?…])\s+/)).filter(Boolean);
+}
+function falarDialogo(texto, aoFalhar, ritmo){
+  if(!podeFalar()){ return falar(texto, aoFalhar, ritmo); }
+  try{
+    const vs = (speechSynthesis.getVoices() || []).filter(v => /^pt/i.test(v.lang));
+    const vA = vozPT(), vB = vs.find(v => !vA || v.name !== vA.name) || vA;
+    speechSynthesis.cancel();
+    frasesDe(texto).forEach(l => {
+      const agente = /^Agente:/i.test(l);
+      const u = new SpeechSynthesisUtterance(l.replace(/^(Agente|Candidat[oa]):\s*/i, ""));
+      u.lang = "pt-BR"; u.rate = ritmo || 1;
+      const v = agente ? vB : vA; if(v) u.voice = v;
+      speechSynthesis.speak(u);
+    });
+    return true;
+  }catch(e){ return falar(texto, aoFalhar, ritmo); }
+}
+function ouvirConto(c, aviso, ritmo){
+  return c.dialogo ? falarDialogo(c.texto, aviso, ritmo) : falar(c.texto, aviso, ritmo);
+}
+function aparece(texto, palavra){
+  const t = " " + norm(texto) + " ";
+  const p = norm(palavra);
+  return p.length > 0 && t.indexOf(" " + p + " ") >= 0;
+}
+function validarConto(d){
+  const texto = String(d.texto || "").trim();
+  if(frasesDe(texto).length < 2) throw new Error("модель вернула слишком короткий текст");
+  const limpa = arr => (Array.isArray(arr) ? arr : []).map(x => ({ pt: String(x.pt || "").trim(), ru: String(x.ru || "").trim() }))
+    .filter(x => x.pt && x.ru);
+  const vistos = new Set();
+  const uniq = x => { const k = norm(x.pt); if(vistos.has(k)) return false; vistos.add(k); return true; };
+  const palavras = limpa(d.palavras).filter(x => aparece(texto, x.pt)).filter(uniq);
+  const distratores = limpa(d.distratores).filter(x => !aparece(texto, x.pt)).filter(uniq);
+  if(palavras.length < 3) throw new Error("модель не дала ключевых слов из текста — попробуйте ещё раз");
+  return { titulo: String(d.titulo || "Рассказ").trim(), texto, traducao: String(d.traducao_ru || "").trim(),
+           palavras: palavras.slice(0, 8), distratores: distratores.slice(0, 5) };
+}
+function renderContos(){
+  const topo = $("contosTopo");
+  if(topo){
+    const feitos = contos.filter(c => c.nota !== null && c.nota !== undefined);
+    const media = feitos.length ? Math.round(feitos.reduce((a, c) => a + c.nota, 0) / feitos.length) : null;
+    topo.textContent = "РАССКАЗОВ: " + contos.length + (media === null ? "" : " · СРЕДНЕЕ РАСПОЗНАВАНИЕ: " + media + "%");
+  }
+  const lista = $("contosLista");
+  if(!lista) return;
+  while(lista.firstChild) lista.removeChild(lista.firstChild);
+  if(!contos.length){
+    const p = document.createElement("p"); p.className = "muted"; p.style.margin = "0";
+    p.textContent = "Пока пусто."; lista.appendChild(p); return;
+  }
+  contos.slice().reverse().forEach((c, k) => {
+    const b = document.createElement("button");
+    b.className = "ghost wide"; b.id = "contoAntigo" + k; b.style.marginBottom = "6px"; b.style.textAlign = "left";
+    b.textContent = c.titulo + (c.nota === null || c.nota === undefined ? "" : " · " + c.nota + "%");
+    b.onclick = () => abrirConto(c);
+    lista.appendChild(b);
+  });
+}
+async function novoConto(){
+  const n = parseInt($("contoTam").value, 10) || 7;
+  $("btnConto").disabled = true;
+  $("contoMsg").textContent = "Сочиняю рассказ…";
+  try{
+    const perfil = ($("perfil").value || "").trim();
+    const dialogo = $("contoTema").value === "DIALOGO";
+    const banco = vocab.filter(v => v.tema === "reais").map(v => v.pt);
+    const sorteio = embaralhar(banco).slice(0, 4);
+    const raw = dialogo ? await callAPI(
+      "Você escreve diálogos curtos de entrevistas de naturalização na Polícia Federal do Brasil, para um estrangeiro de nível A2 treinar a compreensão auditiva. " +
+      "Cada linha começa com \"Agente:\" ou \"Candidato:\" (ou \"Candidata:\"), uma fala por linha. O agente é cordial e faz perguntas simples, sem pegadinhas; o candidato responde com frases naturais e curtas, às vezes com pequenas hesitações. " +
+      "O candidato é OUTRA pessoa com uma história parecida com o perfil abaixo, mas com detalhes diferentes: outra profissão próxima, outra cidade do Nordeste, outra idade dos filhos, outros motivos e planos. Varie as perguntas e as respostas de um diálogo para outro. " +
+      "NÃO use nomes próprios de pessoas, endereços nem números de documentos. " +
+      "Responda SOMENTE com JSON, sem markdown: {\"titulo\":\"título curto em russo\",\"texto\":\"o diálogo, falas separadas por \\n\"," +
+      "\"traducao_ru\":\"tradução completa para o russo, mantendo as falas\"," +
+      "\"palavras\":[{\"pt\":\"palavra ou expressão curta exatamente como aparece no texto\",\"ru\":\"tradução\"}]," +
+      "\"distratores\":[{\"pt\":\"palavra plausível do mesmo tema que NÃO aparece no texto\",\"ru\":\"tradução\"}]}. " +
+      "Dê 7 palavras-chave (não use Agente nem Candidato como palavra-chave) e 4 distratores.",
+      [{ role:"user", content: "Exatamente " + Math.max(2, Math.round(n / 2)) + " perguntas do agente, cada uma com a resposta do candidato. " +
+        (sorteio.length ? "Inclua perguntas parecidas com estas: " + sorteio.join(" | ") + ". " : "") +
+        "\n\nPerfil para inspiração:\n" + perfil }],
+      2000) : await callAPI(
+      "Você escreve pequenas histórias em português do Brasil para um estrangeiro de nível A2 que treina a compreensão auditiva antes da entrevista de naturalização. " +
+      "Linguagem natural, falada, frases curtas e médias, vocabulário do dia a dia. Narração em primeira pessoa, como se fosse a própria pessoa contando. " +
+      "Use o perfil abaixo só como inspiração; NÃO invente nomes, endereços nem números de documentos. " +
+      "Responda SOMENTE com JSON, sem markdown: {\"titulo\":\"título curto em russo\",\"texto\":\"a história\"," +
+      "\"traducao_ru\":\"tradução completa para o russo\"," +
+      "\"palavras\":[{\"pt\":\"palavra ou expressão curta exatamente como aparece no texto\",\"ru\":\"tradução\"}]," +
+      "\"distratores\":[{\"pt\":\"palavra plausível do mesmo tema que NÃO aparece no texto\",\"ru\":\"tradução\"}]}. " +
+      "Dê 7 palavras-chave e 4 distratores.",
+      [{ role:"user", content: "Tema: " + $("contoTema").value + ". Exatamente " + n + " frases.\n\nPerfil:\n" + perfil }],
+      2000);
+    const t = String(raw || "").replace(/```json|```/g, "").trim();
+    const conto = validarConto(JSON.parse(t.slice(t.indexOf("{"), t.lastIndexOf("}") + 1)));
+    conto.dialogo = dialogo;
+    conto.palavras = conto.palavras.filter(x => !/^(agente|candidat[oa])$/i.test(norm(x.pt)));
+    conto.id = Date.now(); conto.d = hoje(); conto.nota = null;
+    contos.push(conto);
+    await saveContos();
+    $("contoMsg").textContent = "Готово. Слушайте — текст пока скрыт.";
+    abrirConto(conto);
+    renderContos();
+  }catch(e){ $("contoMsg").textContent = "Не вышло: " + e.message; }
+  $("btnConto").disabled = false;
+}
+function abrirConto(c){
+  contoAtual = { c, marcados: new Set(), frase: 0, conferido: false };
+  const area = $("contoArea");
+  while(area.firstChild) area.removeChild(area.firstChild);
+  const box = document.createElement("div"); box.className = "panel"; box.id = "contoCaixa";
+  const h = document.createElement("p"); h.className = "prompt"; h.style.fontSize = "1.2rem";
+  h.textContent = "🎧 " + c.titulo;
+  box.appendChild(h);
+
+  const sons = document.createElement("div"); sons.className = "tools"; sons.style.marginBottom = "12px";
+  const tudo = document.createElement("button"); tudo.className = "ghost"; tudo.id = "contoOuvir";
+  tudo.textContent = c.dialogo ? "🔊 Весь диалог" : "🔊 Весь рассказ"; tudo.onclick = () => ouvirConto(c, m => avisoConto(m), 1);
+  const lento = document.createElement("button"); lento.className = "ghost"; lento.id = "contoLento";
+  lento.textContent = "🐢 Медленно"; lento.onclick = () => ouvirConto(c, m => avisoConto(m), 0.7);
+  const passo = document.createElement("button"); passo.className = "ghost"; passo.id = "contoFrase";
+  passo.textContent = "▶ По фразам";
+  passo.onclick = () => {
+    const fs = frasesDe(c.texto);
+    if(contoAtual.frase >= fs.length) contoAtual.frase = 0;
+    falar(fs[contoAtual.frase].replace(/^(Agente|Candidat[oa]):\s*/i, ""), m => avisoConto(m), 0.9);
+    contoAtual.frase++;
+    passo.textContent = "▶ Фраза " + Math.min(contoAtual.frase + 1, fs.length) + " из " + fs.length;
+  };
+  sons.appendChild(tudo); sons.appendChild(lento); sons.appendChild(passo);
+  box.appendChild(sons);
+
+  const pedido = document.createElement("p"); pedido.className = "promptSub";
+  pedido.textContent = "Какие слова вы услышали? Отметьте — среди них есть и не прозвучавшие.";
+  box.appendChild(pedido);
+  const chips = document.createElement("div"); chips.id = "contoChips";
+  embaralhar(c.palavras.concat(c.distratores)).forEach((w, k) => {
+    const b = document.createElement("button"); b.className = "chip"; b.id = "contoChip" + k;
+    b.dataset.pt = w.pt; b.textContent = w.pt;
+    b.onclick = () => {
+      if(contoAtual.conferido) return;
+      if(contoAtual.marcados.has(w.pt)){ contoAtual.marcados.delete(w.pt); b.classList.remove("on"); }
+      else { contoAtual.marcados.add(w.pt); b.classList.add("on"); }
+    };
+    chips.appendChild(b);
+  });
+  box.appendChild(chips);
+  const conf = document.createElement("button"); conf.className = "wide"; conf.id = "contoConferir";
+  conf.style.marginTop = "6px"; conf.textContent = "Проверить и показать текст";
+  conf.onclick = conferirConto;
+  box.appendChild(conf);
+  const aviso = document.createElement("p"); aviso.className = "muted"; aviso.id = "contoAviso"; aviso.style.margin = "8px 0 0";
+  box.appendChild(aviso);
+  area.appendChild(box);
+  area.scrollIntoView({ behavior: "smooth" });
+  ouvirConto(c, m => avisoConto(m), 1);
+}
+function avisoConto(m){ const a = $("contoAviso"); if(a) a.textContent = m; }
+
+async function conferirConto(){
+  const { c, marcados } = contoAtual;
+  contoAtual.conferido = true;
+  const chave = new Set(c.palavras.map(x => x.pt));
+  let ouvidos = 0, falsos = 0;
+  document.querySelectorAll("#contoChips .chip").forEach(b => {
+    const pt = b.dataset.pt, marcou = marcados.has(pt), real = chave.has(pt);
+    b.classList.remove("on");
+    if(real && marcou){ b.classList.add("ok"); ouvidos++; }
+    else if(real && !marcou) b.classList.add("falta");
+    else if(!real && marcou){ b.classList.add("falso"); falsos++; }
+    b.disabled = true;
+  });
+  const nota = Math.max(0, Math.round((ouvidos - falsos) / c.palavras.length * 100));
+  c.nota = (c.nota === null || c.nota === undefined) ? nota : Math.max(c.nota, nota);
+  await saveContos();
+  renderContos();
+
+  const box = $("contoCaixa");
+  $("contoConferir").remove();
+  const res = document.createElement("p"); res.className = "veredito " + (nota >= 60 ? "bom" : "ruim"); res.id = "contoNota";
+  res.textContent = "Расслышано " + ouvidos + " из " + c.palavras.length + (falsos ? ", ложных отметок: " + falsos : "") + " — " + nota + "%";
+  box.appendChild(res);
+
+  const leg = document.createElement("p"); leg.className = "muted"; leg.style.margin = "10px 0 4px";
+  leg.textContent = "Зелёным — расслышали, жёлтым — пропустили. Нажмите на фразу, чтобы её прослушать.";
+  box.appendChild(leg);
+  const texto = document.createElement("p"); texto.id = "contoTexto"; texto.style.cssText = "line-height:1.8;margin:0 0 10px";
+  const perdidos = c.palavras.filter(x => !marcados.has(x.pt));
+  frasesDe(c.texto).forEach(f => {
+    const sp = document.createElement("span"); sp.className = "frase";
+    sp.onclick = () => falar(f.replace(/^(Agente|Candidat[oa]):\s*/i, ""), m => avisoConto(m), 0.9);
+    let resto = f;
+    const marcas = c.palavras.map(x => ({ x, falta: !marcados.has(x.pt) }));
+    while(resto.length){
+      let melhor = null;
+      marcas.forEach(m => {
+        const re = new RegExp("(^|[^\\p{L}])(" + m.x.pt.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")(?=$|[^\\p{L}])", "iu");
+        const r = re.exec(resto);
+        if(r){ const pos = r.index + r[1].length; if(!melhor || pos < melhor.pos) melhor = { pos, len: r[2].length, m }; }
+      });
+      if(!melhor){ sp.appendChild(document.createTextNode(resto)); break; }
+      sp.appendChild(document.createTextNode(resto.slice(0, melhor.pos)));
+      const mk = document.createElement("span");
+      mk.className = melhor.m.falta ? "marcaFalta" : "marcaOk";
+      mk.textContent = resto.slice(melhor.pos, melhor.pos + melhor.len);
+      sp.appendChild(mk);
+      resto = resto.slice(melhor.pos + melhor.len);
+    }
+    texto.appendChild(sp);
+    texto.appendChild(c.dialogo ? document.createElement("br") : document.createTextNode(" "));
+  });
+  box.appendChild(texto);
+
+  if(c.traducao){
+    const tr = document.createElement("button"); tr.className = "ghost"; tr.id = "contoTraducao"; tr.textContent = "Перевод";
+    const pt = document.createElement("p"); pt.className = "muted"; pt.id = "contoTradTexto"; pt.style.margin = "8px 0 0";
+    tr.onclick = () => { pt.textContent = c.traducao; tr.disabled = true; };
+    box.appendChild(tr); box.appendChild(pt);
+  }
+
+  const novos = perdidos.filter(x => !vocab.some(v => norm(v.pt) === norm(x.pt)));
+  if(novos.length){
+    const add = document.createElement("button"); add.className = "wide"; add.id = "contoAdd"; add.style.marginTop = "10px";
+    add.textContent = "Добавить пропущенные в колоду: " + novos.map(x => x.pt).join(", ");
+    add.onclick = async () => {
+      let id = Math.max(0, ...vocab.map(v => v.id));
+      novos.forEach(x => vocab.push({ id: ++id, pt: x.pt, ru: x.ru, box: 0, due: hoje(), tema: "contos" }));
+      await saveVocab();
+      add.disabled = true; add.textContent = "Добавлено: " + novos.length;
+      vTopo();
+    };
+    box.appendChild(add);
+  }
+  const de = document.createElement("button"); de.className = "ghost wide"; de.id = "contoDeNovo"; de.style.marginTop = "8px";
+  de.textContent = "Пройти этот рассказ ещё раз"; de.onclick = () => abrirConto(c);
+  box.appendChild(de);
+}
+$("btnConto").onclick = novoConto;
+$("tabContos").onclick = () => aba("contos");
+
 function aba(qual){
-  const v = qual === "vocab", c = qual === "chat", p = qual === "prog", g = qual === "regras";
+  const v = qual === "vocab", c = qual === "chat", p = qual === "prog", g = qual === "regras", k = qual === "contos";
+  $("viewContos").classList.toggle("hidden", !k);
+  $("tabContos").classList.toggle("on", k);
   $("viewVocab").classList.toggle("hidden", !v);
   $("viewChat").classList.toggle("hidden", !c);
   $("viewProg").classList.toggle("hidden", !p);
@@ -2328,6 +2786,7 @@ loadVocab();
 loadProg();
 loadHist();
 loadRegras();
+loadContos();
 $("histFiltro").onchange = renderHist;
 $("btnHistFile").onclick = () => {
   if(!hist.length){ $("histMsg").textContent = "История пуста."; return; }
