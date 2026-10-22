@@ -1411,7 +1411,7 @@ const REGRAS = [
 
 const TEMAS_BARALHO = { documentos:"Документы и процесс", familia:"Семья и личные данные",
   trabalho:"Работа", estudo:"Учёба и экзамен", vida:"Быт и жизнь в Бразилии",
-  frases:"Вопросы и выручалочки", reais:"Реальные вопросы", respostas:"Слова к ним", contos:"Из рассказов", meu:"Мой случай", outros:"Прочее" };
+  frases:"Вопросы и выручалочки", reais:"Реальные вопросы", respostas:"Слова к ним", contos:"Из рассказов", meu:"Мой случай", minhas:"Мои ответы", outros:"Прочее" };
 function temaPorIndice(i){
   if(i < 30) return "documentos";
   if(i < 43) return "familia";
@@ -1438,6 +1438,11 @@ const embaralhar = a => { const b = a.slice(); for(let i=b.length-1;i>0;i--){ co
 let vocab = [], vst = {streak:0, ultimo:null, feitos:0, dia:null, meta:20};
 let filaV = [], exAtual = null, sessaoAtiva = false;
 
+function cartaSeed(p, i, id){
+  const c = { id, pt:p[0], ru:p[1], box:0, due:hoje(), tema:temaSeed(i) };
+  if(p[4]) c.q = p[4];          // готовый ответ: p[4] — вопрос инспектора
+  return c;
+}
 async function loadVocab(){
   try{
     const r = await store.get("pfshare_vocab");
@@ -1445,7 +1450,7 @@ async function loadVocab(){
   }catch(e){}
   const SEED_VER = 3;
   if(!vocab.length){
-    vocab = SEED.map((p,i) => ({id:i+1, pt:p[0], ru:p[1], box:0, due:hoje(), tema:temaSeed(i)}));
+    vocab = SEED.map((p,i) => cartaSeed(p, i, i+1));
     vst.seedVer = SEED_VER;
   } else if((vst.seedVer || 1) < SEED_VER){
     let id = Math.max(0, ...vocab.map(c => c.id));
@@ -1453,7 +1458,7 @@ async function loadVocab(){
     SEED.forEach((p, i) => {
       if((p[3] || 1) <= (vst.seedVer || 1)) return;
       if(vocab.some(c => norm(c.pt) === norm(p[0]))) return;
-      vocab.push({ id: ++id, pt:p[0], ru:p[1], box:0, due:hoje(), tema:temaSeed(i) }); n++;
+      vocab.push(cartaSeed(p, i, ++id)); n++;
     });
     vst.seedVer = SEED_VER;
     vst.novasV2 = n;
@@ -1500,7 +1505,7 @@ function vInicio(){
 let blitz = null;
 
 function vBlitz(){
-  const pool = embaralhar(vocab.filter(noBaralho));
+  const pool = embaralhar(vocab.filter(c => noBaralho(c) && !c.q));
   if(pool.length < 4){ vInicio(); return; }
   blitz = { fila: pool.slice(), pares: [], acertos: 0, erros: 0, restam: 60,
             escolhido: null, fim: false };
@@ -1625,9 +1630,13 @@ function vComecar(){
 function vProximo(){
   if(!filaV.length){ return vFim(); }
   const c = filaV[0];
-  const outros = embaralhar(vocab.filter(x => x.id !== c.id)).slice(0,3);
+  const mesmoTema = vocab.filter(x => x.id !== c.id && !x.q && temaDe(x) === temaDe(c));
+  const outros = embaralhar(temaDe(c) === "reais" && mesmoTema.length >= 3 ? mesmoTema
+                            : vocab.filter(x => x.id !== c.id && !x.q)).slice(0,3);
   const palavras = String(c.pt).split(/\s+/).filter(Boolean);
-  const tipo = c.box === 0 ? "pt_ru"
+  const tipo = c.q ? ((c.box === 3 || (c.box >= 5 && Math.random() < 0.5)) ? "lacuna" : "resposta")
+             : temaDe(c) === "reais" ? ["ouvir", "ouvir_pt", "ouvir", "montar", "ouvir_digitar", "lacuna", "lacuna"][c.box]
+             : c.box === 0 ? "pt_ru"
              : c.box === 1 ? "ru_pt"
              : c.box === 2 ? "ouvir"
              : c.box === 3 ? (palavras.length >= 2 ? "montar" : "digitar")
@@ -1639,7 +1648,7 @@ function vProximo(){
 }
 function lacunaSorteia(c){
   const ps = String(c.pt).split(/\s+/);
-  const bons = ps.map((w, i) => i).filter(i => ps[i].replace(/[^\wÀ-ÿ]/g, "").length >= 3);
+  const bons = ps.map((w, i) => i).filter(i => !/[\[\]]/.test(ps[i]) && ps[i].replace(/[^\wÀ-ÿ]/g, "").length >= 3);
   const lista = bons.length ? bons : ps.map((w, i) => i);
   return lista[Math.floor(Math.random() * lista.length)];
 }
@@ -1682,19 +1691,39 @@ function vDesenhar(){
 
   if(tipo === "pt_ru"){ sub.textContent = "Что это значит?"; q.textContent = card.pt; }
   if(tipo === "ru_pt"){ sub.textContent = "Как это по-португальски?"; q.textContent = card.ru; }
-  if(tipo === "ouvir"){ sub.textContent = "Послушайте и выберите"; q.textContent = "🔊"; }
+  if(tipo === "ouvir"){ sub.textContent = "Послушайте и выберите перевод"; q.textContent = "🔊"; }
+  if(tipo === "ouvir_pt"){ sub.textContent = "Послушайте и выберите, что прозвучало"; q.textContent = "🔊"; }
   if(tipo === "digitar"){ sub.textContent = "Напишите по-португальски"; q.textContent = card.ru; }
   if(tipo === "montar"){ sub.textContent = "Соберите фразу из слов"; q.textContent = card.ru; }
   if(tipo === "ouvir_digitar"){ sub.textContent = "Послушайте и напишите"; q.textContent = "🎧"; }
   if(tipo === "lacuna"){ sub.textContent = "Вставьте пропущенное слово"; q.textContent = lacunaTexto(card, exAtual.lacunaIdx); }
+  if(tipo === "resposta"){ sub.textContent = "Вопрос инспектора. Ответьте вслух, потом откройте свой ответ"; q.textContent = card.q; }
   p.appendChild(q); p.appendChild(sub);
 
-  if(tipo === "ouvir" || tipo === "pt_ru"){
+  if(tipo === "ouvir" || tipo === "ouvir_pt" || tipo === "pt_ru"){
     p.appendChild(parDeSom(card.pt, "vSay"));
-    if(tipo === "ouvir") falar(card.pt, avisoSom);
   }
 
-  if(tipo === "ouvir_digitar"){
+  if(tipo === "resposta"){
+    p.appendChild(parDeSom(card.q, "vSayQ"));
+    const ver = document.createElement("button");
+    ver.className = "wide"; ver.id = "vVerResp"; ver.textContent = "Показать мой ответ";
+    ver.onclick = () => {
+      ver.remove();
+      const r = document.createElement("p"); r.id = "vResp"; r.className = "prompt";
+      r.style.cssText = "font-size:1.15rem;margin:8px 0 4px"; r.textContent = card.pt;
+      const t = document.createElement("p"); t.id = "vRespRu"; t.className = "muted"; t.textContent = card.ru;
+      p.insertBefore(t, ver.nextSibling); p.insertBefore(r, t);
+      const som = parDeSom(card.pt, "vSay"); p.appendChild(som);
+      falar(card.pt, avisoSom);
+      [["vSei", "✓ Ответил близко к этому", true], ["vNaoSei", "✗ Не вспомнил", false]].forEach(([id, txt, ok]) => {
+        const b = document.createElement("button"); b.className = "opt"; b.id = id; b.textContent = txt;
+        b.onclick = () => { $("vSei").disabled = $("vNaoSei").disabled = true; vResponder(ok, card.pt, ok ? null : b); };
+        p.appendChild(b);
+      });
+    };
+    p.appendChild(ver);
+  } else if(tipo === "ouvir_digitar"){
     p.appendChild(parDeSom(card.pt, "vSay", avisoSom));
     const i = document.createElement("input"); i.id = "vInput"; i.placeholder = "português";
     i.setAttribute("autocapitalize","none"); i.setAttribute("autocorrect","off");
@@ -1703,7 +1732,6 @@ function vDesenhar(){
     b.style.marginTop = "10px"; b.textContent = "Проверить";
     b.onclick = () => vResponder(norm(i.value) === norm(card.pt), card.pt);
     p.appendChild(i); p.appendChild(b);
-    falar(card.pt, avisoSom, 1);
   } else if(tipo === "lacuna"){
     const faltando = lacunaPalavra(card, exAtual.lacunaIdx);
     const outras = embaralhar(vocab.filter(x => x.id !== card.id)
@@ -1745,18 +1773,39 @@ function vDesenhar(){
     b.style.marginTop = "10px"; b.textContent = "Проверить";
     b.onclick = () => vResponder(norm(i.value) === norm(card.pt), card.pt);
     p.appendChild(i); p.appendChild(b);
-  } else if(tipo !== "montar"){
+  } else if(tipo !== "montar" && tipo !== "resposta"){
     opcoes.forEach((o,k) => {
       const b = document.createElement("button");
       b.className = "opt"; b.dataset.id = String(o.id); b.id = "vOpt" + k;
-      b.textContent = tipo === "ru_pt" ? o.pt : o.ru;
-      b.onclick = () => vResponder(o.id === card.id, tipo === "ru_pt" ? card.pt : card.ru, b);
+      const ptOpc = tipo === "ru_pt" || tipo === "ouvir_pt";
+      b.textContent = ptOpc ? o.pt : o.ru;
+      b.onclick = () => vResponder(o.id === card.id, ptOpc ? card.pt : card.ru, b);
       p.appendChild(b);
     });
   }
+  if(["ouvir", "ouvir_pt", "ouvir_digitar", "resposta"].includes(tipo) || temaDe(card) === "reais")
+    portaoDeSom(p, q, sub, tipo === "resposta" ? card.q : card.pt, tipo === "resposta" ? "vSayQ" : "vSay");
   a.appendChild(p);
   vTopo();
   if(tipo === "digitar" && $("vInput")) $("vInput").focus();
+}
+// Упражнение на слух: пока не нажата кнопка звука, текст и варианты скрыты
+function portaoDeSom(p, q, sub, texto, idSom){
+  const promptOrig = q.textContent, subOrig = sub.textContent;
+  [...p.children].filter(e => e.classList.contains("tools") && e.querySelector('[id^="vSay"]')).forEach(e => e.remove());
+  const oculto = document.createElement("div"); oculto.id = "vOculto"; oculto.className = "hidden";
+  [...p.children].filter(e => e !== q && e !== sub).forEach(e => oculto.appendChild(e));
+  q.textContent = "🎧";
+  sub.textContent = "Сначала прослушайте — текст и варианты появятся после";
+  const som = parDeSom(texto, idSom);
+  const liberar = () => {
+    if(!oculto.classList.contains("hidden")) return;
+    oculto.classList.remove("hidden");
+    q.textContent = promptOrig; sub.textContent = subOrig;
+    if($("vInput")) $("vInput").focus();
+  };
+  som.querySelectorAll("button").forEach(b => { const tocar = b.onclick; b.onclick = () => { tocar(); liberar(); }; });
+  p.appendChild(som); p.appendChild(oculto);
 }
 const audioCache = new Map();
 function cfgVoz(){
@@ -2559,10 +2608,16 @@ function abrirConto(c){
   };
   sons.appendChild(tudo); sons.appendChild(lento); sons.appendChild(passo);
   box.appendChild(sons);
+  const espera = document.createElement("p"); espera.className = "promptSub"; espera.id = "contoEspera";
+  espera.textContent = "Нажмите «🔊» и слушайте. Слова для отметки появятся после начала прослушивания.";
+  box.appendChild(espera);
+  const oculto = document.createElement("div"); oculto.id = "contoOculto"; oculto.className = "hidden";
+  [tudo, lento, passo].forEach(b => { const tocar = b.onclick; b.onclick = () => {
+    tocar(); oculto.classList.remove("hidden"); if($("contoEspera")) $("contoEspera").remove(); }; });
 
   const pedido = document.createElement("p"); pedido.className = "promptSub";
   pedido.textContent = "Какие слова вы услышали? Отметьте — среди них есть и не прозвучавшие.";
-  box.appendChild(pedido);
+  oculto.appendChild(pedido);
   const chips = document.createElement("div"); chips.id = "contoChips";
   embaralhar(c.palavras.concat(c.distratores)).forEach((w, k) => {
     const b = document.createElement("button"); b.className = "chip"; b.id = "contoChip" + k;
@@ -2574,16 +2629,16 @@ function abrirConto(c){
     };
     chips.appendChild(b);
   });
-  box.appendChild(chips);
+  oculto.appendChild(chips);
   const conf = document.createElement("button"); conf.className = "wide"; conf.id = "contoConferir";
   conf.style.marginTop = "6px"; conf.textContent = "Проверить и показать текст";
   conf.onclick = conferirConto;
-  box.appendChild(conf);
+  oculto.appendChild(conf);
+  box.appendChild(oculto);
   const aviso = document.createElement("p"); aviso.className = "muted"; aviso.id = "contoAviso"; aviso.style.margin = "8px 0 0";
   box.appendChild(aviso);
   area.appendChild(box);
   area.scrollIntoView({ behavior: "smooth" });
-  ouvirConto(c, m => avisoConto(m), 1);
 }
 function avisoConto(m){ const a = $("contoAviso"); if(a) a.textContent = m; }
 
