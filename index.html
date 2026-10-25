@@ -249,6 +249,9 @@
   <div class="panel">
     <label for="voz">Системный голос</label>
     <select id="voz"><option value="">по умолчанию</option></select>
+    <label for="ritmoLento" style="margin-top:12px">Скорость кнопки «🐢 Медленно» (обычная — 1)</label>
+    <select id="ritmoLento"><option value="0.3">0,3</option><option value="0.4">0,4</option><option value="0.45" selected>0,45</option><option value="0.5">0,5</option><option value="0.6">0,6</option><option value="0.7">0,7</option><option value="0.8">0,8</option><option value="0.9">0,9</option></select>
+    <button class="ghost" id="btnRitmoTeste" style="margin-top:8px">🐢 Послушать пример</button>
     <label for="vozNuvem" style="margin-top:12px">Облачный голос — заметно живее системного</label>
     <select id="vozNuvem">
       <option value="nao">не использовать</option>
@@ -496,6 +499,8 @@
 </div>
 
 <script>
+// скорость кнопок «🐢 Медленно» (1 — обычная); выбирается в «Системный голос»
+function ritmoLento(){ const v = parseFloat($("ritmoLento") && $("ritmoLento").value); return v > 0 && v <= 1 ? v : 0.45; }
 const PERFIL_PADRAO =
 `Опишите себя своими словами — можно по-русски. Агент строит вопросы по этому тексту.
 
@@ -880,7 +885,7 @@ function renderTurn(o){
     som.onclick = () => falar(o.pergunta, msg => aux("Звук", msg, "som"), 1);
     const lento = document.createElement("button");
     lento.className = "ghost"; lento.id = "btnRepetirLento"; lento.textContent = "🐢 Медленно";
-    lento.onclick = () => falar(o.pergunta, msg => aux("Звук", msg, "som"), 0.6);
+    lento.onclick = () => falar(o.pergunta, msg => aux("Звук", msg, "som"), ritmoLento());
     const ver = document.createElement("button");
     ver.className = "ghost"; ver.id = "btnMostrar"; ver.textContent = "👁 Показать текст";
     ver.onclick = () => {
@@ -1039,7 +1044,7 @@ $("btnSay").onclick = () => {
 };
 $("btnSayLento").onclick = () => {
   if(!atual) return;
-  falar(atual.pergunta, msg => aux("Звук", msg), 0.6);
+  falar(atual.pergunta, msg => aux("Звук", msg), ritmoLento());
 };
 
 $("startExame").onclick = async () => {
@@ -1670,7 +1675,7 @@ function parDeSom(texto, idBase, aoFalhar){
   const lento = document.createElement("button");
   lento.className = "ghost"; lento.id = idBase + "Lento";
   lento.textContent = "🐢 Медленно";
-  lento.onclick = () => falar(texto, aoFalhar || avisoSom, 0.6);
+  lento.onclick = () => falar(texto, aoFalhar || avisoSom, ritmoLento());
   cx.appendChild(normal); cx.appendChild(lento);
   return cx;
 }
@@ -2017,6 +2022,8 @@ $("btnModelos").onclick = async () => {
 };
 
 $("vozNuvem").onchange = () => { mostrarCamposVoz(); salvarCfg(); };
+$("btnRitmoTeste").onclick = () => falar("Por que você escolheu o Brasil?", m => { $("btnRitmoTeste").textContent = "🐢 Послушать пример — " + m; }, ritmoLento());
+$("ritmoLento").onchange = () => { salvarCfg(); $("btnRitmoTeste").onclick(); };
 ["chaveVoz","nomeVoz"].forEach(id => $(id).addEventListener("change", salvarCfg));
 
 $("btnVozes").onclick = async () => {
@@ -2596,7 +2603,7 @@ function abrirConto(c){
   const tudo = document.createElement("button"); tudo.className = "ghost"; tudo.id = "contoOuvir";
   tudo.textContent = c.dialogo ? "🔊 Весь диалог" : "🔊 Весь рассказ"; tudo.onclick = () => ouvirConto(c, m => avisoConto(m), 1);
   const lento = document.createElement("button"); lento.className = "ghost"; lento.id = "contoLento";
-  lento.textContent = "🐢 Медленно"; lento.onclick = () => ouvirConto(c, m => avisoConto(m), 0.7);
+  lento.textContent = "🐢 Медленно"; lento.onclick = () => ouvirConto(c, m => avisoConto(m), ritmoLento());
   const passo = document.createElement("button"); passo.className = "ghost"; passo.id = "contoFrase";
   passo.textContent = "▶ По фразам";
   passo.onclick = () => {
@@ -2782,6 +2789,8 @@ async function loadCfg(){
         $("vozNuvem").value = c.voz.modo || "nao";
         $("chaveVoz").value = c.voz.chave || "";
         $("nomeVoz").value = c.voz.nome || "";
+        if(c.voz.lento) $("ritmoLento").value = String(c.voz.lento);
+        if(!$("ritmoLento").value) $("ritmoLento").value = "0.45";
       }
       (c.extras || []).forEach((e, i) => {
         if(!e) return;
@@ -2800,7 +2809,8 @@ async function salvarCfg(){
   c.extras = [2, 3].map(i => ({ p: $("provedor" + i).value, k: $("apiKey" + i).value.trim() }));
   c.modelos = modelosPorProvedor;
   c.prioridade = $("prioridade").value;
-  c.voz = { modo: $("vozNuvem").value, chave: $("chaveVoz").value.trim(), nome: $("nomeVoz").value.trim(), sistema: $("voz").value };
+  c.voz = { modo: $("vozNuvem").value, chave: $("chaveVoz").value.trim(), nome: $("nomeVoz").value.trim(), sistema: $("voz").value,
+            lento: ritmoLento() };
   try{ await store.set("pfshare_cfg", JSON.stringify(c)); }catch(e){}
 }
 function renderOndeChave(){
