@@ -1462,12 +1462,17 @@ function cartaSeed(p, i, id){
   return c;
 }
 // формулировки вопросов могут дополняться в новых версиях — подтягиваем их к уже заведённым карточкам
+// готовые ответы правятся в новых версиях — обновляем текст по вопросу, уровень сохраняется
 function sincronizarVariantes(){
+  let mudou = false;
   SEED.forEach(p => {
-    if(!p[5]) return;
-    const c = vocab.find(x => x.q && norm(x.pt) === norm(p[0]));
-    if(c) c.qs = p[5];
+    if(!p[4]) return;
+    const c = vocab.find(x => x.q === p[4]);
+    if(!c) return;
+    if(c.pt !== p[0] || c.ru !== p[1]){ c.pt = p[0]; c.ru = p[1]; mudou = true; }
+    if(p[5]) c.qs = p[5];
   });
+  if(mudou) saveVocab();
 }
 function perguntasDe(c){ return [c.q].concat(c.qs || []); }
 async function loadVocab(){
