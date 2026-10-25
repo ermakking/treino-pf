@@ -155,7 +155,7 @@
 
   <p style="margin:10px 0 0"><b>Слова.</b> Карточки с интервальным повторением: работают без интернета и без ключей. Слово поднимается на уровень за верный ответ и падает за ошибку, повтор возвращается через 1, 2, 4, 8, 16 и 30 дней. Упражнение меняется с уровнем: выбрать перевод, назвать по-португальски, узнать на слух, собрать фразу из слов, написать самому. Значок-картинка показывается только после ответа — так запоминается лучше. Две кнопки озвучки везде: 🔊 обычная скорость и 🐢 замедленная (её скорость выбирается в «Инструментах», по умолчанию 0,45). В упражнениях на слух и в реальных вопросах сначала звук: текст и варианты появляются только после нажатия 🔊 — так учишься слышать, а не читать.</p>
 
-  <p style="margin:10px 0 0"><b>Словарики.</b> По умолчанию открыт «★ Главное»: реальные вопросы агента (со слов тех, кто недавно проходил собеседование), слова для ответов на них, фразы-выручалочки и готовые ответы, если они есть в колоде. Карточка с готовым ответом задаёт вопрос голосом, каждый раз в одной из формулировок; вы отвечаете вслух, открываете свой ответ и отмечаете, получилось ли. Общая лексика (документы, семья, работа, учёба, быт) — в «Дополнительно». Можно выбрать и отдельный словарик — тогда повторяется только он. В «Инструментах»: своё слово со своим значком, кнопка «Собрать словарь» (модель читает вашу анкету и составляет слова под вашу профессию — они идут в словарик «Мой случай»), выбор голоса, перенос прогресса между устройствами и выгрузка колоды в файл для Excel, Anki или DuoCards.</p>
+  <p style="margin:10px 0 0"><b>Словарики.</b> По умолчанию открыт «★ Главное»: реальные вопросы агента (со слов тех, кто недавно проходил собеседование), слова для ответов на них, фразы-выручалочки и готовые ответы, если они есть в колоде. Карточка с готовым ответом задаёт вопрос голосом, каждый раз в одной из формулировок; вы отвечаете вслух, открываете свой ответ и отмечаете, получилось ли. Общая лексика (документы, семья, работа, учёба, быт) — в «Дополнительно». Можно выбрать и отдельный словарик — тогда повторяется только он. Новых карточек — не больше 25 в день, повторы старых без ограничений. Кнопка «🎤 Прогон» — все вопросы подряд, как на собеседовании: сначала звук, ответ вслух, потом сверка; не вспомненные попадают в сегодняшний повтор. В «Инструментах»: своё слово со своим значком, кнопка «Собрать словарь» (модель читает вашу анкету и составляет слова под вашу профессию — они идут в словарик «Мой случай»), выбор голоса, перенос прогресса между устройствами и выгрузка колоды в файл для Excel, Anki или DuoCards.</p>
 
   <p style="margin:10px 0 0"><b>Собеседование.</b> Диалог с агентом на португальском. Вопросы сочиняет языковая модель по вашей анкете, поэтому нужен ключ API — бесплатного хватает. Анкету можно писать по-русски и перевести кнопкой, проверив результат. После каждого ответа — разбор: ваш текст с зачёркнутыми ошибками, исправленная фраза с подсветкой правок, список ошибок с причинами и озвучка правильного варианта. Подсказки — перевод вопроса, слова и образец ответа — подгружаются по нажатию; незнакомые слова из подсказок одной кнопкой уходят в колоду. По умолчанию включён режим «сначала на слух»: текст вопроса скрыт, вы слушаете и открываете текст кнопкой — как на настоящем собеседовании. Если в колоде есть готовые ответы, агент видит их: образец ответа берётся оттуда, а в разборе он подсказывает, что вы упустили или сказали иначе. Тему и темп выбираете сами, включая совсем простые бытовые вопросы. Кнопка «Экзамен» — восемь вопросов по теме без подсказок и с оценкой.</p>
 
@@ -236,7 +236,7 @@
     <p class="muted" id="limparMsg" style="margin:8px 0 0">Удаляется без возврата. Сначала выгрузите колоду файлом, если жалко.</p>
   </div>
 
-  <div class="panel">
+  <div class="panel" id="painelGerar">
     <label for="gerarN">Словарь под свой случай</label>
     <p class="muted" style="margin:0 0 8px">Модель прочитает вашу анкету со вкладки «Собеседование» и составит слова именно под вашу профессию и обстоятельства. Нужен ключ API.</p>
     <select id="gerarN">
@@ -1500,7 +1500,7 @@ async function loadVocab(){
     saveVocab();
   }
   sincronizarVariantes();
-  if(vst.dia !== hoje()){ vst.dia = hoje(); vst.feitos = 0; }
+  if(vst.dia !== hoje()){ vst.dia = hoje(); vst.feitos = 0; vst.novasHoje = 0; }
   if($("usarRespostas")) $("usarRespostas").closest("label").classList.toggle("hidden", !vocab.some(c => c.q));
   vTopo(); vInicio();
 }
@@ -1511,11 +1511,22 @@ function baralhoAtual(){ return ($("baralho") && $("baralho").value) || "todos";
 const GRUPOS = { principal: ["reais", "minhas", "respostas", "meu", "frases"],
                  extra: ["documentos", "familia", "trabalho", "estudo", "vida", "contos", "outros"] };
 function noBaralho(c){ const b = baralhoAtual(); return b === "todos" || (GRUPOS[b] ? GRUPOS[b].includes(temaDe(c)) : temaDe(c) === b); }
-function pendentes(){ const h = hoje(); return vocab.filter(c => c.due <= h && noBaralho(c)); }
+const NOVAS_POR_DIA = 25;                       // новых карточек в день; старые повторы — без лимита
+function eNova(c){ return !c.visto && c.box === 0; }
+function prioridade(c){ return GRUPOS.principal.includes(temaDe(c)) ? 0 : 1; }
+function pendentes(){
+  const h = hoje();
+  const due = vocab.filter(c => c.due <= h && noBaralho(c));
+  const resto = Math.max(0, NOVAS_POR_DIA - (vst.novasHoje || 0));
+  const novas = due.filter(eNova).map((c, i) => [c, i]).sort((a, b) => prioridade(a[0]) - prioridade(b[0]) || a[1] - b[1])
+                   .slice(0, resto).map(x => x[0]);
+  return due.filter(c => !eNova(c)).concat(novas);
+}
 function vTopo(){
   const p = pendentes().length;
   const nb = vocab.filter(noBaralho).length;
   $("vTopo").textContent = "СЛОВ: " + nb + (baralhoAtual() === "todos" ? "" : " из " + vocab.length) + " · К ПОВТОРУ: " + p +
+    " · НОВЫХ СЕГОДНЯ: " + (vst.novasHoje || 0) + "/" + NOVAS_POR_DIA +
     " · СЕРИЯ: " + vst.streak + " дн. · СЕГОДНЯ: " + vst.feitos + "/" + vst.meta;
   $("vProg").style.width = Math.min(100, Math.round(vst.feitos / vst.meta * 100)) + "%";
 }
@@ -1539,7 +1550,95 @@ function vInicio(){
   bl.className = "ghost wide"; bl.id = "vBlitzBtn"; bl.style.marginTop = "8px";
   bl.textContent = "Блиц: собрать пары за минуту" + (vst.blitz ? " · рекорд " + vst.blitz : "");
   bl.onclick = vBlitz;
-  p.appendChild(h); p.appendChild(s); p.appendChild(b); p.appendChild(bl); a.appendChild(p);
+  const nProva = itensProva().length;
+  const pr = document.createElement("button");
+  pr.className = "ghost wide"; pr.id = "vProvaBtn"; pr.style.marginTop = "8px";
+  pr.textContent = "🎤 Прогон: все вопросы подряд (" + nProva + ")";
+  pr.onclick = () => vProva(false);
+  p.appendChild(h); p.appendChild(s); p.appendChild(b); p.appendChild(pr); p.appendChild(bl); a.appendChild(p);
+}
+// ---- Прогон: все вопросы собеседования подряд, сначала звук, ответ вслух, самооценка.
+// Уровни карточек не меняет; не вспомненные ставятся в сегодняшний повтор.
+let prova = null;
+function itensProva(){
+  const resp = vocab.filter(c => c.q);
+  return resp.length ? resp : vocab.filter(c => temaDe(c) === "reais");
+}
+function vProva(soErros){
+  const base = soErros && prova ? prova.erros.slice() : itensProva();
+  if(!base.length){ vInicio(); return; }
+  prova = { fila: embaralhar(base), i: 0, certos: 0, erros: [] };
+  sessaoAtiva = true;
+  provaPasso();
+}
+function provaPasso(){
+  const a = $("vArea"); limpar(a);
+  if(prova.i >= prova.fila.length) return provaFim();
+  const c = prova.fila[prova.i];
+  const ps = c.q ? perguntasDe(c) : [c.pt];
+  const pergunta = ps[Math.floor(Math.random() * ps.length)];
+  const p = bloco("panel"); p.id = "provaCaixa";
+  const num = document.createElement("p"); num.className = "promptSub"; num.id = "provaNum";
+  num.textContent = "Прогон · вопрос " + (prova.i + 1) + " из " + prova.fila.length + " · вспомнил: " + prova.certos;
+  const q = document.createElement("p"); q.className = "prompt"; q.id = "provaPergunta"; q.textContent = "🎧";
+  const sub = document.createElement("p"); sub.className = "promptSub";
+  sub.textContent = "Прослушайте вопрос и ответьте вслух";
+  p.appendChild(num); p.appendChild(q); p.appendChild(sub);
+  const som = parDeSom(pergunta, "provaSom");
+  const ver = document.createElement("button");
+  ver.className = "wide hidden"; ver.id = "provaVer"; ver.style.marginTop = "8px";
+  ver.textContent = c.q ? "Показать мой ответ" : "Показать перевод";
+  som.querySelectorAll("button").forEach(b => { const tocar = b.onclick; b.onclick = () => {
+    tocar(); q.textContent = pergunta; ver.classList.remove("hidden"); }; });
+  ver.onclick = () => {
+    ver.remove();
+    const r = document.createElement("p"); r.id = "provaResp"; r.className = "prompt"; r.style.fontSize = "1.15rem";
+    r.textContent = c.q ? c.pt : c.ru;
+    p.appendChild(r);
+    if(c.q){
+      const t = document.createElement("p"); t.className = "muted"; t.id = "provaRespRu"; t.textContent = c.ru;
+      p.appendChild(t); p.appendChild(parDeSom(c.pt, "provaSomResp"));
+    }
+    [["provaSim", c.q ? "✓ Ответил" : "✓ Понял", true], ["provaNao", c.q ? "✗ Не вспомнил" : "✗ Не понял", false]].forEach(([id, txt, ok]) => {
+      const b = document.createElement("button"); b.className = "opt"; b.id = id; b.textContent = txt;
+      b.onclick = () => {
+        if(ok) prova.certos++;
+        else { prova.erros.push(c); c.due = hoje(); saveVocab(); }
+        prova.i++; provaPasso();
+      };
+      p.appendChild(b);
+    });
+    p.appendChild(parar);            // «Закончить» — всегда внизу
+  };
+  const parar = document.createElement("button");
+  parar.className = "ghost"; parar.id = "provaParar"; parar.style.marginTop = "12px"; parar.textContent = "⏹ Закончить";
+  parar.onclick = provaFim;
+  p.appendChild(som); p.appendChild(ver); p.appendChild(parar);
+  a.appendChild(p);
+}
+function provaFim(){
+  const a = $("vArea"); limpar(a);
+  const feitos = prova.certos + prova.erros.length;
+  const p = bloco("panel"); p.id = "provaFim";
+  const big = document.createElement("p"); big.className = "prompt"; big.id = "provaNota";
+  big.textContent = "Вспомнил " + prova.certos + " из " + feitos + (feitos ? " · " + Math.round(prova.certos / feitos * 100) + "%" : "");
+  p.appendChild(big);
+  if(prova.erros.length){
+    const t = document.createElement("p"); t.className = "promptSub";
+    t.textContent = "Не вспомнил — они же попали в сегодняшний повтор:";
+    const ul = document.createElement("ul"); ul.id = "provaErros";
+    prova.erros.forEach(c => { const li = document.createElement("li"); li.textContent = c.q || c.pt; ul.appendChild(li); });
+    const de = document.createElement("button"); de.className = "wide"; de.id = "provaDeNovo";
+    de.textContent = "Прогнать ещё раз только их (" + prova.erros.length + ")";
+    de.onclick = () => vProva(true);
+    p.appendChild(t); p.appendChild(ul); p.appendChild(de);
+  }
+  const ok = document.createElement("button"); ok.className = "ghost wide"; ok.id = "provaOk"; ok.style.marginTop = "8px";
+  ok.textContent = "Готово";
+  ok.onclick = () => { sessaoAtiva = false; vTopo(); vInicio(); };
+  p.appendChild(ok);
+  a.appendChild(p);
+  vTopo();
 }
 let blitz = null;
 
@@ -1950,6 +2049,8 @@ try{
 }catch(e){}
 function vResponder(certo, solucao, botao){
   const c = filaV.shift();
+  if(eNova(c)) vst.novasHoje = (vst.novasHoje || 0) + 1;
+  c.visto = true;
   if(certo){ c.box = Math.min(DIAS.length - 1, c.box + 1); c.due = maisDias(hoje(), DIAS[c.box]); }
   else { c.box = Math.max(0, c.box - 1); c.due = hoje(); filaV.push(c); }
   vst.feitos++;
