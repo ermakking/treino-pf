@@ -186,6 +186,8 @@
   <div class="panel">
     <label for="baralho">Словарик</label>
     <select id="baralho">
+      <option value="principal">★ Главное: вопросы, ответы, слова к ним, фразы</option>
+      <option value="extra">Дополнительно: общая лексика</option>
       <option value="todos">Все слова</option>
       <option value="documentos">Документы и процесс</option>
       <option value="familia">Семья и личные данные</option>
@@ -267,7 +269,7 @@
   </div>
 
   <div class="panel">
-    <label for="dump">Перенос прогресса между Claude и браузером</label>
+    <label for="dump">Перенос прогресса между устройствами (телефон ↔ компьютер)</label>
     <textarea id="dump" placeholder="«Выгрузить» — скопируйте текст. На другом устройстве вставьте его сюда и нажмите «Загрузить»."></textarea>
     <div class="row" style="margin-top:8px">
       <div><button class="ghost wide" id="btnDump">Выгрузить</button></div>
@@ -449,8 +451,9 @@
   </details>
   <div class="field">
     <label><input type="checkbox" id="rapido" checked style="width:auto;margin-right:8px">Быстрый режим: подсказки подгружаются по нажатию</label>
+    <label style="margin-top:6px"><input type="checkbox" id="usarRespostas" checked style="width:auto;margin-right:8px">Сверять с «Моими ответами»: инспектор видит их, образец ответа берётся оттуда</label>
     <label style="margin-top:6px"><input type="checkbox" id="autoVoz" style="width:auto;margin-right:8px">Озвучивать вопрос сразу</label>
-    <label style="margin-top:6px"><input type="checkbox" id="soOuvido" style="width:auto;margin-right:8px">Сначала на слух: текст вопроса скрыт, пока не нажмёте «Показать»</label>
+    <label style="margin-top:6px"><input type="checkbox" id="soOuvido" checked style="width:auto;margin-right:8px">Сначала на слух: текст вопроса скрыт, пока не нажмёте «Показать»</label>
   </div>
   <button class="wide" id="start">Начать собеседование</button>
   <button class="ghost wide" id="startExame" style="margin-top:8px">Экзамен: 8 вопросов без подсказок</button>
@@ -513,6 +516,7 @@ const PERFIL_PADRAO =
 
 Имена и фамилии пишите латиницей, как в RNM и паспорте.
 Заполнив, нажмите «Перевести на португальский» — и проверьте перевод глазами.`;
+const PERFIL_ANTIGOS = [];
 
 // Хранилище: внутри артефакта — window.storage, вне его — localStorage браузера
 const store = {
@@ -529,11 +533,19 @@ const store = {
 const $ = id => document.getElementById(id);
 let msgs = [], n = 0, atual = null, stats = {sessoes:0, ultima:null, erros:[]};
 
-const SYS = (perfil, tema, nivel, curto) => `Você é um agente da Polícia Federal do Brasil conduzindo a entrevista de um requerente de naturalização. Fale português brasileiro natural, tom cordial e simples, tratando o entrevistado por "você", como os agentes costumam fazer (às vezes "o senhor").
+function blocoRespostas(){
+  if(!$("usarRespostas") || !$("usarRespostas").checked) return "";
+  return vocab.filter(c => c.q).map(c => "- " + perguntasDe(c).join(" / ") + " → " + c.pt).join("\n");
+}
+const SYS = (perfil, tema, nivel, curto, prep) => `Você é um agente da Polícia Federal do Brasil conduzindo a entrevista de um requerente de naturalização. Fale português brasileiro natural, tom cordial e simples, tratando o entrevistado por "você", como os agentes costumam fazer (às vezes "o senhor").
 
 PERFIL DO ENTREVISTADO (pode estar escrito em russo; entenda-o normalmente, mas fale SEMPRE em português):
 ${perfil}
-
+${prep ? `
+RESPOSTAS QUE O CANDIDATO PREPAROU (são a versão dele dos fatos; trechos entre colchetes ainda não foram preenchidos — ignore-os):
+${prep}
+Quando a pergunta corresponder a uma dessas, "resposta_modelo" deve ser a resposta preparada, só com o português corrigido se preciso. No feedback, compare com a resposta preparada: se faltou um fato importante ou se ele disse algo diferente, diga isso em "comentario_ru". Não exija repetir palavra por palavra.
+` : ""}
 TEMA DESTA SESSÃO: ${tema}
 NÍVEL DE LINGUAGEM: ${nivel} — ajuste velocidade, vocabulário e comprimento das perguntas a esse nível.
 ${nivel === "informal" ? "Neste nível, faça sobretudo perguntas simples e informais, do tipo que um agente faz enquanto confere papéis: como foi a viagem até aqui, se gosta da cidade, se o calor incomoda, quantos filhos tem, se as crianças já falam português, o que gosta de comer no Brasil. Frases curtas, tom de conversa, nada de burocracia." : ""}
@@ -543,7 +555,7 @@ REGRAS:
 - Às vezes faça uma pergunta de acompanhamento sobre a resposta anterior, em vez de mudar de assunto.
 - Avalie a resposta anterior pelo critério real da entrevista: dá para entender? responde ao que foi perguntado? Erros de gênero, concordância ou preposição não reprovam ninguém — aponte, mas não dramatize.
 - Não cobre detalhes de papelada decorados: números de sala, CNPJ, números de resolução, nomes de funcionários. Exceção: o número do diploma ou certificado de português pode ser perguntado, e também se o exame foi presencial. Pergunte como um agente pergunta a uma pessoa, e aceite respostas do tipo "isso está no documento que entreguei".
-- NUNCA invente dados pessoais que não estejam no perfil — sobrenome, nomes de escolas, endereços, números de documento. Se um dado faltar, escreva um marcador entre colchetes, como [sobrenome], em vez de inventar.
+- NUNCA invente dados pessoais que não estejam no perfil nem nas respostas preparadas — sobrenome, nomes de escolas, endereços, números de documento. Se um dado faltar, escreva um marcador entre colchetes, como [sobrenome], em vez de inventar.
 - O comentário em russo deve ser curto, específico e útil.
 
 Responda SEMPRE e SOMENTE com um objeto JSON, sem markdown, sem crases, neste formato:
@@ -852,7 +864,7 @@ async function loadState(){
       const s = JSON.parse(r.value);
       stats = Object.assign(stats, s.stats||{});
       perfilRu = s.perfilRu || "";
-      $("perfil").value = s.perfil || PERFIL_PADRAO;
+      $("perfil").value = (s.perfil && !PERFIL_ANTIGOS.includes(s.perfil)) ? s.perfil : PERFIL_PADRAO;
     } else $("perfil").value = PERFIL_PADRAO;
   }catch(e){ $("perfil").value = PERFIL_PADRAO; }
   renderStats();
@@ -881,7 +893,7 @@ function renderTurn(o){
   if(oculto){
     const cx = document.createElement("div"); cx.className = "tools"; cx.style.marginBottom = "10px";
     const som = document.createElement("button");
-    som.className = "ghost"; som.id = "btnRepetir"; som.textContent = "🔊 Ещё раз";
+    som.className = "ghost"; som.id = "btnRepetir"; som.textContent = "🔊 Прослушать";
     som.onclick = () => falar(o.pergunta, msg => aux("Звук", msg, "som"), 1);
     const lento = document.createElement("button");
     lento.className = "ghost"; lento.id = "btnRepetirLento"; lento.textContent = "🐢 Медленно";
@@ -1095,7 +1107,7 @@ $("start").onclick = async () => {
   busy(true);
   msgs = [{role:"user", content:"Comece a entrevista. Cumprimente brevemente e faça a primeira pergunta."}];
   try{
-    const raw = await callAPI(SYS($("perfil").value, $("tema").value, $("nivel").value, $("rapido").checked), msgs);
+    const raw = await callAPI(SYS($("perfil").value, $("tema").value, $("nivel").value, $("rapido").checked, blocoRespostas()), msgs);
     msgs.push({role:"assistant", content:raw});
     renderTurn(parseJSON(raw));
     $("setup").classList.add("hidden");
@@ -1115,7 +1127,7 @@ $("send").onclick = async () => {
   msgs.push({role:"user", content:t});
   cortarHistorico();
   try{
-    const raw = await callAPI(SYS($("perfil").value, $("tema").value, $("nivel").value, $("rapido").checked), msgs);
+    const raw = await callAPI(SYS($("perfil").value, $("tema").value, $("nivel").value, $("rapido").checked, blocoRespostas()), msgs);
     msgs.push({role:"assistant", content:raw});
     renderTurn(parseJSON(raw));
     saveState();
@@ -1446,8 +1458,18 @@ let filaV = [], exAtual = null, sessaoAtiva = false;
 function cartaSeed(p, i, id){
   const c = { id, pt:p[0], ru:p[1], box:0, due:hoje(), tema:temaSeed(i) };
   if(p[4]) c.q = p[4];          // готовый ответ: p[4] — вопрос инспектора
+  if(p[5]) c.qs = p[5];         // другие формулировки того же вопроса
   return c;
 }
+// формулировки вопросов могут дополняться в новых версиях — подтягиваем их к уже заведённым карточкам
+function sincronizarVariantes(){
+  SEED.forEach(p => {
+    if(!p[5]) return;
+    const c = vocab.find(x => x.q && norm(x.pt) === norm(p[0]));
+    if(c) c.qs = p[5];
+  });
+}
+function perguntasDe(c){ return [c.q].concat(c.qs || []); }
 async function loadVocab(){
   try{
     const r = await store.get("pfshare_vocab");
@@ -1469,14 +1491,18 @@ async function loadVocab(){
     vst.novasV2 = n;
     saveVocab();
   }
+  sincronizarVariantes();
   if(vst.dia !== hoje()){ vst.dia = hoje(); vst.feitos = 0; }
+  if($("usarRespostas")) $("usarRespostas").closest("label").classList.toggle("hidden", !vocab.some(c => c.q));
   vTopo(); vInicio();
 }
 async function saveVocab(){
   try{ await store.set("pfshare_vocab", JSON.stringify({cards:vocab, stats:vst})); }catch(e){}
 }
 function baralhoAtual(){ return ($("baralho") && $("baralho").value) || "todos"; }
-function noBaralho(c){ const b = baralhoAtual(); return b === "todos" || temaDe(c) === b; }
+const GRUPOS = { principal: ["reais", "minhas", "respostas", "meu", "frases"],
+                 extra: ["documentos", "familia", "trabalho", "estudo", "vida", "contos", "outros"] };
+function noBaralho(c){ const b = baralhoAtual(); return b === "todos" || (GRUPOS[b] ? GRUPOS[b].includes(temaDe(c)) : temaDe(c) === b); }
 function pendentes(){ const h = hoje(); return vocab.filter(c => c.due <= h && noBaralho(c)); }
 function vTopo(){
   const p = pendentes().length;
@@ -1648,6 +1674,7 @@ function vProximo(){
              : c.box === 4 ? "ouvir_digitar"
              : (palavras.length >= 2 ? "lacuna" : "digitar");
   exAtual = { card:c, tipo, opcoes: tipo === "digitar" ? [] : embaralhar([c].concat(outros)) };
+  if(c.q){ const ps = perguntasDe(c); exAtual.pergunta = ps[Math.floor(Math.random() * ps.length)]; }
   if(tipo === "lacuna") exAtual.lacunaIdx = lacunaSorteia(c);
   vDesenhar();
 }
@@ -1702,7 +1729,7 @@ function vDesenhar(){
   if(tipo === "montar"){ sub.textContent = "Соберите фразу из слов"; q.textContent = card.ru; }
   if(tipo === "ouvir_digitar"){ sub.textContent = "Послушайте и напишите"; q.textContent = "🎧"; }
   if(tipo === "lacuna"){ sub.textContent = "Вставьте пропущенное слово"; q.textContent = lacunaTexto(card, exAtual.lacunaIdx); }
-  if(tipo === "resposta"){ sub.textContent = "Вопрос инспектора. Ответьте вслух, потом откройте свой ответ"; q.textContent = card.q; }
+  if(tipo === "resposta"){ sub.textContent = "Вопрос инспектора. Ответьте вслух, потом откройте свой ответ"; q.textContent = exAtual.pergunta || card.q; }
   p.appendChild(q); p.appendChild(sub);
 
   if(tipo === "ouvir" || tipo === "ouvir_pt" || tipo === "pt_ru"){
@@ -1710,7 +1737,7 @@ function vDesenhar(){
   }
 
   if(tipo === "resposta"){
-    p.appendChild(parDeSom(card.q, "vSayQ"));
+    p.appendChild(parDeSom(exAtual.pergunta || card.q, "vSayQ"));
     const ver = document.createElement("button");
     ver.className = "wide"; ver.id = "vVerResp"; ver.textContent = "Показать мой ответ";
     ver.onclick = () => {
@@ -1789,7 +1816,7 @@ function vDesenhar(){
     });
   }
   if(["ouvir", "ouvir_pt", "ouvir_digitar", "resposta"].includes(tipo) || temaDe(card) === "reais")
-    portaoDeSom(p, q, sub, tipo === "resposta" ? card.q : card.pt, tipo === "resposta" ? "vSayQ" : "vSay");
+    portaoDeSom(p, q, sub, tipo === "resposta" ? (exAtual.pergunta || card.q) : card.pt, tipo === "resposta" ? "vSayQ" : "vSay");
   a.appendChild(p);
   vTopo();
   if(tipo === "digitar" && $("vInput")) $("vInput").focus();
