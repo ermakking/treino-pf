@@ -1641,13 +1641,14 @@ function provaFim(){
   vTopo();
 }
 let blitz = null;
+const BLITZ_PARES = 4;           // пар на экране: 4 слева и 4 справа — глазу проще искать
 
 function vBlitz(){
   const pool = embaralhar(vocab.filter(c => noBaralho(c) && !c.q));
   if(pool.length < 4){ vInicio(); return; }
   blitz = { fila: pool.slice(), pares: [], acertos: 0, erros: 0, restam: 60,
             escolhido: null, fim: false };
-  for(let i = 0; i < 8 && blitz.fila.length; i++) blitz.pares.push(blitz.fila.shift());
+  for(let i = 0; i < BLITZ_PARES && blitz.fila.length; i++) blitz.pares.push(blitz.fila.shift());
   sessaoAtiva = true;
   blitz.timer = setInterval(() => {
     blitz.restam--;
